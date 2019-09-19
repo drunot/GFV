@@ -139,21 +139,19 @@ void increaseSpeed()
 void driveForwards()
 {
     UART_1_PutString("Set direction: forwards\r\n");
-    if (Direction_Read()) {
-        PWM_1_Stop();
-        Direction_Write(forwards);
+    if (!OUT1_Read()) {
+        OUT2_Write(0);
+        OUT1_Write(1);
     }
-    PWM_1_Start();
 }
 
 void driveBackwards()
 {
     UART_1_PutString("Set direction: backwards\r\n");
-    if (!Direction_Read()) {
-        PWM_1_Stop();
-        Direction_Write(backwards);
+    if (!OUT2_Read()) {
+        OUT1_Write(0);
+        OUT2_Write(1);
     }
-    PWM_1_Start();
 }
 
 void stop()
