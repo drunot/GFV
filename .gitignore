@@ -12,16 +12,15 @@
 *.cycdx
 *.cyfit
 *.rpt
-.*svd
+*.svd
 *_timing
+*.log
 
 # Folders
-*/codegentemp
-*/CoretexM3
-*/Export
-*/Debug
-*/Generated_Source
-*/Backup
-*/codegenTemp
+*/codegen*
+*/Cortex*
+*/Expor*
+*/Debug/
+*/Generated_*
+*/Backup/
 */DC-Motor-PWM.cywrk*
-*/BUILD
