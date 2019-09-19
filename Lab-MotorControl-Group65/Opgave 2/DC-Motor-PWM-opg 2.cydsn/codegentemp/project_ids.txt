@@ -1,0 +1,6 @@
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|79d5a5e6-52f2-4510-b358-dae3ab24035b
+C:\Users\Viktor\Documents\PSoC Creator\4.2\Downloads ( 4.2).cylib\Downloads ( 4.2).cyprj|c0c4fbb4-44a8-4d04-9c40-153cef45e2e6
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|7990ee7b-f645-44a2-b780-4a96692663b1
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|dd195e48-db55-4484-8078-ad7982da11a1
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|19fc04f5-3e0d-4161-b074-9f353a228a16
+C:\Users\Viktor\OneDrive - Aarhus universitet\3. Semester\E3GFV\Exercises\1\DC-Motor-PWM-opg 2.cydsn\DC-Motor-PWM-opg 2.cyprj|a1c57507-80a5-4b97-a90c-403824246110
