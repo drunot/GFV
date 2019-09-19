@@ -17,10 +17,10 @@
 *.log
 
 # Folders
-*/codegen*
-*/Cortex*
-*/Expor*
-*/Debug/
-*/Generated_*
-*/Backup/
-*/DC-Motor-PWM.cywrk*
+*codegen*
+*Cortex*
+*Expor*
+*Debug/
+*Generated_*
+*Backup/
+*DC-Motor-PWM.cywrk*
