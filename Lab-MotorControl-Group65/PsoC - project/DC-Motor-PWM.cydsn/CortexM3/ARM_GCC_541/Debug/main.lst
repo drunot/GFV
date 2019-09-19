@@ -1,0 +1,1939 @@
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.main,"ax",%progbits
+  20              		.align	2
+  21              		.global	main
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	main, %function
+  25              	main:
+  26              	.LFB63:
+  27              		.file 1 "main.c"
+   1:main.c        **** /* ========================================
+   2:main.c        ****  *
+   3:main.c        ****  * Copyright YOUR COMPANY, THE YEAR
+   4:main.c        ****  * All Rights Reserved
+   5:main.c        ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:main.c        ****  *
+   7:main.c        ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:main.c        ****  * WHICH IS THE PROPERTY OF your company.
+   9:main.c        ****  *
+  10:main.c        ****  * ========================================
+  11:main.c        **** */
+  12:main.c        **** #include "project.h"
+  13:main.c        **** 
+  14:main.c        **** CY_ISR_PROTO(ISR_UART_rx_handler);
+  15:main.c        **** void handleByteReceived(uint8_t byteReceived);
+  16:main.c        **** void decreaseSpeed(void);
+  17:main.c        **** void increaseSpeed(void);
+  18:main.c        **** void driveForwards(void);
+  19:main.c        **** void driveBackwards(void);
+  20:main.c        **** void stop(void);
+  21:main.c        **** 
+  22:main.c        **** int main(void)
+  23:main.c        **** {
+  28              		.loc 1 23 0
+  29              		.cfi_startproc
+  30              		@ Volatile: function does not return.
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 2
+
+
+  35              		.cfi_offset 3, -8
+  36              		.cfi_offset 14, -4
+  24:main.c        ****     CyGlobalIntEnable; /* Enable global interrupts. */
+  37              		.loc 1 24 0
+  38              		.syntax unified
+  39              	@ 24 "main.c" 1
+  40 0002 62B6     		CPSIE   i
+  41              	@ 0 "" 2
+  25:main.c        **** 
+  26:main.c        ****     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+  27:main.c        ****     isr_uart_rx_StartEx(ISR_UART_rx_handler);
+  42              		.loc 1 27 0
+  43              		.thumb
+  44              		.syntax unified
+  45 0004 0C48     		ldr	r0, .L4
+  46 0006 FFF7FEFF 		bl	isr_uart_rx_StartEx
+  47              	.LVL0:
+  28:main.c        ****     UART_1_Start();
+  48              		.loc 1 28 0
+  49 000a FFF7FEFF 		bl	UART_1_Start
+  50              	.LVL1:
+  29:main.c        ****     PWM_1_Start();
+  51              		.loc 1 29 0
+  52 000e FFF7FEFF 		bl	PWM_1_Start
+  53              	.LVL2:
+  30:main.c        ****     
+  31:main.c        ****     UART_1_PutString("DC-Motor-PWM application started\r\n");
+  54              		.loc 1 31 0
+  55 0012 0A48     		ldr	r0, .L4+4
+  56 0014 FFF7FEFF 		bl	UART_1_PutString
+  57              	.LVL3:
+  32:main.c        ****     UART_1_PutString("0: Stop\r\n");
+  58              		.loc 1 32 0
+  59 0018 0948     		ldr	r0, .L4+8
+  60 001a FFF7FEFF 		bl	UART_1_PutString
+  61              	.LVL4:
+  33:main.c        ****     UART_1_PutString("1: Drive forwards\r\n");
+  62              		.loc 1 33 0
+  63 001e 0948     		ldr	r0, .L4+12
+  64 0020 FFF7FEFF 		bl	UART_1_PutString
+  65              	.LVL5:
+  34:main.c        ****     UART_1_PutString("2: Drive backwards\r\n");
+  66              		.loc 1 34 0
+  67 0024 0848     		ldr	r0, .L4+16
+  68 0026 FFF7FEFF 		bl	UART_1_PutString
+  69              	.LVL6:
+  35:main.c        ****     UART_1_PutString("q: Decrease speed\r\n");
+  70              		.loc 1 35 0
+  71 002a 0848     		ldr	r0, .L4+20
+  72 002c FFF7FEFF 		bl	UART_1_PutString
+  73              	.LVL7:
+  36:main.c        ****     UART_1_PutString("w: Increase speed\r\n");
+  74              		.loc 1 36 0
+  75 0030 0748     		ldr	r0, .L4+24
+  76 0032 FFF7FEFF 		bl	UART_1_PutString
+  77              	.LVL8:
+  78              	.L2:
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 3
+
+
+  79 0036 FEE7     		b	.L2
+  80              	.L5:
+  81              		.align	2
+  82              	.L4:
+  83 0038 00000000 		.word	ISR_UART_rx_handler
+  84 003c 00000000 		.word	.LC0
+  85 0040 24000000 		.word	.LC1
+  86 0044 30000000 		.word	.LC2
+  87 0048 44000000 		.word	.LC3
+  88 004c 5C000000 		.word	.LC4
+  89 0050 70000000 		.word	.LC5
+  90              		.cfi_endproc
+  91              	.LFE63:
+  92              		.size	main, .-main
+  93              		.section	.text.decreaseSpeed,"ax",%progbits
+  94              		.align	2
+  95              		.global	decreaseSpeed
+  96              		.thumb
+  97              		.thumb_func
+  98              		.type	decreaseSpeed, %function
+  99              	decreaseSpeed:
+ 100              	.LFB66:
+  37:main.c        **** 
+  38:main.c        ****     for(;;)
+  39:main.c        ****     {
+  40:main.c        ****         /* Place your application code here. */
+  41:main.c        ****     }
+  42:main.c        **** }
+  43:main.c        **** 
+  44:main.c        **** CY_ISR(ISR_UART_rx_handler)
+  45:main.c        **** {
+  46:main.c        ****     uint8_t bytesToRead = UART_1_GetRxBufferSize();
+  47:main.c        ****     while (bytesToRead > 0)
+  48:main.c        ****     {
+  49:main.c        ****         uint8_t byteReceived = UART_1_ReadRxData();
+  50:main.c        ****         UART_1_WriteTxData(byteReceived); // echo back
+  51:main.c        ****         
+  52:main.c        ****         handleByteReceived(byteReceived);
+  53:main.c        ****         
+  54:main.c        ****         bytesToRead--;
+  55:main.c        ****     }
+  56:main.c        **** }
+  57:main.c        **** 
+  58:main.c        **** void handleByteReceived(uint8_t byteReceived)
+  59:main.c        **** {
+  60:main.c        ****     switch(byteReceived)
+  61:main.c        ****     {
+  62:main.c        ****         case 'q' :
+  63:main.c        ****         {
+  64:main.c        ****             decreaseSpeed();
+  65:main.c        ****         }
+  66:main.c        ****         break;
+  67:main.c        ****         case 'w' :
+  68:main.c        ****         {
+  69:main.c        ****             increaseSpeed();
+  70:main.c        ****         }
+  71:main.c        ****         break;
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 4
+
+
+  72:main.c        ****         case '1' :
+  73:main.c        ****         {
+  74:main.c        ****             driveForwards();
+  75:main.c        ****         }
+  76:main.c        ****         break;
+  77:main.c        ****         case '2' :
+  78:main.c        ****         {
+  79:main.c        ****             driveBackwards();
+  80:main.c        ****         }
+  81:main.c        ****         break;
+  82:main.c        ****         case '0' :
+  83:main.c        ****         {
+  84:main.c        ****             stop();
+  85:main.c        ****             
+  86:main.c        ****         }
+  87:main.c        ****         break;
+  88:main.c        ****         default :
+  89:main.c        ****         {
+  90:main.c        ****             // nothing
+  91:main.c        ****         }
+  92:main.c        ****         break;
+  93:main.c        ****     }
+  94:main.c        **** }
+  95:main.c        **** 
+  96:main.c        **** void decreaseSpeed()
+  97:main.c        **** {
+ 101              		.loc 1 97 0
+ 102              		.cfi_startproc
+ 103              		@ args = 0, pretend = 0, frame = 0
+ 104              		@ frame_needed = 0, uses_anonymous_args = 0
+ 105 0000 10B5     		push	{r4, lr}
+ 106              		.cfi_def_cfa_offset 8
+ 107              		.cfi_offset 4, -8
+ 108              		.cfi_offset 14, -4
+  98:main.c        ****     uint8 duty = PWM_1_ReadCompare();
+ 109              		.loc 1 98 0
+ 110 0002 FFF7FEFF 		bl	PWM_1_ReadCompare
+ 111              	.LVL9:
+  99:main.c        ****     if(duty > 0)
+ 112              		.loc 1 99 0
+ 113 0006 0446     		mov	r4, r0
+ 114 0008 10B1     		cbz	r0, .L7
+ 100:main.c        ****     {
+ 101:main.c        ****         UART_1_PutString("Decreasing speed\r\n");
+ 115              		.loc 1 101 0
+ 116 000a 0C48     		ldr	r0, .L12
+ 117              	.LVL10:
+ 118 000c FFF7FEFF 		bl	UART_1_PutString
+ 119              	.LVL11:
+ 120              	.L7:
+ 102:main.c        ****     }
+ 103:main.c        ****     if(duty >= 100)
+ 121              		.loc 1 103 0
+ 122 0010 632C     		cmp	r4, #99
+ 123 0012 03D9     		bls	.L8
+ 104:main.c        ****     {
+ 105:main.c        ****         PWM_1_WriteCompare(90);
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 5
+
+
+ 124              		.loc 1 105 0
+ 125 0014 5A20     		movs	r0, #90
+ 126 0016 FFF7FEFF 		bl	PWM_1_WriteCompare
+ 127              	.LVL12:
+ 128 001a 10BD     		pop	{r4, pc}
+ 129              	.L8:
+ 106:main.c        ****         
+ 107:main.c        ****     }
+ 108:main.c        ****     else if(duty > 10)
+ 130              		.loc 1 108 0
+ 131 001c 0A2C     		cmp	r4, #10
+ 132 001e 05D9     		bls	.L10
+ 109:main.c        ****     {
+ 110:main.c        ****         PWM_1_WriteCompare(duty - 10);
+ 133              		.loc 1 110 0
+ 134 0020 A4F10A00 		sub	r0, r4, #10
+ 135 0024 C0B2     		uxtb	r0, r0
+ 136 0026 FFF7FEFF 		bl	PWM_1_WriteCompare
+ 137              	.LVL13:
+ 138 002a 10BD     		pop	{r4, pc}
+ 139              	.L10:
+ 111:main.c        ****     }
+ 112:main.c        ****     else
+ 113:main.c        ****     {
+ 114:main.c        ****         UART_1_PutString("Min speed achieved\r\n");
+ 140              		.loc 1 114 0
+ 141 002c 0448     		ldr	r0, .L12+4
+ 142 002e FFF7FEFF 		bl	UART_1_PutString
+ 143              	.LVL14:
+ 115:main.c        ****         PWM_1_WriteCompare(0);
+ 144              		.loc 1 115 0
+ 145 0032 0020     		movs	r0, #0
+ 146 0034 FFF7FEFF 		bl	PWM_1_WriteCompare
+ 147              	.LVL15:
+ 148 0038 10BD     		pop	{r4, pc}
+ 149              	.L13:
+ 150 003a 00BF     		.align	2
+ 151              	.L12:
+ 152 003c 84000000 		.word	.LC6
+ 153 0040 98000000 		.word	.LC7
+ 154              		.cfi_endproc
+ 155              	.LFE66:
+ 156              		.size	decreaseSpeed, .-decreaseSpeed
+ 157              		.section	.text.increaseSpeed,"ax",%progbits
+ 158              		.align	2
+ 159              		.global	increaseSpeed
+ 160              		.thumb
+ 161              		.thumb_func
+ 162              		.type	increaseSpeed, %function
+ 163              	increaseSpeed:
+ 164              	.LFB67:
+ 116:main.c        ****     }
+ 117:main.c        **** }
+ 118:main.c        **** 
+ 119:main.c        **** void increaseSpeed()
+ 120:main.c        **** {
+ 165              		.loc 1 120 0
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 6
+
+
+ 166              		.cfi_startproc
+ 167              		@ args = 0, pretend = 0, frame = 0
+ 168              		@ frame_needed = 0, uses_anonymous_args = 0
+ 169 0000 10B5     		push	{r4, lr}
+ 170              		.cfi_def_cfa_offset 8
+ 171              		.cfi_offset 4, -8
+ 172              		.cfi_offset 14, -4
+ 121:main.c        ****     uint8 duty = PWM_1_ReadCompare();
+ 173              		.loc 1 121 0
+ 174 0002 FFF7FEFF 		bl	PWM_1_ReadCompare
+ 175              	.LVL16:
+ 176 0006 0446     		mov	r4, r0
+ 177              	.LVL17:
+ 122:main.c        ****     if(duty < 101)
+ 178              		.loc 1 122 0
+ 179 0008 6428     		cmp	r0, #100
+ 180 000a 02D8     		bhi	.L15
+ 123:main.c        ****     {
+ 124:main.c        ****         UART_1_PutString("Increasing speed\r\n");
+ 181              		.loc 1 124 0
+ 182 000c 0848     		ldr	r0, .L19
+ 183              	.LVL18:
+ 184 000e FFF7FEFF 		bl	UART_1_PutString
+ 185              	.LVL19:
+ 186              	.L15:
+ 125:main.c        ****     }
+ 126:main.c        ****     if(duty < 90)
+ 187              		.loc 1 126 0
+ 188 0012 592C     		cmp	r4, #89
+ 189 0014 05D8     		bhi	.L16
+ 127:main.c        ****     {
+ 128:main.c        ****         PWM_1_WriteCompare(duty + 10);
+ 190              		.loc 1 128 0
+ 191 0016 04F10A00 		add	r0, r4, #10
+ 192 001a C0B2     		uxtb	r0, r0
+ 193 001c FFF7FEFF 		bl	PWM_1_WriteCompare
+ 194              	.LVL20:
+ 195 0020 10BD     		pop	{r4, pc}
+ 196              	.L16:
+ 129:main.c        ****     }
+ 130:main.c        ****     else
+ 131:main.c        ****     {
+ 132:main.c        ****         UART_1_PutString("Max speed achieved\r\n");
+ 197              		.loc 1 132 0
+ 198 0022 0448     		ldr	r0, .L19+4
+ 199 0024 FFF7FEFF 		bl	UART_1_PutString
+ 200              	.LVL21:
+ 133:main.c        ****         PWM_1_WriteCompare(101);
+ 201              		.loc 1 133 0
+ 202 0028 6520     		movs	r0, #101
+ 203 002a FFF7FEFF 		bl	PWM_1_WriteCompare
+ 204              	.LVL22:
+ 205 002e 10BD     		pop	{r4, pc}
+ 206              	.L20:
+ 207              		.align	2
+ 208              	.L19:
+ 209 0030 B0000000 		.word	.LC8
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 7
+
+
+ 210 0034 C4000000 		.word	.LC9
+ 211              		.cfi_endproc
+ 212              	.LFE67:
+ 213              		.size	increaseSpeed, .-increaseSpeed
+ 214              		.section	.text.driveForwards,"ax",%progbits
+ 215              		.align	2
+ 216              		.global	driveForwards
+ 217              		.thumb
+ 218              		.thumb_func
+ 219              		.type	driveForwards, %function
+ 220              	driveForwards:
+ 221              	.LFB68:
+ 134:main.c        ****     }
+ 135:main.c        **** }
+ 136:main.c        **** 
+ 137:main.c        **** void driveForwards()
+ 138:main.c        **** {
+ 222              		.loc 1 138 0
+ 223              		.cfi_startproc
+ 224              		@ args = 0, pretend = 0, frame = 0
+ 225              		@ frame_needed = 0, uses_anonymous_args = 0
+ 226 0000 08B5     		push	{r3, lr}
+ 227              		.cfi_def_cfa_offset 8
+ 228              		.cfi_offset 3, -8
+ 229              		.cfi_offset 14, -4
+ 139:main.c        ****     UART_1_PutString("Set direction: forwards\r\n");
+ 230              		.loc 1 139 0
+ 231 0002 0348     		ldr	r0, .L23
+ 232 0004 FFF7FEFF 		bl	UART_1_PutString
+ 233              	.LVL23:
+ 140:main.c        ****     PWM_1_Start();
+ 234              		.loc 1 140 0
+ 235 0008 FFF7FEFF 		bl	PWM_1_Start
+ 236              	.LVL24:
+ 237 000c 08BD     		pop	{r3, pc}
+ 238              	.L24:
+ 239 000e 00BF     		.align	2
+ 240              	.L23:
+ 241 0010 DC000000 		.word	.LC10
+ 242              		.cfi_endproc
+ 243              	.LFE68:
+ 244              		.size	driveForwards, .-driveForwards
+ 245              		.section	.text.driveBackwards,"ax",%progbits
+ 246              		.align	2
+ 247              		.global	driveBackwards
+ 248              		.thumb
+ 249              		.thumb_func
+ 250              		.type	driveBackwards, %function
+ 251              	driveBackwards:
+ 252              	.LFB69:
+ 141:main.c        **** }
+ 142:main.c        **** 
+ 143:main.c        **** void driveBackwards()
+ 144:main.c        **** {
+ 253              		.loc 1 144 0
+ 254              		.cfi_startproc
+ 255              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 8
+
+
+ 256              		@ frame_needed = 0, uses_anonymous_args = 0
+ 257 0000 08B5     		push	{r3, lr}
+ 258              		.cfi_def_cfa_offset 8
+ 259              		.cfi_offset 3, -8
+ 260              		.cfi_offset 14, -4
+ 145:main.c        ****     UART_1_PutString("Set direction: backwards\r\n");
+ 261              		.loc 1 145 0
+ 262 0002 0248     		ldr	r0, .L27
+ 263 0004 FFF7FEFF 		bl	UART_1_PutString
+ 264              	.LVL25:
+ 265 0008 08BD     		pop	{r3, pc}
+ 266              	.L28:
+ 267 000a 00BF     		.align	2
+ 268              	.L27:
+ 269 000c F8000000 		.word	.LC11
+ 270              		.cfi_endproc
+ 271              	.LFE69:
+ 272              		.size	driveBackwards, .-driveBackwards
+ 273              		.section	.text.stop,"ax",%progbits
+ 274              		.align	2
+ 275              		.global	stop
+ 276              		.thumb
+ 277              		.thumb_func
+ 278              		.type	stop, %function
+ 279              	stop:
+ 280              	.LFB70:
+ 146:main.c        **** }
+ 147:main.c        **** 
+ 148:main.c        **** void stop()
+ 149:main.c        **** {
+ 281              		.loc 1 149 0
+ 282              		.cfi_startproc
+ 283              		@ args = 0, pretend = 0, frame = 0
+ 284              		@ frame_needed = 0, uses_anonymous_args = 0
+ 285 0000 08B5     		push	{r3, lr}
+ 286              		.cfi_def_cfa_offset 8
+ 287              		.cfi_offset 3, -8
+ 288              		.cfi_offset 14, -4
+ 150:main.c        ****     UART_1_PutString("Stop\r\n");
+ 289              		.loc 1 150 0
+ 290 0002 0348     		ldr	r0, .L31
+ 291 0004 FFF7FEFF 		bl	UART_1_PutString
+ 292              	.LVL26:
+ 151:main.c        ****     PWM_1_Stop();
+ 293              		.loc 1 151 0
+ 294 0008 FFF7FEFF 		bl	PWM_1_Stop
+ 295              	.LVL27:
+ 296 000c 08BD     		pop	{r3, pc}
+ 297              	.L32:
+ 298 000e 00BF     		.align	2
+ 299              	.L31:
+ 300 0010 14010000 		.word	.LC12
+ 301              		.cfi_endproc
+ 302              	.LFE70:
+ 303              		.size	stop, .-stop
+ 304              		.section	.text.handleByteReceived,"ax",%progbits
+ 305              		.align	2
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 9
+
+
+ 306              		.global	handleByteReceived
+ 307              		.thumb
+ 308              		.thumb_func
+ 309              		.type	handleByteReceived, %function
+ 310              	handleByteReceived:
+ 311              	.LFB65:
+  59:main.c        ****     switch(byteReceived)
+ 312              		.loc 1 59 0
+ 313              		.cfi_startproc
+ 314              		@ args = 0, pretend = 0, frame = 0
+ 315              		@ frame_needed = 0, uses_anonymous_args = 0
+ 316              	.LVL28:
+ 317 0000 08B5     		push	{r3, lr}
+ 318              		.cfi_def_cfa_offset 8
+ 319              		.cfi_offset 3, -8
+ 320              		.cfi_offset 14, -4
+  60:main.c        ****     {
+ 321              		.loc 1 60 0
+ 322 0002 3228     		cmp	r0, #50
+ 323 0004 13D0     		beq	.L35
+ 324 0006 04D8     		bhi	.L36
+ 325 0008 3028     		cmp	r0, #48
+ 326 000a 13D0     		beq	.L37
+ 327 000c 3128     		cmp	r0, #49
+ 328 000e 0BD0     		beq	.L38
+ 329 0010 08BD     		pop	{r3, pc}
+ 330              	.L36:
+ 331 0012 7128     		cmp	r0, #113
+ 332 0014 02D0     		beq	.L39
+ 333 0016 7728     		cmp	r0, #119
+ 334 0018 03D0     		beq	.L40
+ 335 001a 08BD     		pop	{r3, pc}
+ 336              	.L39:
+  64:main.c        ****         }
+ 337              		.loc 1 64 0
+ 338 001c FFF7FEFF 		bl	decreaseSpeed
+ 339              	.LVL29:
+  66:main.c        ****         case 'w' :
+ 340              		.loc 1 66 0
+ 341 0020 08BD     		pop	{r3, pc}
+ 342              	.LVL30:
+ 343              	.L40:
+  69:main.c        ****         }
+ 344              		.loc 1 69 0
+ 345 0022 FFF7FEFF 		bl	increaseSpeed
+ 346              	.LVL31:
+  71:main.c        ****         case '1' :
+ 347              		.loc 1 71 0
+ 348 0026 08BD     		pop	{r3, pc}
+ 349              	.LVL32:
+ 350              	.L38:
+  74:main.c        ****         }
+ 351              		.loc 1 74 0
+ 352 0028 FFF7FEFF 		bl	driveForwards
+ 353              	.LVL33:
+  76:main.c        ****         case '2' :
+ 354              		.loc 1 76 0
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 10
+
+
+ 355 002c 08BD     		pop	{r3, pc}
+ 356              	.LVL34:
+ 357              	.L35:
+  79:main.c        ****         }
+ 358              		.loc 1 79 0
+ 359 002e FFF7FEFF 		bl	driveBackwards
+ 360              	.LVL35:
+  81:main.c        ****         case '0' :
+ 361              		.loc 1 81 0
+ 362 0032 08BD     		pop	{r3, pc}
+ 363              	.LVL36:
+ 364              	.L37:
+  84:main.c        ****             
+ 365              		.loc 1 84 0
+ 366 0034 FFF7FEFF 		bl	stop
+ 367              	.LVL37:
+ 368 0038 08BD     		pop	{r3, pc}
+ 369              		.cfi_endproc
+ 370              	.LFE65:
+ 371              		.size	handleByteReceived, .-handleByteReceived
+ 372 003a 00BF     		.section	.text.ISR_UART_rx_handler,"ax",%progbits
+ 373              		.align	2
+ 374              		.global	ISR_UART_rx_handler
+ 375              		.thumb
+ 376              		.thumb_func
+ 377              		.type	ISR_UART_rx_handler, %function
+ 378              	ISR_UART_rx_handler:
+ 379              	.LFB64:
+  45:main.c        ****     uint8_t bytesToRead = UART_1_GetRxBufferSize();
+ 380              		.loc 1 45 0
+ 381              		.cfi_startproc
+ 382              		@ args = 0, pretend = 0, frame = 0
+ 383              		@ frame_needed = 0, uses_anonymous_args = 0
+ 384 0000 38B5     		push	{r3, r4, r5, lr}
+ 385              		.cfi_def_cfa_offset 16
+ 386              		.cfi_offset 3, -16
+ 387              		.cfi_offset 4, -12
+ 388              		.cfi_offset 5, -8
+ 389              		.cfi_offset 14, -4
+  46:main.c        ****     while (bytesToRead > 0)
+ 390              		.loc 1 46 0
+ 391 0002 FFF7FEFF 		bl	UART_1_GetRxBufferSize
+ 392              	.LVL38:
+ 393 0006 0446     		mov	r4, r0
+ 394              	.LVL39:
+  47:main.c        ****     {
+ 395              		.loc 1 47 0
+ 396 0008 09E0     		b	.L43
+ 397              	.L44:
+ 398              	.LBB2:
+  49:main.c        ****         UART_1_WriteTxData(byteReceived); // echo back
+ 399              		.loc 1 49 0
+ 400 000a FFF7FEFF 		bl	UART_1_ReadRxData
+ 401              	.LVL40:
+ 402 000e 0546     		mov	r5, r0
+ 403              	.LVL41:
+  50:main.c        ****         
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 11
+
+
+ 404              		.loc 1 50 0
+ 405 0010 FFF7FEFF 		bl	UART_1_WriteTxData
+ 406              	.LVL42:
+  52:main.c        ****         
+ 407              		.loc 1 52 0
+ 408 0014 2846     		mov	r0, r5
+ 409 0016 FFF7FEFF 		bl	handleByteReceived
+ 410              	.LVL43:
+  54:main.c        ****     }
+ 411              		.loc 1 54 0
+ 412 001a 013C     		subs	r4, r4, #1
+ 413              	.LVL44:
+ 414 001c E4B2     		uxtb	r4, r4
+ 415              	.LVL45:
+ 416              	.L43:
+ 417              	.LBE2:
+  47:main.c        ****     {
+ 418              		.loc 1 47 0
+ 419 001e 002C     		cmp	r4, #0
+ 420 0020 F3D1     		bne	.L44
+  56:main.c        **** 
+ 421              		.loc 1 56 0
+ 422 0022 38BD     		pop	{r3, r4, r5, pc}
+ 423              		.cfi_endproc
+ 424              	.LFE64:
+ 425              		.size	ISR_UART_rx_handler, .-ISR_UART_rx_handler
+ 426              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 427              		.align	2
+ 428              	.LC0:
+ 429 0000 44432D4D 		.ascii	"DC-Motor-PWM application started\015\012\000"
+ 429      6F746F72 
+ 429      2D50574D 
+ 429      20617070 
+ 429      6C696361 
+ 430 0023 00       		.space	1
+ 431              	.LC1:
+ 432 0024 303A2053 		.ascii	"0: Stop\015\012\000"
+ 432      746F700D 
+ 432      0A00
+ 433 002e 0000     		.space	2
+ 434              	.LC2:
+ 435 0030 313A2044 		.ascii	"1: Drive forwards\015\012\000"
+ 435      72697665 
+ 435      20666F72 
+ 435      77617264 
+ 435      730D0A00 
+ 436              	.LC3:
+ 437 0044 323A2044 		.ascii	"2: Drive backwards\015\012\000"
+ 437      72697665 
+ 437      20626163 
+ 437      6B776172 
+ 437      64730D0A 
+ 438 0059 000000   		.space	3
+ 439              	.LC4:
+ 440 005c 713A2044 		.ascii	"q: Decrease speed\015\012\000"
+ 440      65637265 
+ 440      61736520 
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 12
+
+
+ 440      73706565 
+ 440      640D0A00 
+ 441              	.LC5:
+ 442 0070 773A2049 		.ascii	"w: Increase speed\015\012\000"
+ 442      6E637265 
+ 442      61736520 
+ 442      73706565 
+ 442      640D0A00 
+ 443              	.LC6:
+ 444 0084 44656372 		.ascii	"Decreasing speed\015\012\000"
+ 444      65617369 
+ 444      6E672073 
+ 444      70656564 
+ 444      0D0A00
+ 445 0097 00       		.space	1
+ 446              	.LC7:
+ 447 0098 4D696E20 		.ascii	"Min speed achieved\015\012\000"
+ 447      73706565 
+ 447      64206163 
+ 447      68696576 
+ 447      65640D0A 
+ 448 00ad 000000   		.space	3
+ 449              	.LC8:
+ 450 00b0 496E6372 		.ascii	"Increasing speed\015\012\000"
+ 450      65617369 
+ 450      6E672073 
+ 450      70656564 
+ 450      0D0A00
+ 451 00c3 00       		.space	1
+ 452              	.LC9:
+ 453 00c4 4D617820 		.ascii	"Max speed achieved\015\012\000"
+ 453      73706565 
+ 453      64206163 
+ 453      68696576 
+ 453      65640D0A 
+ 454 00d9 000000   		.space	3
+ 455              	.LC10:
+ 456 00dc 53657420 		.ascii	"Set direction: forwards\015\012\000"
+ 456      64697265 
+ 456      6374696F 
+ 456      6E3A2066 
+ 456      6F727761 
+ 457 00f6 0000     		.space	2
+ 458              	.LC11:
+ 459 00f8 53657420 		.ascii	"Set direction: backwards\015\012\000"
+ 459      64697265 
+ 459      6374696F 
+ 459      6E3A2062 
+ 459      61636B77 
+ 460 0113 00       		.space	1
+ 461              	.LC12:
+ 462 0114 53746F70 		.ascii	"Stop\015\012\000"
+ 462      0D0A00
+ 463              		.text
+ 464              	.Letext0:
+ 465              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 466              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 13
+
+
+ 467              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 468              		.file 5 "Generated_Source\\PSoC5/isr_uart_rx.h"
+ 469              		.file 6 "Generated_Source\\PSoC5/UART_1.h"
+ 470              		.file 7 "Generated_Source\\PSoC5/PWM_1.h"
+ 471              		.file 8 "Generated_Source\\PSoC5/core_cm3.h"
+ 472              		.section	.debug_info,"",%progbits
+ 473              	.Ldebug_info0:
+ 474 0000 7D040000 		.4byte	0x47d
+ 475 0004 0400     		.2byte	0x4
+ 476 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 477 000a 04       		.byte	0x4
+ 478 000b 01       		.uleb128 0x1
+ 479 000c 88000000 		.4byte	.LASF39
+ 480 0010 0C       		.byte	0xc
+ 481 0011 B7020000 		.4byte	.LASF40
+ 482 0015 F4010000 		.4byte	.LASF41
+ 483 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 484 001d 00000000 		.4byte	0
+ 485 0021 00000000 		.4byte	.Ldebug_line0
+ 486 0025 02       		.uleb128 0x2
+ 487 0026 01       		.byte	0x1
+ 488 0027 06       		.byte	0x6
+ 489 0028 01030000 		.4byte	.LASF0
+ 490 002c 03       		.uleb128 0x3
+ 491 002d 21000000 		.4byte	.LASF4
+ 492 0031 02       		.byte	0x2
+ 493 0032 1D       		.byte	0x1d
+ 494 0033 37000000 		.4byte	0x37
+ 495 0037 02       		.uleb128 0x2
+ 496 0038 01       		.byte	0x1
+ 497 0039 08       		.byte	0x8
+ 498 003a 7A000000 		.4byte	.LASF1
+ 499 003e 02       		.uleb128 0x2
+ 500 003f 02       		.byte	0x2
+ 501 0040 05       		.byte	0x5
+ 502 0041 D1020000 		.4byte	.LASF2
+ 503 0045 02       		.uleb128 0x2
+ 504 0046 02       		.byte	0x2
+ 505 0047 07       		.byte	0x7
+ 506 0048 43000000 		.4byte	.LASF3
+ 507 004c 03       		.uleb128 0x3
+ 508 004d 2B000000 		.4byte	.LASF5
+ 509 0051 02       		.byte	0x2
+ 510 0052 3F       		.byte	0x3f
+ 511 0053 57000000 		.4byte	0x57
+ 512 0057 02       		.uleb128 0x2
+ 513 0058 04       		.byte	0x4
+ 514 0059 05       		.byte	0x5
+ 515 005a EC020000 		.4byte	.LASF6
+ 516 005e 02       		.uleb128 0x2
+ 517 005f 04       		.byte	0x4
+ 518 0060 07       		.byte	0x7
+ 519 0061 2A010000 		.4byte	.LASF7
+ 520 0065 02       		.uleb128 0x2
+ 521 0066 08       		.byte	0x8
+ 522 0067 05       		.byte	0x5
+ 523 0068 A0020000 		.4byte	.LASF8
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 14
+
+
+ 524 006c 02       		.uleb128 0x2
+ 525 006d 08       		.byte	0x8
+ 526 006e 07       		.byte	0x7
+ 527 006f BE010000 		.4byte	.LASF9
+ 528 0073 04       		.uleb128 0x4
+ 529 0074 04       		.byte	0x4
+ 530 0075 05       		.byte	0x5
+ 531 0076 696E7400 		.ascii	"int\000"
+ 532 007a 02       		.uleb128 0x2
+ 533 007b 04       		.byte	0x4
+ 534 007c 07       		.byte	0x7
+ 535 007d A3010000 		.4byte	.LASF10
+ 536 0081 03       		.uleb128 0x3
+ 537 0082 D5010000 		.4byte	.LASF11
+ 538 0086 03       		.byte	0x3
+ 539 0087 18       		.byte	0x18
+ 540 0088 2C000000 		.4byte	0x2c
+ 541 008c 03       		.uleb128 0x3
+ 542 008d 76020000 		.4byte	.LASF12
+ 543 0091 03       		.byte	0x3
+ 544 0092 2C       		.byte	0x2c
+ 545 0093 4C000000 		.4byte	0x4c
+ 546 0097 05       		.uleb128 0x5
+ 547 0098 DB020000 		.4byte	.LASF13
+ 548 009c 04       		.byte	0x4
+ 549 009d 9201     		.2byte	0x192
+ 550 009f 37000000 		.4byte	0x37
+ 551 00a3 02       		.uleb128 0x2
+ 552 00a4 04       		.byte	0x4
+ 553 00a5 04       		.byte	0x4
+ 554 00a6 74000000 		.4byte	.LASF14
+ 555 00aa 02       		.uleb128 0x2
+ 556 00ab 08       		.byte	0x8
+ 557 00ac 04       		.byte	0x4
+ 558 00ad 84010000 		.4byte	.LASF15
+ 559 00b1 02       		.uleb128 0x2
+ 560 00b2 01       		.byte	0x1
+ 561 00b3 08       		.byte	0x8
+ 562 00b4 BE020000 		.4byte	.LASF16
+ 563 00b8 02       		.uleb128 0x2
+ 564 00b9 08       		.byte	0x8
+ 565 00ba 04       		.byte	0x4
+ 566 00bb F5020000 		.4byte	.LASF17
+ 567 00bf 02       		.uleb128 0x2
+ 568 00c0 04       		.byte	0x4
+ 569 00c1 07       		.byte	0x7
+ 570 00c2 AE020000 		.4byte	.LASF18
+ 571 00c6 06       		.uleb128 0x6
+ 572 00c7 8B010000 		.4byte	.LASF42
+ 573 00cb 01       		.byte	0x1
+ 574 00cc 16       		.byte	0x16
+ 575 00cd 73000000 		.4byte	0x73
+ 576 00d1 00000000 		.4byte	.LFB63
+ 577 00d5 54000000 		.4byte	.LFE63-.LFB63
+ 578 00d9 01       		.uleb128 0x1
+ 579 00da 9C       		.byte	0x9c
+ 580 00db 8F010000 		.4byte	0x18f
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 15
+
+
+ 581 00df 07       		.uleb128 0x7
+ 582 00e0 0A000000 		.4byte	.LVL0
+ 583 00e4 12040000 		.4byte	0x412
+ 584 00e8 F6000000 		.4byte	0xf6
+ 585 00ec 08       		.uleb128 0x8
+ 586 00ed 01       		.uleb128 0x1
+ 587 00ee 50       		.byte	0x50
+ 588 00ef 05       		.uleb128 0x5
+ 589 00f0 03       		.byte	0x3
+ 590 00f1 00000000 		.4byte	ISR_UART_rx_handler
+ 591 00f5 00       		.byte	0
+ 592 00f6 09       		.uleb128 0x9
+ 593 00f7 0E000000 		.4byte	.LVL1
+ 594 00fb 1D040000 		.4byte	0x41d
+ 595 00ff 09       		.uleb128 0x9
+ 596 0100 12000000 		.4byte	.LVL2
+ 597 0104 28040000 		.4byte	0x428
+ 598 0108 07       		.uleb128 0x7
+ 599 0109 18000000 		.4byte	.LVL3
+ 600 010d 33040000 		.4byte	0x433
+ 601 0111 1F010000 		.4byte	0x11f
+ 602 0115 08       		.uleb128 0x8
+ 603 0116 01       		.uleb128 0x1
+ 604 0117 50       		.byte	0x50
+ 605 0118 05       		.uleb128 0x5
+ 606 0119 03       		.byte	0x3
+ 607 011a 00000000 		.4byte	.LC0
+ 608 011e 00       		.byte	0
+ 609 011f 07       		.uleb128 0x7
+ 610 0120 1E000000 		.4byte	.LVL4
+ 611 0124 33040000 		.4byte	0x433
+ 612 0128 36010000 		.4byte	0x136
+ 613 012c 08       		.uleb128 0x8
+ 614 012d 01       		.uleb128 0x1
+ 615 012e 50       		.byte	0x50
+ 616 012f 05       		.uleb128 0x5
+ 617 0130 03       		.byte	0x3
+ 618 0131 24000000 		.4byte	.LC1
+ 619 0135 00       		.byte	0
+ 620 0136 07       		.uleb128 0x7
+ 621 0137 24000000 		.4byte	.LVL5
+ 622 013b 33040000 		.4byte	0x433
+ 623 013f 4D010000 		.4byte	0x14d
+ 624 0143 08       		.uleb128 0x8
+ 625 0144 01       		.uleb128 0x1
+ 626 0145 50       		.byte	0x50
+ 627 0146 05       		.uleb128 0x5
+ 628 0147 03       		.byte	0x3
+ 629 0148 30000000 		.4byte	.LC2
+ 630 014c 00       		.byte	0
+ 631 014d 07       		.uleb128 0x7
+ 632 014e 2A000000 		.4byte	.LVL6
+ 633 0152 33040000 		.4byte	0x433
+ 634 0156 64010000 		.4byte	0x164
+ 635 015a 08       		.uleb128 0x8
+ 636 015b 01       		.uleb128 0x1
+ 637 015c 50       		.byte	0x50
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 16
+
+
+ 638 015d 05       		.uleb128 0x5
+ 639 015e 03       		.byte	0x3
+ 640 015f 44000000 		.4byte	.LC3
+ 641 0163 00       		.byte	0
+ 642 0164 07       		.uleb128 0x7
+ 643 0165 30000000 		.4byte	.LVL7
+ 644 0169 33040000 		.4byte	0x433
+ 645 016d 7B010000 		.4byte	0x17b
+ 646 0171 08       		.uleb128 0x8
+ 647 0172 01       		.uleb128 0x1
+ 648 0173 50       		.byte	0x50
+ 649 0174 05       		.uleb128 0x5
+ 650 0175 03       		.byte	0x3
+ 651 0176 5C000000 		.4byte	.LC4
+ 652 017a 00       		.byte	0
+ 653 017b 0A       		.uleb128 0xa
+ 654 017c 36000000 		.4byte	.LVL8
+ 655 0180 33040000 		.4byte	0x433
+ 656 0184 08       		.uleb128 0x8
+ 657 0185 01       		.uleb128 0x1
+ 658 0186 50       		.byte	0x50
+ 659 0187 05       		.uleb128 0x5
+ 660 0188 03       		.byte	0x3
+ 661 0189 70000000 		.4byte	.LC5
+ 662 018d 00       		.byte	0
+ 663 018e 00       		.byte	0
+ 664 018f 0B       		.uleb128 0xb
+ 665 0190 C3020000 		.4byte	.LASF19
+ 666 0194 01       		.byte	0x1
+ 667 0195 60       		.byte	0x60
+ 668 0196 00000000 		.4byte	.LFB66
+ 669 019a 44000000 		.4byte	.LFE66-.LFB66
+ 670 019e 01       		.uleb128 0x1
+ 671 019f 9C       		.byte	0x9c
+ 672 01a0 22020000 		.4byte	0x222
+ 673 01a4 0C       		.uleb128 0xc
+ 674 01a5 5A010000 		.4byte	.LASF21
+ 675 01a9 01       		.byte	0x1
+ 676 01aa 62       		.byte	0x62
+ 677 01ab 97000000 		.4byte	0x97
+ 678 01af 00000000 		.4byte	.LLST0
+ 679 01b3 09       		.uleb128 0x9
+ 680 01b4 06000000 		.4byte	.LVL9
+ 681 01b8 3E040000 		.4byte	0x43e
+ 682 01bc 07       		.uleb128 0x7
+ 683 01bd 10000000 		.4byte	.LVL11
+ 684 01c1 33040000 		.4byte	0x433
+ 685 01c5 D3010000 		.4byte	0x1d3
+ 686 01c9 08       		.uleb128 0x8
+ 687 01ca 01       		.uleb128 0x1
+ 688 01cb 50       		.byte	0x50
+ 689 01cc 05       		.uleb128 0x5
+ 690 01cd 03       		.byte	0x3
+ 691 01ce 84000000 		.4byte	.LC6
+ 692 01d2 00       		.byte	0
+ 693 01d3 07       		.uleb128 0x7
+ 694 01d4 1A000000 		.4byte	.LVL12
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 17
+
+
+ 695 01d8 49040000 		.4byte	0x449
+ 696 01dc E7010000 		.4byte	0x1e7
+ 697 01e0 08       		.uleb128 0x8
+ 698 01e1 01       		.uleb128 0x1
+ 699 01e2 50       		.byte	0x50
+ 700 01e3 02       		.uleb128 0x2
+ 701 01e4 08       		.byte	0x8
+ 702 01e5 5A       		.byte	0x5a
+ 703 01e6 00       		.byte	0
+ 704 01e7 07       		.uleb128 0x7
+ 705 01e8 2A000000 		.4byte	.LVL13
+ 706 01ec 49040000 		.4byte	0x449
+ 707 01f0 FB010000 		.4byte	0x1fb
+ 708 01f4 08       		.uleb128 0x8
+ 709 01f5 01       		.uleb128 0x1
+ 710 01f6 50       		.byte	0x50
+ 711 01f7 02       		.uleb128 0x2
+ 712 01f8 74       		.byte	0x74
+ 713 01f9 76       		.sleb128 -10
+ 714 01fa 00       		.byte	0
+ 715 01fb 07       		.uleb128 0x7
+ 716 01fc 32000000 		.4byte	.LVL14
+ 717 0200 33040000 		.4byte	0x433
+ 718 0204 12020000 		.4byte	0x212
+ 719 0208 08       		.uleb128 0x8
+ 720 0209 01       		.uleb128 0x1
+ 721 020a 50       		.byte	0x50
+ 722 020b 05       		.uleb128 0x5
+ 723 020c 03       		.byte	0x3
+ 724 020d 98000000 		.4byte	.LC7
+ 725 0211 00       		.byte	0
+ 726 0212 0A       		.uleb128 0xa
+ 727 0213 38000000 		.4byte	.LVL15
+ 728 0217 49040000 		.4byte	0x449
+ 729 021b 08       		.uleb128 0x8
+ 730 021c 01       		.uleb128 0x1
+ 731 021d 50       		.byte	0x50
+ 732 021e 01       		.uleb128 0x1
+ 733 021f 30       		.byte	0x30
+ 734 0220 00       		.byte	0
+ 735 0221 00       		.byte	0
+ 736 0222 0B       		.uleb128 0xb
+ 737 0223 35000000 		.4byte	.LASF20
+ 738 0227 01       		.byte	0x1
+ 739 0228 77       		.byte	0x77
+ 740 0229 00000000 		.4byte	.LFB67
+ 741 022d 38000000 		.4byte	.LFE67-.LFB67
+ 742 0231 01       		.uleb128 0x1
+ 743 0232 9C       		.byte	0x9c
+ 744 0233 A2020000 		.4byte	0x2a2
+ 745 0237 0C       		.uleb128 0xc
+ 746 0238 5A010000 		.4byte	.LASF21
+ 747 023c 01       		.byte	0x1
+ 748 023d 79       		.byte	0x79
+ 749 023e 97000000 		.4byte	0x97
+ 750 0242 13000000 		.4byte	.LLST1
+ 751 0246 09       		.uleb128 0x9
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 18
+
+
+ 752 0247 06000000 		.4byte	.LVL16
+ 753 024b 3E040000 		.4byte	0x43e
+ 754 024f 07       		.uleb128 0x7
+ 755 0250 12000000 		.4byte	.LVL19
+ 756 0254 33040000 		.4byte	0x433
+ 757 0258 66020000 		.4byte	0x266
+ 758 025c 08       		.uleb128 0x8
+ 759 025d 01       		.uleb128 0x1
+ 760 025e 50       		.byte	0x50
+ 761 025f 05       		.uleb128 0x5
+ 762 0260 03       		.byte	0x3
+ 763 0261 B0000000 		.4byte	.LC8
+ 764 0265 00       		.byte	0
+ 765 0266 07       		.uleb128 0x7
+ 766 0267 20000000 		.4byte	.LVL20
+ 767 026b 49040000 		.4byte	0x449
+ 768 026f 7A020000 		.4byte	0x27a
+ 769 0273 08       		.uleb128 0x8
+ 770 0274 01       		.uleb128 0x1
+ 771 0275 50       		.byte	0x50
+ 772 0276 02       		.uleb128 0x2
+ 773 0277 74       		.byte	0x74
+ 774 0278 0A       		.sleb128 10
+ 775 0279 00       		.byte	0
+ 776 027a 07       		.uleb128 0x7
+ 777 027b 28000000 		.4byte	.LVL21
+ 778 027f 33040000 		.4byte	0x433
+ 779 0283 91020000 		.4byte	0x291
+ 780 0287 08       		.uleb128 0x8
+ 781 0288 01       		.uleb128 0x1
+ 782 0289 50       		.byte	0x50
+ 783 028a 05       		.uleb128 0x5
+ 784 028b 03       		.byte	0x3
+ 785 028c C4000000 		.4byte	.LC9
+ 786 0290 00       		.byte	0
+ 787 0291 0A       		.uleb128 0xa
+ 788 0292 2E000000 		.4byte	.LVL22
+ 789 0296 49040000 		.4byte	0x449
+ 790 029a 08       		.uleb128 0x8
+ 791 029b 01       		.uleb128 0x1
+ 792 029c 50       		.byte	0x50
+ 793 029d 02       		.uleb128 0x2
+ 794 029e 08       		.byte	0x8
+ 795 029f 65       		.byte	0x65
+ 796 02a0 00       		.byte	0
+ 797 02a1 00       		.byte	0
+ 798 02a2 0B       		.uleb128 0xb
+ 799 02a3 B0010000 		.4byte	.LASF22
+ 800 02a7 01       		.byte	0x1
+ 801 02a8 89       		.byte	0x89
+ 802 02a9 00000000 		.4byte	.LFB68
+ 803 02ad 14000000 		.4byte	.LFE68-.LFB68
+ 804 02b1 01       		.uleb128 0x1
+ 805 02b2 9C       		.byte	0x9c
+ 806 02b3 D8020000 		.4byte	0x2d8
+ 807 02b7 07       		.uleb128 0x7
+ 808 02b8 08000000 		.4byte	.LVL23
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 19
+
+
+ 809 02bc 33040000 		.4byte	0x433
+ 810 02c0 CE020000 		.4byte	0x2ce
+ 811 02c4 08       		.uleb128 0x8
+ 812 02c5 01       		.uleb128 0x1
+ 813 02c6 50       		.byte	0x50
+ 814 02c7 05       		.uleb128 0x5
+ 815 02c8 03       		.byte	0x3
+ 816 02c9 DC000000 		.4byte	.LC10
+ 817 02cd 00       		.byte	0
+ 818 02ce 09       		.uleb128 0x9
+ 819 02cf 0C000000 		.4byte	.LVL24
+ 820 02d3 28040000 		.4byte	0x428
+ 821 02d7 00       		.byte	0
+ 822 02d8 0B       		.uleb128 0xb
+ 823 02d9 7E020000 		.4byte	.LASF23
+ 824 02dd 01       		.byte	0x1
+ 825 02de 8F       		.byte	0x8f
+ 826 02df 00000000 		.4byte	.LFB69
+ 827 02e3 10000000 		.4byte	.LFE69-.LFB69
+ 828 02e7 01       		.uleb128 0x1
+ 829 02e8 9C       		.byte	0x9c
+ 830 02e9 01030000 		.4byte	0x301
+ 831 02ed 0A       		.uleb128 0xa
+ 832 02ee 08000000 		.4byte	.LVL25
+ 833 02f2 33040000 		.4byte	0x433
+ 834 02f6 08       		.uleb128 0x8
+ 835 02f7 01       		.uleb128 0x1
+ 836 02f8 50       		.byte	0x50
+ 837 02f9 05       		.uleb128 0x5
+ 838 02fa 03       		.byte	0x3
+ 839 02fb F8000000 		.4byte	.LC11
+ 840 02ff 00       		.byte	0
+ 841 0300 00       		.byte	0
+ 842 0301 0B       		.uleb128 0xb
+ 843 0302 5F010000 		.4byte	.LASF24
+ 844 0306 01       		.byte	0x1
+ 845 0307 94       		.byte	0x94
+ 846 0308 00000000 		.4byte	.LFB70
+ 847 030c 14000000 		.4byte	.LFE70-.LFB70
+ 848 0310 01       		.uleb128 0x1
+ 849 0311 9C       		.byte	0x9c
+ 850 0312 37030000 		.4byte	0x337
+ 851 0316 07       		.uleb128 0x7
+ 852 0317 08000000 		.4byte	.LVL26
+ 853 031b 33040000 		.4byte	0x433
+ 854 031f 2D030000 		.4byte	0x32d
+ 855 0323 08       		.uleb128 0x8
+ 856 0324 01       		.uleb128 0x1
+ 857 0325 50       		.byte	0x50
+ 858 0326 05       		.uleb128 0x5
+ 859 0327 03       		.byte	0x3
+ 860 0328 14010000 		.4byte	.LC12
+ 861 032c 00       		.byte	0
+ 862 032d 09       		.uleb128 0x9
+ 863 032e 0C000000 		.4byte	.LVL27
+ 864 0332 54040000 		.4byte	0x454
+ 865 0336 00       		.byte	0
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 20
+
+
+ 866 0337 0B       		.uleb128 0xb
+ 867 0338 90010000 		.4byte	.LASF25
+ 868 033c 01       		.byte	0x1
+ 869 033d 3A       		.byte	0x3a
+ 870 033e 00000000 		.4byte	.LFB65
+ 871 0342 3A000000 		.4byte	.LFE65-.LFB65
+ 872 0346 01       		.uleb128 0x1
+ 873 0347 9C       		.byte	0x9c
+ 874 0348 89030000 		.4byte	0x389
+ 875 034c 0D       		.uleb128 0xd
+ 876 034d 1E030000 		.4byte	.LASF28
+ 877 0351 01       		.byte	0x1
+ 878 0352 3A       		.byte	0x3a
+ 879 0353 81000000 		.4byte	0x81
+ 880 0357 26000000 		.4byte	.LLST2
+ 881 035b 09       		.uleb128 0x9
+ 882 035c 20000000 		.4byte	.LVL29
+ 883 0360 8F010000 		.4byte	0x18f
+ 884 0364 09       		.uleb128 0x9
+ 885 0365 26000000 		.4byte	.LVL31
+ 886 0369 22020000 		.4byte	0x222
+ 887 036d 09       		.uleb128 0x9
+ 888 036e 2C000000 		.4byte	.LVL33
+ 889 0372 A2020000 		.4byte	0x2a2
+ 890 0376 09       		.uleb128 0x9
+ 891 0377 32000000 		.4byte	.LVL35
+ 892 037b D8020000 		.4byte	0x2d8
+ 893 037f 09       		.uleb128 0x9
+ 894 0380 38000000 		.4byte	.LVL37
+ 895 0384 01030000 		.4byte	0x301
+ 896 0388 00       		.byte	0
+ 897 0389 0B       		.uleb128 0xb
+ 898 038a 16010000 		.4byte	.LASF26
+ 899 038e 01       		.byte	0x1
+ 900 038f 2C       		.byte	0x2c
+ 901 0390 00000000 		.4byte	.LFB64
+ 902 0394 24000000 		.4byte	.LFE64-.LFB64
+ 903 0398 01       		.uleb128 0x1
+ 904 0399 9C       		.byte	0x9c
+ 905 039a 01040000 		.4byte	0x401
+ 906 039e 0C       		.uleb128 0xc
+ 907 039f 56000000 		.4byte	.LASF27
+ 908 03a3 01       		.byte	0x1
+ 909 03a4 2E       		.byte	0x2e
+ 910 03a5 81000000 		.4byte	0x81
+ 911 03a9 AB000000 		.4byte	.LLST3
+ 912 03ad 0E       		.uleb128 0xe
+ 913 03ae 0A000000 		.4byte	.LBB2
+ 914 03b2 14000000 		.4byte	.LBE2-.LBB2
+ 915 03b6 F7030000 		.4byte	0x3f7
+ 916 03ba 0C       		.uleb128 0xc
+ 917 03bb 1E030000 		.4byte	.LASF28
+ 918 03bf 01       		.byte	0x1
+ 919 03c0 31       		.byte	0x31
+ 920 03c1 81000000 		.4byte	0x81
+ 921 03c5 C9000000 		.4byte	.LLST4
+ 922 03c9 09       		.uleb128 0x9
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 21
+
+
+ 923 03ca 0E000000 		.4byte	.LVL40
+ 924 03ce 5F040000 		.4byte	0x45f
+ 925 03d2 07       		.uleb128 0x7
+ 926 03d3 14000000 		.4byte	.LVL42
+ 927 03d7 6A040000 		.4byte	0x46a
+ 928 03db E6030000 		.4byte	0x3e6
+ 929 03df 08       		.uleb128 0x8
+ 930 03e0 01       		.uleb128 0x1
+ 931 03e1 50       		.byte	0x50
+ 932 03e2 02       		.uleb128 0x2
+ 933 03e3 75       		.byte	0x75
+ 934 03e4 00       		.sleb128 0
+ 935 03e5 00       		.byte	0
+ 936 03e6 0A       		.uleb128 0xa
+ 937 03e7 1A000000 		.4byte	.LVL43
+ 938 03eb 37030000 		.4byte	0x337
+ 939 03ef 08       		.uleb128 0x8
+ 940 03f0 01       		.uleb128 0x1
+ 941 03f1 50       		.byte	0x50
+ 942 03f2 02       		.uleb128 0x2
+ 943 03f3 75       		.byte	0x75
+ 944 03f4 00       		.sleb128 0
+ 945 03f5 00       		.byte	0
+ 946 03f6 00       		.byte	0
+ 947 03f7 09       		.uleb128 0x9
+ 948 03f8 06000000 		.4byte	.LVL38
+ 949 03fc 75040000 		.4byte	0x475
+ 950 0400 00       		.byte	0
+ 951 0401 0F       		.uleb128 0xf
+ 952 0402 64010000 		.4byte	.LASF43
+ 953 0406 08       		.byte	0x8
+ 954 0407 9606     		.2byte	0x696
+ 955 0409 0D040000 		.4byte	0x40d
+ 956 040d 10       		.uleb128 0x10
+ 957 040e 8C000000 		.4byte	0x8c
+ 958 0412 11       		.uleb128 0x11
+ 959 0413 00000000 		.4byte	.LASF29
+ 960 0417 00000000 		.4byte	.LASF29
+ 961 041b 05       		.byte	0x5
+ 962 041c 18       		.byte	0x18
+ 963 041d 11       		.uleb128 0x11
+ 964 041e 14000000 		.4byte	.LASF30
+ 965 0422 14000000 		.4byte	.LASF30
+ 966 0426 06       		.byte	0x6
+ 967 0427 54       		.byte	0x54
+ 968 0428 11       		.uleb128 0x11
+ 969 0429 4E010000 		.4byte	.LASF31
+ 970 042d 4E010000 		.4byte	.LASF31
+ 971 0431 07       		.byte	0x7
+ 972 0432 92       		.byte	0x92
+ 973 0433 11       		.uleb128 0x11
+ 974 0434 0D030000 		.4byte	.LASF32
+ 975 0438 0D030000 		.4byte	.LASF32
+ 976 043c 06       		.byte	0x6
+ 977 043d 8B       		.byte	0x8b
+ 978 043e 11       		.uleb128 0x11
+ 979 043f 62000000 		.4byte	.LASF33
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 22
+
+
+ 980 0443 62000000 		.4byte	.LASF33
+ 981 0447 07       		.byte	0x7
+ 982 0448 C5       		.byte	0xc5
+ 983 0449 11       		.uleb128 0x11
+ 984 044a 8D020000 		.4byte	.LASF34
+ 985 044e 8D020000 		.4byte	.LASF34
+ 986 0452 07       		.byte	0x7
+ 987 0453 C3       		.byte	0xc3
+ 988 0454 11       		.uleb128 0x11
+ 989 0455 E1020000 		.4byte	.LASF35
+ 990 0459 E1020000 		.4byte	.LASF35
+ 991 045d 07       		.byte	0x7
+ 992 045e 93       		.byte	0x93
+ 993 045f 11       		.uleb128 0x11
+ 994 0460 3C010000 		.4byte	.LASF36
+ 995 0464 3C010000 		.4byte	.LASF36
+ 996 0468 06       		.byte	0x6
+ 997 0469 6F       		.byte	0x6f
+ 998 046a 11       		.uleb128 0x11
+ 999 046b 71010000 		.4byte	.LASF37
+ 1000 046f 71010000 		.4byte	.LASF37
+ 1001 0473 06       		.byte	0x6
+ 1002 0474 88       		.byte	0x88
+ 1003 0475 11       		.uleb128 0x11
+ 1004 0476 DD010000 		.4byte	.LASF38
+ 1005 047a DD010000 		.4byte	.LASF38
+ 1006 047e 06       		.byte	0x6
+ 1007 047f 73       		.byte	0x73
+ 1008 0480 00       		.byte	0
+ 1009              		.section	.debug_abbrev,"",%progbits
+ 1010              	.Ldebug_abbrev0:
+ 1011 0000 01       		.uleb128 0x1
+ 1012 0001 11       		.uleb128 0x11
+ 1013 0002 01       		.byte	0x1
+ 1014 0003 25       		.uleb128 0x25
+ 1015 0004 0E       		.uleb128 0xe
+ 1016 0005 13       		.uleb128 0x13
+ 1017 0006 0B       		.uleb128 0xb
+ 1018 0007 03       		.uleb128 0x3
+ 1019 0008 0E       		.uleb128 0xe
+ 1020 0009 1B       		.uleb128 0x1b
+ 1021 000a 0E       		.uleb128 0xe
+ 1022 000b 55       		.uleb128 0x55
+ 1023 000c 17       		.uleb128 0x17
+ 1024 000d 11       		.uleb128 0x11
+ 1025 000e 01       		.uleb128 0x1
+ 1026 000f 10       		.uleb128 0x10
+ 1027 0010 17       		.uleb128 0x17
+ 1028 0011 00       		.byte	0
+ 1029 0012 00       		.byte	0
+ 1030 0013 02       		.uleb128 0x2
+ 1031 0014 24       		.uleb128 0x24
+ 1032 0015 00       		.byte	0
+ 1033 0016 0B       		.uleb128 0xb
+ 1034 0017 0B       		.uleb128 0xb
+ 1035 0018 3E       		.uleb128 0x3e
+ 1036 0019 0B       		.uleb128 0xb
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 23
+
+
+ 1037 001a 03       		.uleb128 0x3
+ 1038 001b 0E       		.uleb128 0xe
+ 1039 001c 00       		.byte	0
+ 1040 001d 00       		.byte	0
+ 1041 001e 03       		.uleb128 0x3
+ 1042 001f 16       		.uleb128 0x16
+ 1043 0020 00       		.byte	0
+ 1044 0021 03       		.uleb128 0x3
+ 1045 0022 0E       		.uleb128 0xe
+ 1046 0023 3A       		.uleb128 0x3a
+ 1047 0024 0B       		.uleb128 0xb
+ 1048 0025 3B       		.uleb128 0x3b
+ 1049 0026 0B       		.uleb128 0xb
+ 1050 0027 49       		.uleb128 0x49
+ 1051 0028 13       		.uleb128 0x13
+ 1052 0029 00       		.byte	0
+ 1053 002a 00       		.byte	0
+ 1054 002b 04       		.uleb128 0x4
+ 1055 002c 24       		.uleb128 0x24
+ 1056 002d 00       		.byte	0
+ 1057 002e 0B       		.uleb128 0xb
+ 1058 002f 0B       		.uleb128 0xb
+ 1059 0030 3E       		.uleb128 0x3e
+ 1060 0031 0B       		.uleb128 0xb
+ 1061 0032 03       		.uleb128 0x3
+ 1062 0033 08       		.uleb128 0x8
+ 1063 0034 00       		.byte	0
+ 1064 0035 00       		.byte	0
+ 1065 0036 05       		.uleb128 0x5
+ 1066 0037 16       		.uleb128 0x16
+ 1067 0038 00       		.byte	0
+ 1068 0039 03       		.uleb128 0x3
+ 1069 003a 0E       		.uleb128 0xe
+ 1070 003b 3A       		.uleb128 0x3a
+ 1071 003c 0B       		.uleb128 0xb
+ 1072 003d 3B       		.uleb128 0x3b
+ 1073 003e 05       		.uleb128 0x5
+ 1074 003f 49       		.uleb128 0x49
+ 1075 0040 13       		.uleb128 0x13
+ 1076 0041 00       		.byte	0
+ 1077 0042 00       		.byte	0
+ 1078 0043 06       		.uleb128 0x6
+ 1079 0044 2E       		.uleb128 0x2e
+ 1080 0045 01       		.byte	0x1
+ 1081 0046 3F       		.uleb128 0x3f
+ 1082 0047 19       		.uleb128 0x19
+ 1083 0048 03       		.uleb128 0x3
+ 1084 0049 0E       		.uleb128 0xe
+ 1085 004a 3A       		.uleb128 0x3a
+ 1086 004b 0B       		.uleb128 0xb
+ 1087 004c 3B       		.uleb128 0x3b
+ 1088 004d 0B       		.uleb128 0xb
+ 1089 004e 27       		.uleb128 0x27
+ 1090 004f 19       		.uleb128 0x19
+ 1091 0050 49       		.uleb128 0x49
+ 1092 0051 13       		.uleb128 0x13
+ 1093 0052 8701     		.uleb128 0x87
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 24
+
+
+ 1094 0054 19       		.uleb128 0x19
+ 1095 0055 11       		.uleb128 0x11
+ 1096 0056 01       		.uleb128 0x1
+ 1097 0057 12       		.uleb128 0x12
+ 1098 0058 06       		.uleb128 0x6
+ 1099 0059 40       		.uleb128 0x40
+ 1100 005a 18       		.uleb128 0x18
+ 1101 005b 9742     		.uleb128 0x2117
+ 1102 005d 19       		.uleb128 0x19
+ 1103 005e 01       		.uleb128 0x1
+ 1104 005f 13       		.uleb128 0x13
+ 1105 0060 00       		.byte	0
+ 1106 0061 00       		.byte	0
+ 1107 0062 07       		.uleb128 0x7
+ 1108 0063 898201   		.uleb128 0x4109
+ 1109 0066 01       		.byte	0x1
+ 1110 0067 11       		.uleb128 0x11
+ 1111 0068 01       		.uleb128 0x1
+ 1112 0069 31       		.uleb128 0x31
+ 1113 006a 13       		.uleb128 0x13
+ 1114 006b 01       		.uleb128 0x1
+ 1115 006c 13       		.uleb128 0x13
+ 1116 006d 00       		.byte	0
+ 1117 006e 00       		.byte	0
+ 1118 006f 08       		.uleb128 0x8
+ 1119 0070 8A8201   		.uleb128 0x410a
+ 1120 0073 00       		.byte	0
+ 1121 0074 02       		.uleb128 0x2
+ 1122 0075 18       		.uleb128 0x18
+ 1123 0076 9142     		.uleb128 0x2111
+ 1124 0078 18       		.uleb128 0x18
+ 1125 0079 00       		.byte	0
+ 1126 007a 00       		.byte	0
+ 1127 007b 09       		.uleb128 0x9
+ 1128 007c 898201   		.uleb128 0x4109
+ 1129 007f 00       		.byte	0
+ 1130 0080 11       		.uleb128 0x11
+ 1131 0081 01       		.uleb128 0x1
+ 1132 0082 31       		.uleb128 0x31
+ 1133 0083 13       		.uleb128 0x13
+ 1134 0084 00       		.byte	0
+ 1135 0085 00       		.byte	0
+ 1136 0086 0A       		.uleb128 0xa
+ 1137 0087 898201   		.uleb128 0x4109
+ 1138 008a 01       		.byte	0x1
+ 1139 008b 11       		.uleb128 0x11
+ 1140 008c 01       		.uleb128 0x1
+ 1141 008d 31       		.uleb128 0x31
+ 1142 008e 13       		.uleb128 0x13
+ 1143 008f 00       		.byte	0
+ 1144 0090 00       		.byte	0
+ 1145 0091 0B       		.uleb128 0xb
+ 1146 0092 2E       		.uleb128 0x2e
+ 1147 0093 01       		.byte	0x1
+ 1148 0094 3F       		.uleb128 0x3f
+ 1149 0095 19       		.uleb128 0x19
+ 1150 0096 03       		.uleb128 0x3
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 25
+
+
+ 1151 0097 0E       		.uleb128 0xe
+ 1152 0098 3A       		.uleb128 0x3a
+ 1153 0099 0B       		.uleb128 0xb
+ 1154 009a 3B       		.uleb128 0x3b
+ 1155 009b 0B       		.uleb128 0xb
+ 1156 009c 27       		.uleb128 0x27
+ 1157 009d 19       		.uleb128 0x19
+ 1158 009e 11       		.uleb128 0x11
+ 1159 009f 01       		.uleb128 0x1
+ 1160 00a0 12       		.uleb128 0x12
+ 1161 00a1 06       		.uleb128 0x6
+ 1162 00a2 40       		.uleb128 0x40
+ 1163 00a3 18       		.uleb128 0x18
+ 1164 00a4 9742     		.uleb128 0x2117
+ 1165 00a6 19       		.uleb128 0x19
+ 1166 00a7 01       		.uleb128 0x1
+ 1167 00a8 13       		.uleb128 0x13
+ 1168 00a9 00       		.byte	0
+ 1169 00aa 00       		.byte	0
+ 1170 00ab 0C       		.uleb128 0xc
+ 1171 00ac 34       		.uleb128 0x34
+ 1172 00ad 00       		.byte	0
+ 1173 00ae 03       		.uleb128 0x3
+ 1174 00af 0E       		.uleb128 0xe
+ 1175 00b0 3A       		.uleb128 0x3a
+ 1176 00b1 0B       		.uleb128 0xb
+ 1177 00b2 3B       		.uleb128 0x3b
+ 1178 00b3 0B       		.uleb128 0xb
+ 1179 00b4 49       		.uleb128 0x49
+ 1180 00b5 13       		.uleb128 0x13
+ 1181 00b6 02       		.uleb128 0x2
+ 1182 00b7 17       		.uleb128 0x17
+ 1183 00b8 00       		.byte	0
+ 1184 00b9 00       		.byte	0
+ 1185 00ba 0D       		.uleb128 0xd
+ 1186 00bb 05       		.uleb128 0x5
+ 1187 00bc 00       		.byte	0
+ 1188 00bd 03       		.uleb128 0x3
+ 1189 00be 0E       		.uleb128 0xe
+ 1190 00bf 3A       		.uleb128 0x3a
+ 1191 00c0 0B       		.uleb128 0xb
+ 1192 00c1 3B       		.uleb128 0x3b
+ 1193 00c2 0B       		.uleb128 0xb
+ 1194 00c3 49       		.uleb128 0x49
+ 1195 00c4 13       		.uleb128 0x13
+ 1196 00c5 02       		.uleb128 0x2
+ 1197 00c6 17       		.uleb128 0x17
+ 1198 00c7 00       		.byte	0
+ 1199 00c8 00       		.byte	0
+ 1200 00c9 0E       		.uleb128 0xe
+ 1201 00ca 0B       		.uleb128 0xb
+ 1202 00cb 01       		.byte	0x1
+ 1203 00cc 11       		.uleb128 0x11
+ 1204 00cd 01       		.uleb128 0x1
+ 1205 00ce 12       		.uleb128 0x12
+ 1206 00cf 06       		.uleb128 0x6
+ 1207 00d0 01       		.uleb128 0x1
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 26
+
+
+ 1208 00d1 13       		.uleb128 0x13
+ 1209 00d2 00       		.byte	0
+ 1210 00d3 00       		.byte	0
+ 1211 00d4 0F       		.uleb128 0xf
+ 1212 00d5 34       		.uleb128 0x34
+ 1213 00d6 00       		.byte	0
+ 1214 00d7 03       		.uleb128 0x3
+ 1215 00d8 0E       		.uleb128 0xe
+ 1216 00d9 3A       		.uleb128 0x3a
+ 1217 00da 0B       		.uleb128 0xb
+ 1218 00db 3B       		.uleb128 0x3b
+ 1219 00dc 05       		.uleb128 0x5
+ 1220 00dd 49       		.uleb128 0x49
+ 1221 00de 13       		.uleb128 0x13
+ 1222 00df 3F       		.uleb128 0x3f
+ 1223 00e0 19       		.uleb128 0x19
+ 1224 00e1 3C       		.uleb128 0x3c
+ 1225 00e2 19       		.uleb128 0x19
+ 1226 00e3 00       		.byte	0
+ 1227 00e4 00       		.byte	0
+ 1228 00e5 10       		.uleb128 0x10
+ 1229 00e6 35       		.uleb128 0x35
+ 1230 00e7 00       		.byte	0
+ 1231 00e8 49       		.uleb128 0x49
+ 1232 00e9 13       		.uleb128 0x13
+ 1233 00ea 00       		.byte	0
+ 1234 00eb 00       		.byte	0
+ 1235 00ec 11       		.uleb128 0x11
+ 1236 00ed 2E       		.uleb128 0x2e
+ 1237 00ee 00       		.byte	0
+ 1238 00ef 3F       		.uleb128 0x3f
+ 1239 00f0 19       		.uleb128 0x19
+ 1240 00f1 3C       		.uleb128 0x3c
+ 1241 00f2 19       		.uleb128 0x19
+ 1242 00f3 6E       		.uleb128 0x6e
+ 1243 00f4 0E       		.uleb128 0xe
+ 1244 00f5 03       		.uleb128 0x3
+ 1245 00f6 0E       		.uleb128 0xe
+ 1246 00f7 3A       		.uleb128 0x3a
+ 1247 00f8 0B       		.uleb128 0xb
+ 1248 00f9 3B       		.uleb128 0x3b
+ 1249 00fa 0B       		.uleb128 0xb
+ 1250 00fb 00       		.byte	0
+ 1251 00fc 00       		.byte	0
+ 1252 00fd 00       		.byte	0
+ 1253              		.section	.debug_loc,"",%progbits
+ 1254              	.Ldebug_loc0:
+ 1255              	.LLST0:
+ 1256 0000 06000000 		.4byte	.LVL9
+ 1257 0004 0C000000 		.4byte	.LVL10
+ 1258 0008 0100     		.2byte	0x1
+ 1259 000a 50       		.byte	0x50
+ 1260 000b 00000000 		.4byte	0
+ 1261 000f 00000000 		.4byte	0
+ 1262              	.LLST1:
+ 1263 0013 08000000 		.4byte	.LVL17
+ 1264 0017 0E000000 		.4byte	.LVL18
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 27
+
+
+ 1265 001b 0100     		.2byte	0x1
+ 1266 001d 50       		.byte	0x50
+ 1267 001e 00000000 		.4byte	0
+ 1268 0022 00000000 		.4byte	0
+ 1269              	.LLST2:
+ 1270 0026 00000000 		.4byte	.LVL28
+ 1271 002a 1F000000 		.4byte	.LVL29-1
+ 1272 002e 0100     		.2byte	0x1
+ 1273 0030 50       		.byte	0x50
+ 1274 0031 1F000000 		.4byte	.LVL29-1
+ 1275 0035 22000000 		.4byte	.LVL30
+ 1276 0039 0400     		.2byte	0x4
+ 1277 003b F3       		.byte	0xf3
+ 1278 003c 01       		.uleb128 0x1
+ 1279 003d 50       		.byte	0x50
+ 1280 003e 9F       		.byte	0x9f
+ 1281 003f 22000000 		.4byte	.LVL30
+ 1282 0043 25000000 		.4byte	.LVL31-1
+ 1283 0047 0100     		.2byte	0x1
+ 1284 0049 50       		.byte	0x50
+ 1285 004a 25000000 		.4byte	.LVL31-1
+ 1286 004e 28000000 		.4byte	.LVL32
+ 1287 0052 0400     		.2byte	0x4
+ 1288 0054 F3       		.byte	0xf3
+ 1289 0055 01       		.uleb128 0x1
+ 1290 0056 50       		.byte	0x50
+ 1291 0057 9F       		.byte	0x9f
+ 1292 0058 28000000 		.4byte	.LVL32
+ 1293 005c 2B000000 		.4byte	.LVL33-1
+ 1294 0060 0100     		.2byte	0x1
+ 1295 0062 50       		.byte	0x50
+ 1296 0063 2B000000 		.4byte	.LVL33-1
+ 1297 0067 2E000000 		.4byte	.LVL34
+ 1298 006b 0400     		.2byte	0x4
+ 1299 006d F3       		.byte	0xf3
+ 1300 006e 01       		.uleb128 0x1
+ 1301 006f 50       		.byte	0x50
+ 1302 0070 9F       		.byte	0x9f
+ 1303 0071 2E000000 		.4byte	.LVL34
+ 1304 0075 31000000 		.4byte	.LVL35-1
+ 1305 0079 0100     		.2byte	0x1
+ 1306 007b 50       		.byte	0x50
+ 1307 007c 31000000 		.4byte	.LVL35-1
+ 1308 0080 34000000 		.4byte	.LVL36
+ 1309 0084 0400     		.2byte	0x4
+ 1310 0086 F3       		.byte	0xf3
+ 1311 0087 01       		.uleb128 0x1
+ 1312 0088 50       		.byte	0x50
+ 1313 0089 9F       		.byte	0x9f
+ 1314 008a 34000000 		.4byte	.LVL36
+ 1315 008e 37000000 		.4byte	.LVL37-1
+ 1316 0092 0100     		.2byte	0x1
+ 1317 0094 50       		.byte	0x50
+ 1318 0095 37000000 		.4byte	.LVL37-1
+ 1319 0099 3A000000 		.4byte	.LFE65
+ 1320 009d 0400     		.2byte	0x4
+ 1321 009f F3       		.byte	0xf3
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 28
+
+
+ 1322 00a0 01       		.uleb128 0x1
+ 1323 00a1 50       		.byte	0x50
+ 1324 00a2 9F       		.byte	0x9f
+ 1325 00a3 00000000 		.4byte	0
+ 1326 00a7 00000000 		.4byte	0
+ 1327              	.LLST3:
+ 1328 00ab 08000000 		.4byte	.LVL39
+ 1329 00af 1C000000 		.4byte	.LVL44
+ 1330 00b3 0100     		.2byte	0x1
+ 1331 00b5 54       		.byte	0x54
+ 1332 00b6 1E000000 		.4byte	.LVL45
+ 1333 00ba 24000000 		.4byte	.LFE64
+ 1334 00be 0100     		.2byte	0x1
+ 1335 00c0 54       		.byte	0x54
+ 1336 00c1 00000000 		.4byte	0
+ 1337 00c5 00000000 		.4byte	0
+ 1338              	.LLST4:
+ 1339 00c9 10000000 		.4byte	.LVL41
+ 1340 00cd 1E000000 		.4byte	.LVL45
+ 1341 00d1 0100     		.2byte	0x1
+ 1342 00d3 55       		.byte	0x55
+ 1343 00d4 00000000 		.4byte	0
+ 1344 00d8 00000000 		.4byte	0
+ 1345              		.section	.debug_aranges,"",%progbits
+ 1346 0000 54000000 		.4byte	0x54
+ 1347 0004 0200     		.2byte	0x2
+ 1348 0006 00000000 		.4byte	.Ldebug_info0
+ 1349 000a 04       		.byte	0x4
+ 1350 000b 00       		.byte	0
+ 1351 000c 0000     		.2byte	0
+ 1352 000e 0000     		.2byte	0
+ 1353 0010 00000000 		.4byte	.LFB63
+ 1354 0014 54000000 		.4byte	.LFE63-.LFB63
+ 1355 0018 00000000 		.4byte	.LFB66
+ 1356 001c 44000000 		.4byte	.LFE66-.LFB66
+ 1357 0020 00000000 		.4byte	.LFB67
+ 1358 0024 38000000 		.4byte	.LFE67-.LFB67
+ 1359 0028 00000000 		.4byte	.LFB68
+ 1360 002c 14000000 		.4byte	.LFE68-.LFB68
+ 1361 0030 00000000 		.4byte	.LFB69
+ 1362 0034 10000000 		.4byte	.LFE69-.LFB69
+ 1363 0038 00000000 		.4byte	.LFB70
+ 1364 003c 14000000 		.4byte	.LFE70-.LFB70
+ 1365 0040 00000000 		.4byte	.LFB65
+ 1366 0044 3A000000 		.4byte	.LFE65-.LFB65
+ 1367 0048 00000000 		.4byte	.LFB64
+ 1368 004c 24000000 		.4byte	.LFE64-.LFB64
+ 1369 0050 00000000 		.4byte	0
+ 1370 0054 00000000 		.4byte	0
+ 1371              		.section	.debug_ranges,"",%progbits
+ 1372              	.Ldebug_ranges0:
+ 1373 0000 00000000 		.4byte	.LFB63
+ 1374 0004 54000000 		.4byte	.LFE63
+ 1375 0008 00000000 		.4byte	.LFB66
+ 1376 000c 44000000 		.4byte	.LFE66
+ 1377 0010 00000000 		.4byte	.LFB67
+ 1378 0014 38000000 		.4byte	.LFE67
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 29
+
+
+ 1379 0018 00000000 		.4byte	.LFB68
+ 1380 001c 14000000 		.4byte	.LFE68
+ 1381 0020 00000000 		.4byte	.LFB69
+ 1382 0024 10000000 		.4byte	.LFE69
+ 1383 0028 00000000 		.4byte	.LFB70
+ 1384 002c 14000000 		.4byte	.LFE70
+ 1385 0030 00000000 		.4byte	.LFB65
+ 1386 0034 3A000000 		.4byte	.LFE65
+ 1387 0038 00000000 		.4byte	.LFB64
+ 1388 003c 24000000 		.4byte	.LFE64
+ 1389 0040 00000000 		.4byte	0
+ 1390 0044 00000000 		.4byte	0
+ 1391              		.section	.debug_line,"",%progbits
+ 1392              	.Ldebug_line0:
+ 1393 0000 2C020000 		.section	.debug_str,"MS",%progbits,1
+ 1393      02007401 
+ 1393      00000201 
+ 1393      FB0E0D00 
+ 1393      01010101 
+ 1394              	.LASF29:
+ 1395 0000 6973725F 		.ascii	"isr_uart_rx_StartEx\000"
+ 1395      75617274 
+ 1395      5F72785F 
+ 1395      53746172 
+ 1395      74457800 
+ 1396              	.LASF30:
+ 1397 0014 55415254 		.ascii	"UART_1_Start\000"
+ 1397      5F315F53 
+ 1397      74617274 
+ 1397      00
+ 1398              	.LASF4:
+ 1399 0021 5F5F7569 		.ascii	"__uint8_t\000"
+ 1399      6E74385F 
+ 1399      7400
+ 1400              	.LASF5:
+ 1401 002b 5F5F696E 		.ascii	"__int32_t\000"
+ 1401      7433325F 
+ 1401      7400
+ 1402              	.LASF20:
+ 1403 0035 696E6372 		.ascii	"increaseSpeed\000"
+ 1403      65617365 
+ 1403      53706565 
+ 1403      6400
+ 1404              	.LASF3:
+ 1405 0043 73686F72 		.ascii	"short unsigned int\000"
+ 1405      7420756E 
+ 1405      7369676E 
+ 1405      65642069 
+ 1405      6E7400
+ 1406              	.LASF27:
+ 1407 0056 62797465 		.ascii	"bytesToRead\000"
+ 1407      73546F52 
+ 1407      65616400 
+ 1408              	.LASF33:
+ 1409 0062 50574D5F 		.ascii	"PWM_1_ReadCompare\000"
+ 1409      315F5265 
+ 1409      6164436F 
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 30
+
+
+ 1409      6D706172 
+ 1409      6500
+ 1410              	.LASF14:
+ 1411 0074 666C6F61 		.ascii	"float\000"
+ 1411      7400
+ 1412              	.LASF1:
+ 1413 007a 756E7369 		.ascii	"unsigned char\000"
+ 1413      676E6564 
+ 1413      20636861 
+ 1413      7200
+ 1414              	.LASF39:
+ 1415 0088 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 1415      43313120 
+ 1415      352E342E 
+ 1415      31203230 
+ 1415      31363036 
+ 1416 00bb 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 1416      20726576 
+ 1416      6973696F 
+ 1416      6E203233 
+ 1416      37373135 
+ 1417 00ee 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1417      66756E63 
+ 1417      74696F6E 
+ 1417      2D736563 
+ 1417      74696F6E 
+ 1418              	.LASF26:
+ 1419 0116 4953525F 		.ascii	"ISR_UART_rx_handler\000"
+ 1419      55415254 
+ 1419      5F72785F 
+ 1419      68616E64 
+ 1419      6C657200 
+ 1420              	.LASF7:
+ 1421 012a 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1421      20756E73 
+ 1421      69676E65 
+ 1421      6420696E 
+ 1421      7400
+ 1422              	.LASF36:
+ 1423 013c 55415254 		.ascii	"UART_1_ReadRxData\000"
+ 1423      5F315F52 
+ 1423      65616452 
+ 1423      78446174 
+ 1423      6100
+ 1424              	.LASF31:
+ 1425 014e 50574D5F 		.ascii	"PWM_1_Start\000"
+ 1425      315F5374 
+ 1425      61727400 
+ 1426              	.LASF21:
+ 1427 015a 64757479 		.ascii	"duty\000"
+ 1427      00
+ 1428              	.LASF24:
+ 1429 015f 73746F70 		.ascii	"stop\000"
+ 1429      00
+ 1430              	.LASF43:
+ 1431 0164 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 1431      52784275 
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 31
+
+
+ 1431      66666572 
+ 1431      00
+ 1432              	.LASF37:
+ 1433 0171 55415254 		.ascii	"UART_1_WriteTxData\000"
+ 1433      5F315F57 
+ 1433      72697465 
+ 1433      54784461 
+ 1433      746100
+ 1434              	.LASF15:
+ 1435 0184 646F7562 		.ascii	"double\000"
+ 1435      6C6500
+ 1436              	.LASF42:
+ 1437 018b 6D61696E 		.ascii	"main\000"
+ 1437      00
+ 1438              	.LASF25:
+ 1439 0190 68616E64 		.ascii	"handleByteReceived\000"
+ 1439      6C654279 
+ 1439      74655265 
+ 1439      63656976 
+ 1439      656400
+ 1440              	.LASF10:
+ 1441 01a3 756E7369 		.ascii	"unsigned int\000"
+ 1441      676E6564 
+ 1441      20696E74 
+ 1441      00
+ 1442              	.LASF22:
+ 1443 01b0 64726976 		.ascii	"driveForwards\000"
+ 1443      65466F72 
+ 1443      77617264 
+ 1443      7300
+ 1444              	.LASF9:
+ 1445 01be 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1445      206C6F6E 
+ 1445      6720756E 
+ 1445      7369676E 
+ 1445      65642069 
+ 1446              	.LASF11:
+ 1447 01d5 75696E74 		.ascii	"uint8_t\000"
+ 1447      385F7400 
+ 1448              	.LASF38:
+ 1449 01dd 55415254 		.ascii	"UART_1_GetRxBufferSize\000"
+ 1449      5F315F47 
+ 1449      65745278 
+ 1449      42756666 
+ 1449      65725369 
+ 1450              	.LASF41:
+ 1451 01f4 433A5C55 		.ascii	"C:\\Users\\Anton\\OneDrive - Aarhus universitet\\3."
+ 1451      73657273 
+ 1451      5C416E74 
+ 1451      6F6E5C4F 
+ 1451      6E654472 
+ 1452 0223 2073656D 		.ascii	" semester\\GFV\\GFV - LAB\\Lab-MotorControl-Group65"
+ 1452      65737465 
+ 1452      725C4746 
+ 1452      565C4746 
+ 1452      56202D20 
+ 1453 0253 5C50736F 		.ascii	"\\PsoC - project\\DC-Motor-PWM.cydsn\000"
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 32
+
+
+ 1453      43202D20 
+ 1453      70726F6A 
+ 1453      6563745C 
+ 1453      44432D4D 
+ 1454              	.LASF12:
+ 1455 0276 696E7433 		.ascii	"int32_t\000"
+ 1455      325F7400 
+ 1456              	.LASF23:
+ 1457 027e 64726976 		.ascii	"driveBackwards\000"
+ 1457      65426163 
+ 1457      6B776172 
+ 1457      647300
+ 1458              	.LASF34:
+ 1459 028d 50574D5F 		.ascii	"PWM_1_WriteCompare\000"
+ 1459      315F5772 
+ 1459      69746543 
+ 1459      6F6D7061 
+ 1459      726500
+ 1460              	.LASF8:
+ 1461 02a0 6C6F6E67 		.ascii	"long long int\000"
+ 1461      206C6F6E 
+ 1461      6720696E 
+ 1461      7400
+ 1462              	.LASF18:
+ 1463 02ae 73697A65 		.ascii	"sizetype\000"
+ 1463      74797065 
+ 1463      00
+ 1464              	.LASF40:
+ 1465 02b7 6D61696E 		.ascii	"main.c\000"
+ 1465      2E6300
+ 1466              	.LASF16:
+ 1467 02be 63686172 		.ascii	"char\000"
+ 1467      00
+ 1468              	.LASF19:
+ 1469 02c3 64656372 		.ascii	"decreaseSpeed\000"
+ 1469      65617365 
+ 1469      53706565 
+ 1469      6400
+ 1470              	.LASF2:
+ 1471 02d1 73686F72 		.ascii	"short int\000"
+ 1471      7420696E 
+ 1471      7400
+ 1472              	.LASF13:
+ 1473 02db 75696E74 		.ascii	"uint8\000"
+ 1473      3800
+ 1474              	.LASF35:
+ 1475 02e1 50574D5F 		.ascii	"PWM_1_Stop\000"
+ 1475      315F5374 
+ 1475      6F7000
+ 1476              	.LASF6:
+ 1477 02ec 6C6F6E67 		.ascii	"long int\000"
+ 1477      20696E74 
+ 1477      00
+ 1478              	.LASF17:
+ 1479 02f5 6C6F6E67 		.ascii	"long double\000"
+ 1479      20646F75 
+ 1479      626C6500 
+ARM GAS  C:\Users\Anton\AppData\Local\Temp\cc09pmzc.s 			page 33
+
+
+ 1480              	.LASF0:
+ 1481 0301 7369676E 		.ascii	"signed char\000"
+ 1481      65642063 
+ 1481      68617200 
+ 1482              	.LASF32:
+ 1483 030d 55415254 		.ascii	"UART_1_PutString\000"
+ 1483      5F315F50 
+ 1483      75745374 
+ 1483      72696E67 
+ 1483      00
+ 1484              	.LASF28:
+ 1485 031e 62797465 		.ascii	"byteReceived\000"
+ 1485      52656365 
+ 1485      69766564 
+ 1485      00
+ 1486              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

@@ -95,17 +95,49 @@ void handleByteReceived(uint8_t byteReceived)
 
 void decreaseSpeed()
 {
-    UART_1_PutString("Decreasing speed\r\n");
+    uint8 duty = PWM_1_ReadCompare();
+    if(duty > 0)
+    {
+        UART_1_PutString("Decreasing speed\r\n");
+    }
+    if(duty >= 100)
+    {
+        PWM_1_WriteCompare(90);
+        
+    }
+    else if(duty > 10)
+    {
+        PWM_1_WriteCompare(duty - 10);
+    }
+    else
+    {
+        UART_1_PutString("Min speed achieved\r\n");
+        PWM_1_WriteCompare(0);
+    }
 }
 
 void increaseSpeed()
 {
-    UART_1_PutString("Increasing speed\r\n");
+    uint8 duty = PWM_1_ReadCompare();
+    if(duty < 101)
+    {
+        UART_1_PutString("Increasing speed\r\n");
+    }
+    if(duty < 90)
+    {
+        PWM_1_WriteCompare(duty + 10);
+    }
+    else
+    {
+        UART_1_PutString("Max speed achieved\r\n");
+        PWM_1_WriteCompare(101);
+    }
 }
 
 void driveForwards()
 {
     UART_1_PutString("Set direction: forwards\r\n");
+    PWM_1_Start();
 }
 
 void driveBackwards()
@@ -116,6 +148,7 @@ void driveBackwards()
 void stop()
 {
     UART_1_PutString("Stop\r\n");
+    PWM_1_Stop();
 }
 
 /* [] END OF FILE */
