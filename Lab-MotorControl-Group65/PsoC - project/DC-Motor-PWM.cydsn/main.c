@@ -21,6 +21,9 @@ void driveForwards(void);
 void driveBackwards(void);
 void stop(void);
 
+void setDirection(uint8 dir);
+uint8 getDirection();
+
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
@@ -46,6 +49,7 @@ int main(void)
 CY_ISR(ISR_UART_rx_handler)
 {
     uint8_t bytesToRead = UART_1_GetRxBufferSize();
+    setDirection(1);
     while (bytesToRead > 0)
     {
         uint8_t byteReceived = UART_1_ReadRxData();
@@ -139,9 +143,9 @@ void increaseSpeed()
 void driveForwards()
 {
     UART_1_PutString("Set direction: forwards\r\n");
-    if (Direction_Read()) {
+    if (getDirection()) {
         PWM_1_Stop();
-        Direction_Write(forwards);
+        setDirection(0);
     }
     PWM_1_Start();
 }
@@ -149,9 +153,9 @@ void driveForwards()
 void driveBackwards()
 {
     UART_1_PutString("Set direction: backwards\r\n");
-    if (!Direction_Read()) {
+    if (!getDirection()) {
         PWM_1_Stop();
-        Direction_Write(backwards);
+        setDirection(1);
     }
     PWM_1_Start();
 }
@@ -160,5 +164,24 @@ void stop()
 {
     UART_1_PutString("Stop\r\n");
     PWM_1_Stop();
+}
+
+void setDirection(uint8 dir)
+{
+    if(dir)
+    {
+    OUT1_Write(1);
+    OUT2_Write(0);
+    }
+    else
+    {
+    OUT1_Write(0);
+    OUT2_Write(1);
+    }
+}
+
+uint8 getDirection()
+{
+    return OUT1_Read();
 }
 /* [] END OF FILE */
