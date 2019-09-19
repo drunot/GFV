@@ -9,11 +9,19 @@
 *.pdf
 *.rpt
 */ComponentUpdateLog.txt
+*.cycdx
+*.cyfit
+*.rpt
+.*svd
+*_timing
 
 # Folders
-*codegentemp/
-*CoretexM3/
-*Debug/
-*Generated_Source/
+*/codegentemp
+*/CoretexM3
+*/Export
+*/Debug
+*/Generated_Source
 */Backup
 */codegenTemp
+*/DC-Motor-PWM.cywrk*
+*/BUILD
