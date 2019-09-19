@@ -10,6 +10,8 @@
  * ========================================
 */
 #include "project.h"
+#define forwards 0u
+#define backwards 1u
 
 CY_ISR_PROTO(ISR_UART_rx_handler);
 void handleByteReceived(uint8_t byteReceived);
@@ -137,12 +139,21 @@ void increaseSpeed()
 void driveForwards()
 {
     UART_1_PutString("Set direction: forwards\r\n");
+    if (Direction_Read()) {
+        PWM_1_Stop();
+        Direction_Write(forwards);
+    }
     PWM_1_Start();
 }
 
 void driveBackwards()
 {
     UART_1_PutString("Set direction: backwards\r\n");
+    if (!Direction_Read()) {
+        PWM_1_Stop();
+        Direction_Write(backwards);
+    }
+    PWM_1_Start();
 }
 
 void stop()
@@ -150,5 +161,4 @@ void stop()
     UART_1_PutString("Stop\r\n");
     PWM_1_Stop();
 }
-
 /* [] END OF FILE */
