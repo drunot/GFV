@@ -102,20 +102,20 @@ void handleByteReceived(uint8_t byteReceived)
 void decreaseSpeed()
 {
     uint8 duty = PWM_1_ReadCompare();
-    if(duty > 0)
+    if(duty > 0) //Skriver at hastigheden bliver mindre hvis denne ikke er max.
     {
         UART_1_PutString("Decreasing speed\r\n");
     }
-    if(duty >= 100)
+    if(duty >= 100) //Da max hastigheden er 101, men vi ellers bruger intervaller på 10, bruges denne funktion til at sikre at vi går til 90 og ikke 91.
     {
         PWM_1_WriteCompare(90);
         
     }
-    else if(duty > 10)
+    else if(duty > 10) //trækker 10 procentpoint fra duty-cycle, hvis denne ikke er under 10.
     {
         PWM_1_WriteCompare(duty - 10);
     }
-    else
+    else //Sætter duty-cycle til nul og skriver at minimum hastighed er nået.
     {
         UART_1_PutString("Min speed achieved\r\n");
         PWM_1_WriteCompare(0);
@@ -125,17 +125,17 @@ void decreaseSpeed()
 void increaseSpeed()
 {
     uint8 duty = PWM_1_ReadCompare();
-    if(duty < 101)
+    if(duty < 101) //Skriver at hastigheden bliver større hvis denne ikke er max.
     {
         UART_1_PutString("Increasing speed\r\n");
     }
-    if(duty < 90)
+    if(duty < 90) //Lægger 10 procentpoint til duty-cycle, hvis denne ikke er over 90%.
     {
         PWM_1_WriteCompare(duty + 10);
     }
-    else
+    else  //Da duty-cycle ikke er helt 100% hvis man skriver 100 til Write Compare så skriver vi 101 til, når duty er over 90% for at få en duty-cycle på 100%
     {
-        UART_1_PutString("Max speed achieved\r\n");
+        UART_1_PutString("Max speed achieved\r\n"); //Giver besked hvis maksimal hastighed er nået.
         PWM_1_WriteCompare(101);
     }
 }
@@ -143,8 +143,9 @@ void increaseSpeed()
 void driveForwards()
 {
     UART_1_PutString("Set direction: forwards\r\n");
-    if (getDirection()) {
-        PWM_1_Stop();
+    if (getDirection()) { //Denne if tjækker om rettningen skal ændres og stopper moteren i 100 millisekunder med CyDelay og starter den i modsatte retning.
+        PWM_1_Stop();     //Den stoppes kort for at undgå den hårde opbremsning som måtte ske, hvis man skiftede retning iden et delay.
+        CyDelay(100);
         setDirection(0);
     }
     PWM_1_Start();
@@ -153,14 +154,15 @@ void driveForwards()
 void driveBackwards()
 {
     UART_1_PutString("Set direction: backwards\r\n");
-    if (!getDirection()) {
-        PWM_1_Stop();
+    if (!getDirection()) { //Denne if tjækker om rettningen skal ændres og stopper moteren i 100 millisekunder med CyDelay og starter den i modsatte retning.
+        PWM_1_Stop();      //Den stoppes kort for at undgå den hårde opbremsning som måtte ske, hvis man skiftede retning iden et delay.
+        CyDelay(100);
         setDirection(1);
     }
     PWM_1_Start();
 }
 
-void stop()
+void stop() //PWM-signalet stoppes, så der ikke føres nogen strøm til motoren.
 {
     UART_1_PutString("Stop\r\n");
     PWM_1_Stop();
@@ -168,10 +170,10 @@ void stop()
 
 void setDirection(uint8 dir)
 {
-    if(dir)
+    if(dir) //Man sætter retningen og udgangenne styres så der altid kun er et output tændt. Inputtet "dir" bestemmer retningen.
     {
-    OUT1_Write(1);
     OUT2_Write(0);
+    OUT1_Write(1);
     }
     else
     {
@@ -182,6 +184,6 @@ void setDirection(uint8 dir)
 
 uint8 getDirection()
 {
-    return OUT1_Read();
+    return OUT1_Read(); //Læser retningen, ved at se om en af de to pins forbundet til h-broen 
 }
 /* [] END OF FILE */
