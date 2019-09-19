@@ -15,11 +15,8 @@
 
 CY_ISR_PROTO(ISR_UART_rx_handler);
 void handleByteReceived(uint8_t byteReceived);
-void decreaseSpeed(void);
-void increaseSpeed(void);
-void driveForwards(void);
-void driveBackwards(void);
-void stop(void);
+void turnLeft();
+void turnRight();
 
 void setDirection(uint8 dir);
 uint8 getDirection();
@@ -33,12 +30,9 @@ int main(void)
     UART_1_Start();
     PWM_1_Start();
     
-    UART_1_PutString("DC-Motor-PWM application started\r\n");
-    UART_1_PutString("0: Stop\r\n");
-    UART_1_PutString("1: Drive forwards\r\n");
-    UART_1_PutString("2: Drive backwards\r\n");
-    UART_1_PutString("q: Decrease speed\r\n");
-    UART_1_PutString("w: Increase speed\r\n");
+    UART_1_PutString("Servo-Motor-PWM application started\r\n");
+    UART_1_PutString("a: Turn Left\r\n");
+    UART_1_PutString("d: Turn Right\r\n");
 
     for(;;)
     {
@@ -49,7 +43,6 @@ int main(void)
 CY_ISR(ISR_UART_rx_handler)
 {
     uint8_t bytesToRead = UART_1_GetRxBufferSize();
-    setDirection(1);
     while (bytesToRead > 0)
     {
         uint8_t byteReceived = UART_1_ReadRxData();
@@ -65,30 +58,14 @@ void handleByteReceived(uint8_t byteReceived)
 {
     switch(byteReceived)
     {
-        case 'q' :
+        case 'a' :
         {
-            decreaseSpeed();
+            turnLeft();
         }
         break;
-        case 'w' :
+        case 'd' :
         {
-            increaseSpeed();
-        }
-        break;
-        case '1' :
-        {
-            driveForwards();
-        }
-        break;
-        case '2' :
-        {
-            driveBackwards();
-        }
-        break;
-        case '0' :
-        {
-            stop();
-            
+            turnRight();
         }
         break;
         default :
@@ -99,6 +76,32 @@ void handleByteReceived(uint8_t byteReceived)
     }
 }
 
+void turnLeft() {
+    uint16 deg = PWM_1_ReadCompare();
+    UART_1_PutString("Turning left\r\n");
+    if (deg > 6000) {
+        PWM_1_WriteCompare(5900);
+    } else if (deg > 3100) {
+        PWM_1_WriteCompare(deg - 100);
+    } else {
+        UART_1_PutString("All the way left\r\n");
+        PWM_1_WriteCompare(3000);
+    }
+}
+
+void turnRight() {
+    uint16 deg = PWM_1_ReadCompare();
+    UART_1_PutString("Turning right\r\n");
+    if (deg < 3000) {
+        PWM_1_WriteCompare(3100);
+    } else if (deg < 5900) {
+        PWM_1_WriteCompare(deg + 100);
+    } else {
+        UART_1_PutString("All the way left\r\n");
+        PWM_1_WriteCompare(6000);
+    }
+}
+/*
 void decreaseSpeed()
 {
     uint8 duty = PWM_1_ReadCompare();
@@ -186,4 +189,5 @@ uint8 getDirection()
 {
     return OUT1_Read(); //Læser retningen, ved at se om en af de to pins forbundet til h-broen 
 }
+*/
 /* [] END OF FILE */
