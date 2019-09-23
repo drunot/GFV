@@ -109,7 +109,6 @@ void decreaseSpeed()
     if(duty >= 100) //Da max hastigheden er 101, men vi ellers bruger intervaller på 10, bruges denne funktion til at sikre at vi går til 90 og ikke 91.
     {
         PWM_1_WriteCompare(90);
-        
     }
     else if(duty > 10) //trækker 10 procentpoint fra duty-cycle, hvis denne ikke er under 10.
     {
@@ -154,7 +153,7 @@ void driveForwards()
 void driveBackwards()
 {
     UART_1_PutString("Set direction: backwards\r\n");
-    if (!getDirection()) { //Denne if tjækker om rettningen skal ændres og stopper moteren i 100 millisekunder med CyDelay og starter den i modsatte retning.
+    if (!getDirection()) { //Denne if tjekker om retningen skal ændres og stopper moteren i 100 millisekunder med CyDelay og starter den i modsatte retning.
         PWM_1_Stop();      //Den stoppes kort for at undgå den hårde opbremsning som måtte ske, hvis man skiftede retning iden et delay.
         CyDelay(100);
         setDirection(1);
@@ -170,7 +169,7 @@ void stop() //PWM-signalet stoppes, så der ikke føres nogen strøm til motoren
 
 void setDirection(uint8 dir)
 {
-    if(dir) //Man sætter retningen og udgangenne styres så der altid kun er et output tændt. Inputtet "dir" bestemmer retningen.
+    if(dir) //Man sætter retningen og udgangene styres så der altid kun er et output tændt. Inputtet "dir" bestemmer retningen.
     {
     OUT2_Write(0);
     OUT1_Write(1);
