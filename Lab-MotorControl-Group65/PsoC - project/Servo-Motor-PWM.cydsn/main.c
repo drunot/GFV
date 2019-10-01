@@ -10,6 +10,7 @@
  * ========================================
 */
 #include "project.h"
+#include "stdio.h"
 #define forwards 0u
 #define backwards 1u
 
@@ -17,9 +18,11 @@ CY_ISR_PROTO(ISR_UART_rx_handler);
 void handleByteReceived(uint8_t byteReceived);
 void turnLeft();
 void turnRight();
+void cycle();
 
 void setDirection(uint8 dir);
 uint8 getDirection();
+uint8 left;
 
 int main(void)
 {
@@ -68,6 +71,10 @@ void handleByteReceived(uint8_t byteReceived) //Switch-case til at finde indputt
             turnRight();
         }
         break;
+        case ' ' :
+        {
+            cycle();
+        }
         default :
         {
             // nothing
@@ -76,30 +83,46 @@ void handleByteReceived(uint8_t byteReceived) //Switch-case til at finde indputt
     }
 }
 
+void cycle() {
+    if (left) {
+        turnLeft();
+    } else {
+        turnRight();
+    }
+}
+
 void turnLeft() {
     uint16 deg = PWM_1_ReadCompare();
     UART_1_PutString("Turning left\r\n");
-    if (deg > 6000) { //Hvis systemet er over de 10% dutycycle, retter signalet ind til at være 10%.
-        PWM_1_WriteCompare(5900);
-    } else if (deg > 3100) { //Hvis signalet kan få trukket 100 fra sig uden at falde under 5%, gør det
+    if (deg > 7000) { //Hvis systemet er over de 10% dutycycle, retter signalet ind til at være 10%.
+        PWM_1_WriteCompare(7000);
+    } else if (deg > 1600) { //Hvis signalet kan få trukket 100 fra sig uden at falde under 5%, gør det
         PWM_1_WriteCompare(deg - 100);
     } else { //Ellers ret det til 5%, og skriv det ikke kan komme lavere
         UART_1_PutString("All the way left\r\n");
-        PWM_1_WriteCompare(3000);
+        PWM_1_WriteCompare(1500);
+        left = 0;
     }
+    char buffer[25];
+    sprintf(buffer, "Current: %d\r\n", deg - 100);
+    UART_1_PutString(buffer);
 }
 
 void turnRight() { //Er funktionelt meget ens den ovenstående, men omvendt.
     uint16 deg = PWM_1_ReadCompare();
     UART_1_PutString("Turning right\r\n");
-    if (deg < 3000) { 
-        PWM_1_WriteCompare(3100);
-    } else if (deg < 5900) { 
+    if (deg < 1500) { 
+        PWM_1_WriteCompare(1500);
+    } else if (deg < 6900) { 
         PWM_1_WriteCompare(deg + 100);
     } else {
         UART_1_PutString("All the way right\r\n");
-        PWM_1_WriteCompare(6000);
+        PWM_1_WriteCompare(7000);
+        left = 1;
     }
+    char buffer[25];
+    sprintf(buffer, "Current: %d\r\n", deg + 100);
+    UART_1_PutString(buffer);
 }
 
 /* [] END OF FILE */
