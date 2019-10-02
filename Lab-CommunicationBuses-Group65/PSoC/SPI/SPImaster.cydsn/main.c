@@ -10,7 +10,10 @@
  * ========================================
 */
 #include "project.h"
+#include "SPImaster.h"
+
 CY_ISR_PROTO(ISR_UART_rx_handler);
+CY_ISR_PROTO(ISR_SW_handler);
 void handleByteReceived(uint8_t byteReceived);
 
 int main(void)
@@ -19,13 +22,21 @@ int main(void)
 
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     isr_uart_rx_StartEx(ISR_UART_rx_handler);
+    isr_sw_StartEx(ISR_SW_handler);
     UART_1_Start();
     SPIM_1_Start();
+    Sel_Write(1);
 
     for(;;)
     {
         /* Place your application code here. */
     }
+}
+
+CY_ISR(ISR_SW_handler) {
+    SPIM_1_WriteTxData(SW1_Read());
+    UART_1_PutString("Butang Clan ain't nuthin to fuck with\r\n");
+    SW1_ClearInterrupt();
 }
 
 CY_ISR(ISR_UART_rx_handler) {
@@ -47,12 +58,14 @@ void handleByteReceived(uint8_t byteReceived)
     {
         case '1' :
         {
-            //Tænd lampe
+            //tænd lampe
+            turnOnLED();
             break;
         }
         case '2' :
         {
             //sluk lampe
+            turnOffLED();
             break;
         }
         default :
