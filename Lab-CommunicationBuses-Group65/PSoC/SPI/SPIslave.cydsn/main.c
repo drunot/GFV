@@ -14,7 +14,8 @@
 //#include dinmor
 
 CY_ISR_PROTO(isr_spi_rx_handler);
-
+static char CMD_buffer[25];
+static uint8_t buffer_index = 0;
 
 int main(void)
 {
@@ -35,6 +36,7 @@ int main(void)
 }
 
 CY_ISR(isr_spi_rx_handler) {
+    
     LED_Write(~LED_Read());
     UART_1_PutChar(SPIS_1_ReadRxData());
 }
