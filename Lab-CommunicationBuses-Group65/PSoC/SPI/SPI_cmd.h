@@ -14,10 +14,10 @@
 #define CharTerminator '\n'
 
 #define DoNothing	0
-#define TurnOffLed 	1
-#define TurnOnLed 	2
-#define GetSWConst  3
-#define StopSWConst 4
-#define GetSWStatus 5
+#define TurnOffLed 	'a'
+#define TurnOnLed 	'b'
+#define GetSWConst  'c'
+#define StopSWConst 'd'
+#define GetSWStatus 'e'
 
 /* [] END OF FILE */
