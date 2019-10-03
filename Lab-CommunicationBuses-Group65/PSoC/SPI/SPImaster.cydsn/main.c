@@ -11,11 +11,12 @@
 */
 #include "project.h"
 #include "SPImaster.h"
+#include "../SPI_cmd.h"
 
 CY_ISR_PROTO(ISR_UART_rx_handler);
 CY_ISR_PROTO(ISR_SW_handler);
 void handleByteReceived(uint8_t byteReceived);
-int pollSlave();
+uint8 pollSlave();
 void sendString();
 char buf[25];
 int ptr = 0;
@@ -30,17 +31,20 @@ int main(void)
     isr_sw_StartEx(ISR_SW_handler);
     UART_1_Start();
     SPIM_1_Start();
-    Sel_Write(1);
 
     for(;;)
     {
-//        if (pollSlave() = //Whatever)
-        /* Place your application code here. */
+        /*
+        if (pollSlave() == 1) {
+            LED1_Write(1);
+        }
+        */
+        /* Place your application code here. */ 
     }
 }
 
 CY_ISR(ISR_SW_handler) {
-    SPIM_1_WriteTxData(SW1_Read());
+    SPIM_1_WriteTxData('b');
     UART_1_PutString("Butang Clan ain't nuthin to fuck with\r\n");
     SW1_ClearInterrupt();
 }
@@ -89,7 +93,7 @@ void handleByteReceived(uint8_t byteReceived)
 }
 
 
-int pollSlave() {
+uint8 pollSlave() {
     SPIM_1_WriteTxData(0);
     return SPIM_1_ReadRxData();
 }
@@ -101,7 +105,7 @@ void sendString() {
     //UART_1_PutString(buf);
     for(int i = 0; buf[i] != '\n'; i++) {
         UART_1_PutChar(buf[i]);
-        //SPIM_1_WriteTxData(buf[i]);
+        SPIM_1_WriteTxData(buf[i]);
     }
     ptr = 0;
 }
