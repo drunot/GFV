@@ -16,7 +16,7 @@
 
 CY_ISR_PROTO(isr_spi_rx_handler);
 void SPI_CMD_Handler(void);
-static char CMD_buffer[25];
+static char CMD_buffer[MAX_CMD_LENGTH];
 static uint8_t buffer_index = 0;
 static uint8_t continuous = 0;
 
@@ -35,15 +35,20 @@ int main(void)
 
     for(;;)
     {
-        if(continuous)
+        UART_1_PutChar(CMD_buffer[buffer_index]);
+        UART_1_PutString("\r\n");
+        if(continuous){
             SPIS_1_WriteTxData(SW_Read());
+            SPIS_1_ClearTxBuffer();
+        }
     }
 }
 
 CY_ISR(isr_spi_rx_handler) {
     CMD_buffer[buffer_index] = SPIS_1_ReadRxData();
-    if (CMD_buffer[buffer_index] != CharTerminator)
-        buffer_index++;
+    //if (CMD_buffer[buffer_index] != CharTerminator)
+    buffer_index = 0;
+    SPIS_1_ClearFIFO();
 }
 
 void SPI_CMD_Handler(void){

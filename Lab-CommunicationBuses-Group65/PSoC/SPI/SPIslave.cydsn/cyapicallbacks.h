@@ -9,15 +9,13 @@
  *
  * ========================================
 */
+#ifndef CYAPICALLBACKS_H
+#define CYAPICALLBACKS_H
+    
 
-#define MAX_CMD_LENGTH 25U
-#define CharTerminator '\n'
+    /*Define your macro callbacks here */
+    /*For more information, refer to the Writing Code topic in the PSoC Creator Help.*/
 
-#define DoNothing	0
-#define TurnOffLed 	1
-#define TurnOnLed 	2
-#define GetSWConst  3
-#define StopSWConst 4
-#define GetSWStatus 5
-
-/* [] END OF FILE */
+    
+#endif /* CYAPICALLBACKS_H */   
+/* [] */
