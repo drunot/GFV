@@ -11,11 +11,12 @@
 */
 
 #define MAX_CMD_LENGTH 25U;
+#define CharTerminator "\r\n"
 
-#define TurnOffLed "Turn Led Off"
-#define TurnOnLed "Turn Led on"
-#define GetSWConst "Constant send SW"
-#define StopSWConst "Stop Constant Send"
-#define GetSWStatus "Send SW status"
+#define TurnOffLed ("Turn Led Off" + CharTerminator)
+#define TurnOnLed ("Turn Led on" + CharTerminator)
+#define GetSWConst ("Constant send SW" + CharTerminator)
+#define StopSWConst ("Stop Constant Send" + CharTerminator)
+#define GetSWStatus ("Send SW status" + CharTerminator)
 
 /* [] END OF FILE */

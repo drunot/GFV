@@ -11,6 +11,7 @@
 */
 #include "project.h"
 #include <stdio.h>
+#include "../SPI_cmd.h"
 //#include dinmor
 
 CY_ISR_PROTO(isr_spi_rx_handler);
@@ -28,6 +29,10 @@ int main(void)
     SPIS_1_EnableRxInt();
     SPIS_1_SetRxInterruptMode(SPIS_1_STS_RX_FIFO_NOT_EMPTY);
     LED_Write(0);
+    
+    
+       LED_Write(~LED_Read());
+        UART_1_PutChar(SPIS_1_ReadRxData());
 
     for(;;)
     {
@@ -36,9 +41,8 @@ int main(void)
 }
 
 CY_ISR(isr_spi_rx_handler) {
-    
-    LED_Write(~LED_Read());
-    UART_1_PutChar(SPIS_1_ReadRxData());
+    CMD_buffer[buffer_index] = SPIS_1_ReadRxData();
+    if (CMD_buffer[buffer_index] == 
 }
 
 /* [] END OF FILE */
