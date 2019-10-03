@@ -11,7 +11,6 @@
 */
 #include "project.h"
 #include <stdio.h>
-//#include dinmor
 
 CY_ISR_PROTO(isr_spi_rx_handler);
 

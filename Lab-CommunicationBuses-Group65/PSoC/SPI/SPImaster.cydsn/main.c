@@ -15,6 +15,11 @@
 CY_ISR_PROTO(ISR_UART_rx_handler);
 CY_ISR_PROTO(ISR_SW_handler);
 void handleByteReceived(uint8_t byteReceived);
+int pollSlave();
+void sendString();
+char buf[25];
+int ptr = 0;
+int numprinted = 0;
 
 int main(void)
 {
@@ -29,6 +34,7 @@ int main(void)
 
     for(;;)
     {
+//        if (pollSlave() = //Whatever)
         /* Place your application code here. */
     }
 }
@@ -44,36 +50,61 @@ CY_ISR(ISR_UART_rx_handler) {
     while (bytesToRead > 0)
     {
         uint8_t byteReceived = UART_1_ReadRxData();
-        UART_1_WriteTxData(byteReceived); // echo back
-        
+        //UART_1_WriteTxData(byteReceived); // echo back
         handleByteReceived(byteReceived);
-        
         bytesToRead--;
     }
 }
+
 
 void handleByteReceived(uint8_t byteReceived)
 {
     switch(byteReceived)
     {
-        case '1' :
+        /*
+        case 10 :
         {
-            //tænd lampe
-            turnOnLED();
-            break;
+            sendString(buf);
+            LED1_Write(1);
         }
-        case '2' :
+        break;
+        */
+        case 13 : 
         {
-            //sluk lampe
-            turnOffLED();
-            break;
+            sendString();
+            LED1_Write(1);
         }
+        break;
+        
         default :
         {
-            // nothing
+            buf[ptr] = byteReceived;
+            LED1_Write(0);
+            UART_1_PutChar(buf[ptr]);
+            ptr++;            
         }
         break;
     }
+    //UART_1_PutChar(ptr + 48);
 }
+
+
+int pollSlave() {
+    SPIM_1_WriteTxData(0);
+    return SPIM_1_ReadRxData();
+}
+
+void sendString() {
+    UART_1_PutString("\r\n");
+    buf[ptr] = '\r';
+    buf[ptr+1] = '\n';
+    //UART_1_PutString(buf);
+    for(int i = 0; buf[i] != '\n'; i++) {
+        UART_1_PutChar(buf[i]);
+        //SPIM_1_WriteTxData(buf[i]);
+    }
+    ptr = 0;
+}
+
 
 /* [] END OF FILE */
