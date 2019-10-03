@@ -15,8 +15,10 @@
 //#include dinmor
 
 CY_ISR_PROTO(isr_spi_rx_handler);
+void SPI_CMD_Handler(void);
 static char CMD_buffer[25];
 static uint8_t buffer_index = 0;
+static uint8_t continuous = 0;
 
 int main(void)
 {
@@ -28,21 +30,43 @@ int main(void)
     SPIS_1_Start();
     SPIS_1_EnableRxInt();
     SPIS_1_SetRxInterruptMode(SPIS_1_STS_RX_FIFO_NOT_EMPTY);
-    LED_Write(0);
-    
-    
-       LED_Write(~LED_Read());
-        UART_1_PutChar(SPIS_1_ReadRxData());
+    LED_Write(0);        
 
     for(;;)
     {
-        
+        if(continuous)
+            SPIS_1_WriteTxData(SW_Read());
     }
 }
 
 CY_ISR(isr_spi_rx_handler) {
     CMD_buffer[buffer_index] = SPIS_1_ReadRxData();
-    if (CMD_buffer[buffer_index] == 
+    if (CMD_buffer[buffer_index] != CharTerminator)
+        buffer_index++;
 }
 
+void SPI_CMD_Handler(void){
+    if(!strncmp(CMD_buffer, TurnOffLed, sizeof(TurnOffLed))){
+        LED_Write(0);
+    }
+            
+    else if(!strncmp(CMD_buffer, TurnOnLed, sizeof(TurnOnLed))){
+        LED_Write(1);
+    }
+            
+    else if(!strncmp(CMD_buffer, GetSWStatus, sizeof(GetSWStatus))){
+        SPIS_1_WriteTxData(SW_Read());
+    }
+        
+    else if(!strncasecmp(CMD_buffer, GetSWConst, sizeof(GetSWConst))){
+        continuous = 1;   
+    }
+        
+    else if(!strncasecmp(CMD_buffer, StopSWConst, sizeof(StopSWConst))){
+        continuous = 0;
+        
+    }  
+    UART_1_PutString(CMD_buffer);
+    buffer_index = 0;
+}
 /* [] END OF FILE */
