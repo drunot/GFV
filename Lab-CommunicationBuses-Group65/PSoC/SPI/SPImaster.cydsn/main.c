@@ -44,9 +44,10 @@ int main(void)
 }
 
 CY_ISR(ISR_SW_handler) {
-    SPIM_1_WriteTxData('b');
+    SPIM_1_WriteTxData('c');
     UART_1_PutString("Butang Clan ain't nuthin to fuck with\r\n");
     SW1_ClearInterrupt();
+    UART_1_PutChar(SPIM_1_ReadRxData());
 }
 
 CY_ISR(ISR_UART_rx_handler) {
@@ -107,6 +108,8 @@ void sendString() {
         UART_1_PutChar(buf[i]);
         SPIM_1_WriteTxData(buf[i]);
     }
+    UART_1_PutChar('\n');
+    SPIM_1_WriteTxData('\n');
     ptr = 0;
 }
 
