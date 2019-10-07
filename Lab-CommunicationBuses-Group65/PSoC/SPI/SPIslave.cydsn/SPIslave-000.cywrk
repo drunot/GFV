@@ -9,7 +9,11 @@
 <projects>
 <v>.\SPIslave.cyprj</v>
 </projects>
+<<<<<<< HEAD
 <workspace_id v="517165b9-40c5-49bd-8422-a26230850253" />
+=======
+<workspace_id v="e213d4fc-7d94-4c85-9541-92eb005163cb" />
+>>>>>>> e55504ab7ec2ccdef3d08d50f10b21073c262a8e
 <WriteAppVersionLastSavedWith v="4.2.0.641" />
 <WriteAppMarketingVersionLastSavedWith v="4.2" />
 <CyGuid_dcbd9771-0334-43dc-9cc3-fe99dc3c5316 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize+CyPrjDependencyList" version="4">

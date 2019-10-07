@@ -257,6 +257,7 @@
       <Data key="264be2d3-9481-494b-8d9c-c1905a45e9cc" value="MOSI" />
       <Data key="1425177d-0d0e-4468-8bcc-e638e5509a9b" value="Rx_1" />
       <Data key="bf7ac1d2-c20e-455b-a5a0-7dba64fdba8e" value="SW1" />
+      <Data key="e851a3b9-efb8-48be-bbb8-b303b216c393" value="LED1" />
       <Data key="ed092b9b-d398-4703-be89-cebf998501f6" value="Tx_1" />
     </Group>
   </Group>
@@ -3372,6 +3373,11 @@
     <Group key="bf7ac1d2-c20e-455b-a5a0-7dba64fdba8e">
       <Group key="0">
         <Data key="Port Format" value="2,2" />
+      </Group>
+    </Group>
+    <Group key="e851a3b9-efb8-48be-bbb8-b303b216c393">
+      <Group key="0">
+        <Data key="Port Format" value="2,1" />
       </Group>
     </Group>
     <Group key="ed092b9b-d398-4703-be89-cebf998501f6">
