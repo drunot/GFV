@@ -9,15 +9,7 @@
 <projects>
 <v>.\SPImaster.cyprj</v>
 </projects>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<workspace_id v="ce8b377e-5442-4152-bdb9-5a7017c1a88b" />
-=======
 <workspace_id v="8f5fd52a-a509-48e9-b956-98ba0c9abe6a" />
->>>>>>> e55504ab7ec2ccdef3d08d50f10b21073c262a8e
-=======
-<workspace_id v="8f5fd52a-a509-48e9-b956-98ba0c9abe6a" />
->>>>>>> e55504ab7ec2ccdef3d08d50f10b21073c262a8e
 <WriteAppVersionLastSavedWith v="4.2.0.641" />
 <WriteAppMarketingVersionLastSavedWith v="4.2" />
 <CyGuid_dcbd9771-0334-43dc-9cc3-fe99dc3c5316 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize+CyPrjDependencyList" version="4">
