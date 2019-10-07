@@ -58,9 +58,9 @@ void sendString(char * buffer, uint8_t * counter)
 {
     UART_1_PutString("\r\n");
     buffer[*counter] = '\r';
-    buffer[*counter+1] = '\n';
-    //UART_1_PutString(buf);
-    for(int i = 0; buffer[i] != '\n'; i++) {
+    buffer[*counter+1] = 0;
+    UART_1_PutString(buffer);
+    for(int i = 0; buffer[i] != 0; i++) {
         UART_1_PutChar(buffer[i]);
         SPIM_1_WriteTxData(buffer[i]);
     }

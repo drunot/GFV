@@ -13,7 +13,6 @@
 #include "SPI_slave.h"
 
 void SPI_CMD_Handler(char8* buffer, char8 * text, uint8_t * conBool){
-    UART_1_PutChar(*buffer );
     if(*buffer == TurnOffLed){
         LED_Write(0);
         text = TurnOffLedTEXT; 

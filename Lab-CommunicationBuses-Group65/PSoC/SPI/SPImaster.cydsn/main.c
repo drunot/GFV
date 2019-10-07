@@ -51,8 +51,8 @@ CY_ISR(ISR_UART_rx_handler) {
     while (bytesToRead > 0)
     {
         uint8_t byteReceived = UART_1_ReadRxData();
-        //UART_1_WriteTxData(byteReceived); // echo back
         handleByteReceived(byteReceived, &polling, buf, &ptr);
+        //UART_1_WriteTxData(byteReceived); // echo back
         bytesToRead--;
     }
 }
