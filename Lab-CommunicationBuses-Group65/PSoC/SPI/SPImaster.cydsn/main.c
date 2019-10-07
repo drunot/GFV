@@ -20,7 +20,7 @@ uint8 pollSlave();
 void sendString();
 char buf[25];
 int ptr = 0;
-int polling = 0;
+volatile int polling = 0;
 int numprinted = 0;
 
 int main(void)
@@ -93,7 +93,8 @@ void handleByteReceived(uint8_t byteReceived)
 
 uint8 pollSlave() {
     SPIM_1_WriteTxData(0);
-    return SPIM_1_ReadRxData();
+    uint8_t r = SPIM_1_ReadRxData();
+    return r;
 }
 
 void sendString() {

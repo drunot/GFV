@@ -25,7 +25,7 @@ char* GetSWStatusTEXT = "Send SW status";
 
 CY_ISR_PROTO(isr_spi_rx_handler);
 void SPI_CMD_Handler(void);
-static char CMD_buffer;
+static volatile char CMD_buffer;
 static char* CMD_TEXT;
 static uint8_t continuous = 0;
 
@@ -48,8 +48,8 @@ int main(void)
 
     for(;;)
     {
+        SPIS_1_WriteTxData(SW_Read());
         /*if(continuous){
-            SPIS_1_WriteTxData(SW_Read());
             SPIS_1_ClearTxBuffer();
         }*/
     }
@@ -58,9 +58,9 @@ int main(void)
 CY_ISR(isr_spi_rx_handler) {
     //if (CMD_buffer[buffer_index] != CharTerminator)
     //CMD_buffer = SPIS_1_ReadRxData();
-    LED_Write(~LED_Read());
+    //LED_Write(~LED_Read());
     UART_1_PutChar(SPIS_1_ReadRxData());
-    //CMD_buffer = SPIS_1_ReadRxData();
+    CMD_buffer = SPIS_1_ReadRxData();
     //char msg[30];
     //sprintf(msg, "%d", SPIS_1_ReadRxData());
     //UART_1_PutString(msg);

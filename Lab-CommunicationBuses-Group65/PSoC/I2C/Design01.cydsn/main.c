@@ -26,6 +26,7 @@ int main(void)
         uint8_t DataToRead[2];
         char8 printString[30];
         UART_1_PutString(readFromI2C(0x48, printString, DataToRead));
+        UART_1_PutString(readFromI2C(0x4f, printString, DataToRead));
         CyDelay(100);
         
         /* Place your application code here. */
