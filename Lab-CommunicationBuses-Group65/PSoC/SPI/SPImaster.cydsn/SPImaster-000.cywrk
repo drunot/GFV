@@ -2,14 +2,14 @@
 <CyXmlSerializer>
 <!--This file is machine generated and read. It is not intended to be edited by hand.-->
 <!--Due to this, there is no schema for this file.-->
-<CyGuid_2867d519-54d2-4c01-9830-c51cb08bc3dd type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize" version="5" xml_contents_version="3" name="I2C" persistent="I2C.cywrk" platform="NOT_USED">
-<current_project name=".\Design01.cydsn\Design01.cyprj" />
+<CyGuid_2867d519-54d2-4c01-9830-c51cb08bc3dd type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize" version="5" xml_contents_version="3" name="SPImaster-000" persistent="SPImaster-000.cywrk" platform="NOT_USED">
+<current_project name=".\SPImaster.cyprj" />
 <wrkspc_folders />
 <files />
 <projects>
-<v>.\Design01.cydsn\Design01.cyprj</v>
+<v>.\SPImaster.cyprj</v>
 </projects>
-<workspace_id v="5db7031d-fb3a-4bea-8e3b-a8779c84c64f" />
+<workspace_id v="ce8b377e-5442-4152-bdb9-5a7017c1a88b" />
 <WriteAppVersionLastSavedWith v="4.2.0.641" />
 <WriteAppMarketingVersionLastSavedWith v="4.2" />
 <CyGuid_dcbd9771-0334-43dc-9cc3-fe99dc3c5316 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize+CyPrjDependencyList" version="4">

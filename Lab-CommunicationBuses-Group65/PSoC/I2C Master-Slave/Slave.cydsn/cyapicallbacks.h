@@ -9,12 +9,13 @@
  *
  * ========================================
 */
+#ifndef CYAPICALLBACKS_H
+#define CYAPICALLBACKS_H
+    
 
-#include "project.h"
+    /*Define your macro callbacks here */
+    /*For more information, refer to the Writing Code topic in the PSoC Creator Help.*/
 
-int8_t convertToSigned(uint8_t number);
-uint8_t getDecimal(uint8_t number);
-void GetStringToPrint(char* stringToPrint, uint8_t* dataRead);
-char8* readFromI2C(uint8_t Address, char8* printString, uint8_t* DataToRead);
-
-/* [] END OF FILE */
+    
+#endif /* CYAPICALLBACKS_H */   
+/* [] */

@@ -10,29 +10,27 @@
  * ========================================
 */
 #include "project.h"
-#include "I2CHelper.h"
+uint8_t r[2] = {0,0x00};
 
-
+CY_ISR(ISR_SW_handler) {
+    r[0] = SW1_Read();
+    SW1_ClearInterrupt();
+}
 
 int main(void)
 {
+    isr_sw_StartEx(ISR_SW_handler);
     CyGlobalIntEnable; /* Enable global interrupts. */
     I2C_1_Start();
-    UART_1_Start();
+    I2C_1_SetBuffer1(2,0,r);
+
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
 
     for(;;)
     {
-        uint8_t DataToRead[2];
-        char8 printString[30];
-        UART_1_PutString(readFromI2C(0x48, printString, DataToRead));
-        CyDelay(100);
-        
         /* Place your application code here. */
     }
 }
-
-
 
 
 /* [] END OF FILE */
