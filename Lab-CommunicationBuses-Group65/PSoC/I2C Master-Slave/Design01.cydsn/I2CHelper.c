@@ -34,13 +34,6 @@ uint8_t getDecimal(uint8_t number)
     return 0;
 }
 
-void GetStringToPrint(char8* stringToPrint, uint8_t* dataRead)
-{
-    int8_t temp = convertToSigned(dataRead[0]);
-    uint8_t decimal = getDecimal(dataRead[1]);
-    sprintf(stringToPrint,"Temperatur: %d,%d\n\r",temp,decimal);
-}
-
 
 char8* readFromI2C(uint8_t Address, char8* printString, uint8_t* DataToRead)
 {
