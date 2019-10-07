@@ -14,7 +14,6 @@
 
 int8_t convertToSigned(uint8_t number);
 uint8_t getDecimal(uint8_t number);
-void GetStringToPrint(char* stringToPrint, uint8_t* dataRead);
 char8* readFromI2C(uint8_t Address, char8* printString, uint8_t* DataToRead);
 
 /* [] END OF FILE */
