@@ -12,6 +12,7 @@
 #include "../SPI_cmd.h"
 #include "SPImaster.h"
 #include "project.h"
+#include "stdio.h"
 
 void turnOnLED() {
     SPIM_1_WriteTxData(49);
@@ -51,6 +52,9 @@ void handleByteReceived(uint8_t byteReceived, uint8_t * poller, char * buffer, u
 uint8 pollSlave() {
     SPIM_1_WriteTxData(0);
     uint8_t r = SPIM_1_ReadRxData();
+    char8 msg[20];
+    sprintf(msg, "Kanp status: %d\r\n", r);
+    UART_1_PutString(msg);
     return r;
 }
 
