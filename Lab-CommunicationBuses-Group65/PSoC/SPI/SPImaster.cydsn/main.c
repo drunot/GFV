@@ -20,6 +20,7 @@ uint8 pollSlave();
 void sendString();
 char buf[25];
 int ptr = 0;
+int polling = 0;
 int numprinted = 0;
 
 int main(void)
@@ -34,11 +35,10 @@ int main(void)
 
     for(;;)
     {
-        /*
-        if (pollSlave() == 1) {
-            LED1_Write(1);
+        if (polling) {
+            LED1_Write(pollSlave());
+            CyDelay(100);
         }
-        */
         /* Place your application code here. */ 
     }
 }
@@ -66,21 +66,18 @@ void handleByteReceived(uint8_t byteReceived)
 {
     switch(byteReceived)
     {
-        /*
-        case 10 :
-        {
-            sendString(buf);
-            LED1_Write(1);
-        }
-        break;
-        */
         case 13 : 
         {
             sendString();
             LED1_Write(1);
         }
         break;
-        
+        case 'p' :
+        {
+            polling = ~polling;
+            SPIM_1_WriteTxData('2'); //Indsæt her kommandoen til at starte polling, kunne ikke lige se hvad det var
+        }
+        break;
         default :
         {
             buf[ptr] = byteReceived;
