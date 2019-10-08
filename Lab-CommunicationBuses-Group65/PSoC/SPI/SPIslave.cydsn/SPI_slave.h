@@ -21,6 +21,6 @@ static char* const StopSWConstTEXT = "Stop Constant Send";
 static char* const GetSWStatusTEXT = "Send SW status";
 
 
-void SPI_CMD_Handler(char8* buffer, char8 * text, uint8_t * conBool);
+void SPI_CMD_Handler(char8* buffer, char8 * text, uint8_t * conBool, char8* last);
 
 /* [] END OF FILE */
