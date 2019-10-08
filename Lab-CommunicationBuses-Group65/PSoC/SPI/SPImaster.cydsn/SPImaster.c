@@ -39,7 +39,7 @@ void handleByteReceived(uint8_t byteReceived, uint8_t * poller, char * buffer, u
         case 'p' : //If P is pressed, polling will begin, and the switch from the slave can be read.
         {
             *poller = ~(*poller);
-            SPIM_1_WriteTxData(GetSWConst); //Indsæt her kommandoen til at starte polling, kunne ikke lige se hvad det var
+            SPIM_1_WriteTxData(GetSWConst); //Indsæt her kommandoen til at starte polling
         }
         break;
         default : //If non of above the function saves the receved byte in the buffer
