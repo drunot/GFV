@@ -11,6 +11,7 @@
 */
 #include "project.h"
 
+#define MAX_CMD_LENGTH 25U
 
 static char* const StartUpTEXT = "Started";
 static char* const DoNothingTEXT = "Do nothing";
@@ -21,6 +22,9 @@ static char* const StopSWConstTEXT = "Stop Constant Send";
 static char* const GetSWStatusTEXT = "Send SW status";
 
 
+
+void init(void * isr_rx, void * isr_timeout, void * isr_switch,  char8 * last);
 void SPI_CMD_Handler(char8* buffer, char8 * text, uint8_t * conBool, char8* last);
+void poll(void);
 
 /* [] END OF FILE */

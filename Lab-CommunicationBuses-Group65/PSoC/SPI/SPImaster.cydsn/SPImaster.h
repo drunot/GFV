@@ -11,6 +11,8 @@
 */
 #include "project.h"
 
+
+
 void init(void * UARTISR); //Initializes the interrupts and the components. Takes to interrupts at parameters.
 void turnOnLED(); //Turns on LED1
 void turnOffLED(); //Turns off LED1

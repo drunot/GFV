@@ -18,9 +18,11 @@
 
 
 CY_ISR_PROTO(isr_spi_rx_handler);
+CY_ISR_PROTO(isr_sw_handler);
 CY_ISR_PROTO(isr_timeout_handler);
 static char8 CMD_buffer;
 static char8 * CMD_TEXT;
+uint8_t r;
 static uint8_t continuous = 0;
 static char8 Last[MAX_CMD_LENGTH];
 
@@ -29,26 +31,11 @@ int main(void)
     CyGlobalIntEnable; /* Enable global interrupts. */
 
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
-    isr_spi_rx_StartEx(isr_spi_rx_handler);
-    isr_timeout_StartEx(isr_timeout_handler);
-    UART_1_Start();
-    UART_1_PutString(StartUpTEXT);
-    UART_1_PutString("\r\n");
-    SPIS_1_Start();
-    SPIS_1_EnableRxInt();
-    SPIS_1_SetRxInterruptMode(SPIS_1_STS_RX_FIFO_NOT_EMPTY);
-    LED_Write(1);   
-    strcpy(Last, " ");
-    Timer_1_Start();
-
-    
+    init(isr_spi_rx_handler, isr_timeout_handler, isr_sw_handler, Last); //initializes the interrupts and the top design components.
 
     for(;;)
     {
-        if(continuous){
-            SPIS_1_WriteTxData(SW_Read());
-            SPIS_1_ClearTxBuffer();
-        }
+//        
     }
 }
 
@@ -57,8 +44,20 @@ CY_ISR(isr_spi_rx_handler) {
     SPI_CMD_Handler(&CMD_buffer, CMD_TEXT, &continuous, Last);
     SPIS_1_ClearFIFO();
 }
+CY_ISR(isr_sw_handler){
+    if(continuous)
+    {
+    uint8_t r = SW_Read();
+    SPIS_1_WriteTxData(r);
+    SPIS_1_ClearTxBuffer();
+    }
+    SW_ClearInterrupt();
+}
 
 CY_ISR(isr_timeout_handler){
-    strcpy(Last, " ");
+    strcpy(Last, " "); //Is added because we had problems with strings that was receved double. 
 }
+
+
+
 /* [] END OF FILE */

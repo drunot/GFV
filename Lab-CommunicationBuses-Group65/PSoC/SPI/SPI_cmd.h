@@ -10,9 +10,8 @@
  * ========================================
 */
 
+#define MAX_BUF_LENGTH 25U
 
-
-#define MAX_CMD_LENGTH 25U
 #define CharTerminator '\n'
 
 #define DoNothing	0
