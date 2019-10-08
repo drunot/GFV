@@ -22,13 +22,7 @@ int numprinted = 0;
 
 int main(void)
 {
-    CyGlobalIntEnable; /* Enable global interrupts. */
-
-    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
-    isr_uart_rx_StartEx(ISR_UART_rx_handler);
-    isr_sw_StartEx(ISR_SW_handler);
-    UART_1_Start();
-    SPIM_1_Start();
+    init(ISR_UART_rx_handler, ISR_SW_handler);
 
     for(;;)
     {
@@ -47,14 +41,8 @@ CY_ISR(ISR_SW_handler) {
 }
 
 CY_ISR(ISR_UART_rx_handler) {
-    uint8_t bytesToRead = UART_1_GetRxBufferSize();
-    while (bytesToRead > 0)
-    {
-        uint8_t byteReceived = UART_1_ReadRxData();
-        handleByteReceived(byteReceived, &polling, buf, &ptr);
-        //UART_1_WriteTxData(byteReceived); // echo back
-        bytesToRead--;
-    }
+    
+    UARTHandler(&polling, buf, &ptr);
 }
 
 

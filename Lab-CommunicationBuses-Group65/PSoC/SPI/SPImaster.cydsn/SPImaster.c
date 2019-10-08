@@ -14,6 +14,21 @@
 #include "project.h"
 #include "stdio.h"
 
+
+
+void init(void * UARTISR, void * SWISR)
+{
+    CyGlobalIntEnable; /* Enable global interrupts. */
+
+    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+    //Initializes the interrupts with the given inputs
+    isr_uart_rx_StartEx(UARTISR);
+    isr_sw_StartEx(SWISR);
+    //Starts the components from topdesign.
+    UART_1_Start();
+    SPIM_1_Start();
+}
+
 void turnOnLED() {
     SPIM_1_WriteTxData(49);
 }
@@ -25,19 +40,19 @@ void handleByteReceived(uint8_t byteReceived, uint8_t * poller, char * buffer, u
 {
     switch(byteReceived)
     {
-        case 13 : 
+        case '\r' : //Sends string on return carage receved
         {
             sendString(buffer, counter);
             LED1_Write(1);
         }
         break;
-        case 'p' :
+        case 'p' : //If P is pressed, polling will begin, and the switch from the slave can be read.
         {
             *poller = ~(*poller);
             SPIM_1_WriteTxData(GetSWConst); //Indsæt her kommandoen til at starte polling, kunne ikke lige se hvad det var
         }
         break;
-        default :
+        default : //If non of above the function saves the receved byte in the buffer
         {
             buffer[*counter] = byteReceived;
             LED1_Write(0);
@@ -50,25 +65,35 @@ void handleByteReceived(uint8_t byteReceived, uint8_t * poller, char * buffer, u
 
 
 uint8 pollSlave() {
-    SPIM_1_WriteTxData(0);
-    uint8_t r = SPIM_1_ReadRxData();
+    SPIM_1_WriteTxData(0); //Sends an empty message in order to be able to receve.
+    uint8_t r = SPIM_1_ReadRxData(); //Reads receved data. 
     char8 msg[20];
-    sprintf(msg, "Kanp status: %d\r\n", r);
-    UART_1_PutString(msg);
+    sprintf(msg, "Knap status: %d\r\n", r); //Creates the string with the given data.
+    UART_1_PutString(msg); //Sends the string over the UART.
     return r;
 }
 
 void sendString(char * buffer, uint8_t * counter) 
 {
-    UART_1_PutString("\r\n");
-    buffer[*counter] = '\r';
-    buffer[*counter+1] = 0;
-    UART_1_PutString(buffer);
+    UART_1_PutString("\r\n"); //New line, carage return.
+    buffer[*counter] = '\r'; //Sets end of buffer to carage return.
+    buffer[*counter+1] = 0; //Sets end of buffer to end of string char.
+    UART_1_PutString(buffer); //Sends the string to the UART.
     for(int i = 0; buffer[i] != 0; i++) {
-        UART_1_PutChar(buffer[i]);
-        SPIM_1_WriteTxData(buffer[i]);
+        SPIM_1_WriteTxData(buffer[i]); //Sends the string one byte at the time over SPI
     }
-    UART_1_PutChar('\n');
-    *counter = 0;
+    UART_1_PutChar('\n'); //New line in the UART after done sending.
+    *counter = 0; //Resets the buffer counter.
+}
+
+void UARTHandler(uint8_t * poller, char * buffer, uint8_t * counter)
+{
+    uint8_t bytesToRead = UART_1_GetRxBufferSize(); //Reads number of bytes to read.
+    while (bytesToRead > 0) //Handles each byte one at the time.
+    {
+        uint8_t byteReceived = UART_1_ReadRxData();
+        handleByteReceived(byteReceived, poller, buffer, counter);
+        bytesToRead--;
+    }
 }
 /* [] END OF FILE */
