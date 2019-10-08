@@ -26,13 +26,6 @@ void init(void * UARTISR)
     SPIM_1_Start();
 }
 
-void turnOnLED() {
-    SPIM_1_WriteTxData(49);
-}
-void turnOffLED() {
-    SPIM_1_WriteTxData('2');
-}
-
 void handleByteReceived(uint8_t byteReceived, uint8_t * poller, char * buffer, uint8_t * counter)
 {
     switch(byteReceived)
