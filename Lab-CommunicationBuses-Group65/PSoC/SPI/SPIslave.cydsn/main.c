@@ -47,9 +47,7 @@ CY_ISR(isr_spi_rx_handler) {
 CY_ISR(isr_sw_handler){
     if(continuous)
     {
-    uint8_t r = SW_Read();
-    SPIS_1_WriteTxData(r);
-    SPIS_1_ClearTxBuffer();
+        poll();
     }
     SW_ClearInterrupt();
 }
