@@ -67,6 +67,7 @@ void init(void * isr_rx, void * isr_timeout, void * isr_switch,  char8 * last) /
     LED_Write(1);   
     strcpy(last, " ");
     Timer_1_Start();
+    poll();
     
 }
 
