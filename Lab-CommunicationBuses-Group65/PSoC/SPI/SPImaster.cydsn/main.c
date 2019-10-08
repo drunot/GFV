@@ -17,7 +17,6 @@ CY_ISR_PROTO(ISR_UART_rx_handler);
 char buf[MAX_BUF_LENGTH];
 uint8_t ptr = 0;
 uint8_t polling = 0;
-int numprinted = 0;
 
 int main(void)
 {
