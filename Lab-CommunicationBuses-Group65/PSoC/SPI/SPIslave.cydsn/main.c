@@ -12,6 +12,7 @@
 #include "project.h"
 #include <stdio.h>
 #include "SPI_slave.h"
+#include "../SPI_cmd.h"
 
 
 
@@ -21,7 +22,7 @@ CY_ISR_PROTO(isr_timeout_handler);
 static char8 CMD_buffer;
 static char8 * CMD_TEXT;
 static uint8_t continuous = 0;
-static char8 Last[25];
+static char8 Last[MAX_CMD_LENGTH];
 
 int main(void)
 {
