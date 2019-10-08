@@ -11,7 +11,7 @@
 */
 #include "project.h"
 
-void init(void * UARTISR, void * SWISR); //Initializes the interrupts and the components. Takes to interrupts at parameters.
+void init(void * UARTISR); //Initializes the interrupts and the components. Takes to interrupts at parameters.
 void turnOnLED(); //Turns on LED1
 void turnOffLED(); //Turns off LED1
 void handleByteReceived(uint8_t byteReceived, uint8_t * poller, char * buffer, uint8_t * counter); //Handles the reading and understanding of receved input from the UART
