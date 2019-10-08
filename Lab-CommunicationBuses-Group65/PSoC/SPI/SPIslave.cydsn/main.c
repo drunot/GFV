@@ -22,7 +22,7 @@ CY_ISR_PROTO(isr_sw_handler);
 CY_ISR_PROTO(isr_timeout_handler);
 static char8 CMD_buffer;
 static char8 * CMD_TEXT;
-uint8_t r;
+uint8_t r = 1;
 static uint8_t continuous = 0;
 static char8 Last[MAX_CMD_LENGTH];
 
