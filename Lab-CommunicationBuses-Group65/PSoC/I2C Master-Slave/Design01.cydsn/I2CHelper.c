@@ -34,13 +34,11 @@ uint8_t getDecimal(uint8_t number)
     return 0;
 }
 
-
 char8* readFromI2C(uint8_t Address, char8* printString, uint8_t* DataToRead)
 {
-    I2C_1_MasterReadBuf(Address,DataToRead,2, I2C_1_MODE_COMPLETE_XFER);
+    I2C_1_MasterReadBuf(Address,DataToRead,1, I2C_1_MODE_COMPLETE_XFER);
     int8_t temp = convertToSigned(DataToRead[0]);
-    uint8_t decimal = getDecimal(DataToRead[1]);
-    sprintf(printString,"Temperatur from adress 0x%02X: %d,%d\n\r",Address, temp, decimal);
+    sprintf(printString,"Button status from adress 0x%02X: %d\n\r",Address, temp);
     return printString;
 }
 

@@ -24,7 +24,7 @@ int main(void)
     for(;;)
     {
         uint8_t DataToRead[2];
-        char8 printString[30];
+        char8 printString[50];
         UART_1_PutString(readFromI2C(0x48, printString, DataToRead));
         CyDelay(100);
         
