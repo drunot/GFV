@@ -70,14 +70,15 @@ uint8 pollSlave() {
     return r;
 }
 
-void sendString(char * buffer, uint8_t * counter) 
+void sendString(char * buffer, uint8_t * counter)
 {
     UART_1_PutString("\r\n"); //New line, carriage return.
     buffer[*counter] = '\r'; //Sets end of buffer to carriage return.
     buffer[*counter+1] = 0; //Sets end of buffer to end of string char.
-    UART_1_PutString(buffer); //Sends the string to the UART.
+    //UART_1_PutString(buffer); //Sends the string to the UART.
     for(int i = 0; buffer[i] != 0; i++) {
         SPIM_1_WriteTxData(buffer[i]); //Sends the string one byte at the time over SPI
+        UART_1_PutChar(buffer[i]);
     }
     UART_1_PutChar('\n'); //New line in the UART after done sending.
     *counter = 0; //Resets the buffer counter.
