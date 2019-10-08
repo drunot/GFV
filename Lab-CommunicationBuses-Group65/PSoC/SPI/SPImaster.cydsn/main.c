@@ -14,7 +14,6 @@
 #include "../SPI_cmd.h"
 
 CY_ISR_PROTO(ISR_UART_rx_handler);
-CY_ISR_PROTO(ISR_SW_handler);
 char buf[25];
 uint8_t ptr = 0;
 uint8_t polling = 0;
@@ -22,7 +21,8 @@ int numprinted = 0;
 
 int main(void)
 {
-    init(ISR_UART_rx_handler, ISR_SW_handler);
+    CyGlobalIntEnable; /* Enable global interrupts. */
+    init(ISR_UART_rx_handler);
 
     for(;;)
     {
@@ -34,11 +34,6 @@ int main(void)
     }
 }
 
-CY_ISR(ISR_SW_handler) {
-    SPIM_1_WriteTxData('c');
-    SW1_ClearInterrupt();
-    UART_1_PutChar(SPIM_1_ReadRxData());
-}
 
 CY_ISR(ISR_UART_rx_handler) {
     

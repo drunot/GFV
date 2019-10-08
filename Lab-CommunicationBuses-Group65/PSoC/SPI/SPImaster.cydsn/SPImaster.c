@@ -16,14 +16,11 @@
 
 
 
-void init(void * UARTISR, void * SWISR)
+void init(void * UARTISR)
 {
-    CyGlobalIntEnable; /* Enable global interrupts. */
-
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     //Initializes the interrupts with the given inputs
     isr_uart_rx_StartEx(UARTISR);
-    isr_sw_StartEx(SWISR);
     //Starts the components from topdesign.
     UART_1_Start();
     SPIM_1_Start();
@@ -40,7 +37,7 @@ void handleByteReceived(uint8_t byteReceived, uint8_t * poller, char * buffer, u
 {
     switch(byteReceived)
     {
-        case '\r' : //Sends string on return carage receved
+        case '\r' : //Sends string on return carriage receved
         {
             sendString(buffer, counter);
             LED1_Write(1);
@@ -75,8 +72,8 @@ uint8 pollSlave() {
 
 void sendString(char * buffer, uint8_t * counter) 
 {
-    UART_1_PutString("\r\n"); //New line, carage return.
-    buffer[*counter] = '\r'; //Sets end of buffer to carage return.
+    UART_1_PutString("\r\n"); //New line, carriage return.
+    buffer[*counter] = '\r'; //Sets end of buffer to carriage return.
     buffer[*counter+1] = 0; //Sets end of buffer to end of string char.
     UART_1_PutString(buffer); //Sends the string to the UART.
     for(int i = 0; buffer[i] != 0; i++) {
