@@ -35,15 +35,15 @@ int main(void)
     {
         /* Place your application code here. */
         if (ADC_SAR_1_IsEndConversion(ADC_SAR_1_WAIT_FOR_RESULT)) {
-            if (!SW1_Read() || avgcnt > 500) {
-                double linear = 4.9310*result - 5425.5;
-                snprintf(uartBuffer, sizeof(uartBuffer), "ADC result: %d, estimated weight - linear: %0.2f\r\n", result, linear);
-                UART_1_PutString(uartBuffer);
-                while (!SW1_Read()) {}
-                result = ADC_SAR_1_GetResult16();
+            if (!SW1_Read() || avgcnt > 500) { //Print weight every 5 seconds or if SW1 is pressed
+                double linear = 4.9310*result - 5425.5; //convert analog to weight
+                snprintf(uartBuffer, sizeof(uartBuffer), "ADC result: %d, estimated weight - linear: %0.2f\r\n", result, linear); //convert to string
+                UART_1_PutString(uartBuffer); //print string
+                while (!SW1_Read()) {} //Hold while SW1 pressed
+                result = ADC_SAR_1_GetResult16(); //restart result value to newest read
                 avgcnt = 0;
             } else {
-                result = (result + ADC_SAR_1_GetResult16()) / 2;
+                result = (result + ADC_SAR_1_GetResult16()) / 2; //read value and find middle value between new and old
             }
         }
         avgcnt++;
