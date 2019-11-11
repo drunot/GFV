@@ -3352,27 +3352,22 @@
         <Data key="Port Format" value="12,1" />
       </Group>
     </Group>
+    <Group key="1425177d-0d0e-4468-8bcc-e638e5509a9b">
+      <Group key="0">
+        <Data key="Port Format" value="12,6" />
+      </Group>
+    </Group>
     <Group key="bf7ac1d2-c20e-455b-a5a0-7dba64fdba8e">
       <Group key="0">
         <Data key="Port Format" value="2,2" />
       </Group>
     </Group>
-    <Group key="Unlocked Pins">
-      <Group key="1425177d-0d0e-4468-8bcc-e638e5509a9b">
-        <Group key="0">
-          <Group key="132145722039351650">
-            <Data key="Port Format" value="12,6" />
-          </Group>
-        </Group>
-      </Group>
-      <Group key="ed092b9b-d398-4703-be89-cebf998501f6">
-        <Group key="0">
-          <Group key="132145722023095463">
-            <Data key="Port Format" value="12,7" />
-          </Group>
-        </Group>
+    <Group key="ed092b9b-d398-4703-be89-cebf998501f6">
+      <Group key="0">
+        <Data key="Port Format" value="12,7" />
       </Group>
     </Group>
+    <Group key="Unlocked Pins" />
   </Group>
   <Group key="PlaceDir">
     <Data key="count" value="0" />
