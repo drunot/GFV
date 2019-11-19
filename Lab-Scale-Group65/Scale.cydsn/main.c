@@ -31,9 +31,7 @@ int main(void)
     while (!ADC_SAR_1_IsEndConversion(ADC_SAR_1_WAIT_FOR_RESULT)) {}
     uint16_t result = ADC_SAR_1_GetResult16();
     int avgcnt = 0;
-    for(;;)
-    {
-        /* Place your application code here. */
+    for(;;) {
         if (ADC_SAR_1_IsEndConversion(ADC_SAR_1_WAIT_FOR_RESULT)) {
             if (!SW1_Read() || avgcnt > 500) { //Print weight every 5 seconds or if SW1 is pressed
                 double linear = 4.9310*result - 5425.5; //convert analog to weight
