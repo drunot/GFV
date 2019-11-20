@@ -1,4 +1,5 @@
 %%  
+clc
 clear
 close all
 
@@ -33,7 +34,7 @@ Rs =  50;                                                   % Stopband Ripple (d
 [b,a] = cheby2(n,Rs,Ws,'high');                             % Filter Design, Sepcify Bandstop
 signal_Highpass = filter(b, a, signal_Lowpass);
 
-%% Plotter grafen i alle stadier af filtering
+%% Plotter grafen i alle stadier af filtering 5 Hz
 close all;
 figNr = 1;
 figure(figNr); figNr = figNr + 1; clf;
@@ -61,7 +62,42 @@ xlabel("Tid [s]");
 ylabel("Amplitude");
 legend("EKG signal uden DC med lowpass - og highpass filter");
 
-%% Plotter alt FFT i log akse
+%% Plotter grafen i alle stadier af filtering 100 Hz
+close all;
+figNr = 1;
+figure(figNr); figNr = figNr + 1; clf;
+plot(T,signal_QRS)
+title('EKG signal ufilteret')
+xlabel("Tid [s]");
+ylabel("Amplitude");
+legend("EKG signal raw");
+figure(figNr); figNr = figNr + 1; clf;
+plot(T,signal_noDC)
+title('1. filtering: Fjern DC')
+xlabel("Tid [s]");
+ylabel("Amplitude");
+legend("EKG signal uden DC");
+figure(figNr); figNr = figNr + 1; clf;
+plot(T,signal_no50Hz)
+title('2. filtering: ellipse 50 stopband')
+xlabel("Tid [s]");
+ylabel("Amplitude");
+legend("EKG signal uden DC og 50 Hz");
+figure(figNr); figNr = figNr + 1; clf;
+plot(T,signal_Lowpass)
+title('3. filtering: Fir lowpass')
+xlabel("Tid [s]");
+ylabel("Amplitude");
+legend("EKG signal uden DC og 50 Hz, med lowpass filter");
+figure(figNr); figNr = figNr + 1; clf;
+plot(T,signal_Highpass)
+title('4. filtering: IIR Cheby2 filter highpass')
+xlabel("Tid [s]");
+ylabel("Amplitude");
+legend("EKG signal uden DC og 50 Hz, med lowpass - og highpass filter");
+
+
+%% Plotter alt FFT i log akse 5 Hz
 fft_QRS = fft(signal_QRS);
 fft_noDC = fft(signal_noDC);
 fft_Lowpass = fft(signal_Lowpass);
@@ -91,6 +127,43 @@ xlabel("Frekvens [Hz]");
 ylabel("Amplitude");
 legend("EKG signal uden DC med lowpass - og highpass filter");
 
+%% Plotter alt FFT i log akse 100 Hz
+fft_QRS = fft(signal_QRS);
+fft_noDC = fft(signal_noDC);
+fft_no50Hz = fft(signal_no50Hz);
+fft_Lowpass = fft(signal_Lowpass);
+fft_Highpass = fft(signal_Highpass);
+figure(figNr); figNr = figNr + 1; clf;
+semilogx(f(1:L/2),abs(fft_QRS(1:L/2)));
+title('EKG signal ufilteret')
+xlabel("Frekvens [Hz]");
+ylabel("Amplitude");
+legend("EKG signal raw");
+figure(figNr); figNr = figNr + 1; clf;
+semilogx(f(1:L/2),abs(fft_noDC(1:L/2)));
+title('1. filtering: Fjern DC')
+xlabel("Frekvens [Hz]");
+ylabel("Amplitude");
+legend("EKG signal uden DC");
+figure(figNr); figNr = figNr + 1; clf;
+semilogx(f(1:L/2),abs(fft_no50Hz(1:L/2)));
+title('2. filtering: ellipse 50 stopband')
+xlabel("Frekvens [Hz]");
+ylabel("Amplitude");
+legend("EKG signal uden DC med lowpass filter");
+figure(figNr); figNr = figNr + 1; clf;
+semilogx(f(1:L/2),abs(fft_Lowpass(1:L/2)));
+title('3. filtering: Fir lowpass')
+xlabel("Frekvens [Hz]");
+ylabel("Amplitude");
+legend("EKG signal uden DC med lowpass filter");
+figure(figNr); figNr = figNr + 1; clf;
+semilogx(f(1:L/2),abs(fft_Highpass(1:L/2)));
+title('4. filtering: IIR Cheby2 filter highpass')
+xlabel("Frekvens [Hz]");
+ylabel("Amplitude");
+legend("EKG signal uden DC med lowpass - og highpass filter");
+
 %% Plottet af FFT for de to først hvor man kan se at DC er væk.
 figure(figNr); figNr = figNr + 1; clf;
 plot(f(1:L/2),abs(fft_QRS(1:L/2)));
@@ -98,13 +171,14 @@ title('EKG signal ufilteret')
 xlabel("Frekvens [Hz]");
 ylabel("Amplitude");
 legend("EKG signal raw");
+
 figure(figNr); figNr = figNr + 1; clf;
 plot(f(1:L/2),abs(fft_noDC(1:L/2)));
 title('1. filtering: Fjern DC')
 xlabel("Frekvens [Hz]");
 ylabel("Amplitude");
 legend("EKG signal uden DC");
-%% Filterkarakteristiker for begge filte.
+%% Filterkarakteristiker for begge filtre. 5 Hz
 figure(figNr); figNr = figNr + 1; clf;
 freqz(LPfir,1,2^14,f_sample);
 title('FIR lowpass filter')
@@ -115,9 +189,44 @@ subplot(2,1,2)
 legend('faseforskydning');
 xlabel("Frekvens [Hz]");
 ylabel("Fase [grader]");
+
 figure(figNr); figNr = figNr + 1; clf;
 freqz(b,a,2^14,f_sample);
 title('IIR Cheby2 filter highpass')
+xlabel("Frekvens [Hz]");
+ylabel("Magnetude [dB]");
+legend('frekvenskarakteristik')
+subplot(2,1,2)
+legend('faseforskydning');
+xlabel("Frekvens [Hz]");
+ylabel("Fase [grader]");
+
+%% Filterkarakteristiker for alle tre filtre. 100 Hz
+figure(figNr); figNr = figNr + 1; clf;
+freqz(LPfir,1,2^14,f_sample);
+title('FIR lowpass filter')
+legend('frekvenskarakteristik')
+xlabel("Frekvens [Hz]");
+ylabel("Magnetude [dB]");
+subplot(2,1,2)
+legend('faseforskydning');
+xlabel("Frekvens [Hz]");
+ylabel("Fase [grader]");
+
+figure(figNr); figNr = figNr + 1; clf;
+freqz(b,a,2^14,f_sample);
+title('IIR Cheby2 filter highpass')
+xlabel("Frekvens [Hz]");
+ylabel("Magnetude [dB]");
+legend('frekvenskarakteristik')
+subplot(2,1,2)
+legend('faseforskydning');
+xlabel("Frekvens [Hz]");
+ylabel("Fase [grader]");
+
+figure(figNr); figNr = figNr + 1; clf;
+freqz(b1,a1,2^14,f_sample);
+title('IIR ellipse filter 50Hz stopband')
 xlabel("Frekvens [Hz]");
 ylabel("Magnetude [dB]");
 legend('frekvenskarakteristik')
