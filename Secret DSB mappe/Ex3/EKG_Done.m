@@ -110,7 +110,7 @@ hold on
 plot(T(PR_Index(1):PR_Index(2)),signal_Highpass(PR_Index(1):PR_Index(2)), 'm')
 plot(T(QRS_Index(1):QRS_Index(2)),signal_Highpass(QRS_Index(1):QRS_Index(2)), 'g')
 plot(T(T_Index(1):T_Index(2)),signal_Highpass(T_Index(1):T_Index(2)), 'r')
-legend("EKG signal uden DC med lowpass - og highpass filter", "PR", "QRS", "T");
+legend("EKG signalet", "PR", "QRS", "T");
 %% Signal med PR, QRS og T 5 Hz
 Sig_Index = [9600; 10900];
 PR_Index = [Sig_Index(1)+270; Sig_Index(1)+340];
@@ -125,7 +125,7 @@ hold on
 plot(T(PR_Index(1):PR_Index(2)),signal_Highpass(PR_Index(1):PR_Index(2)), 'm')
 plot(T(QRS_Index(1):QRS_Index(2)),signal_Highpass(QRS_Index(1):QRS_Index(2)), 'g')
 plot(T(T_Index(1):T_Index(2)),signal_Highpass(T_Index(1):T_Index(2)), 'r')
-legend("EKG signal uden DC med lowpass - og highpass filter", "PR", "QRS", "T");
+legend("EKG signalet", "PR", "QRS", "T");
 
 
 %% Plotter alt FFT i log akse 5 Hz
