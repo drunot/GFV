@@ -275,6 +275,23 @@ legend('faseforskydning');
 xlabel("Frekvens [Hz]");
 ylabel("Fase [grader]");
 
+
+
+figure(figNr); figNr = figNr + 1; clf;
+[h,f] = freqz(b1,a1,2^14,f_sample);
+Index100Hz = uint32(length(f)/10);
+subplot(2,1,1)
+plot(f(1:Index100Hz),20*log(abs(h(1:Index100Hz))))
+title('IIR ellipse filter 50Hz stopband')
+xlabel("Frekvens [Hz]");
+ylabel("Magnetude [dB]");
+legend('frekvenskarakteristik')
+subplot(2,1,2)
+plot(f(1:Index100Hz),360/(2*pi)*unwrap(angle(h(1:Index100Hz))));
+legend('faseforskydning');
+xlabel("Frekvens [Hz]");
+ylabel("Fase [grader]");
+
 %% Impulsrespons for alle tre filtre. 100 Hz
 figure(figNr); figNr = figNr + 1; clf;
 impz(LPfir,1,100,f_sample);
