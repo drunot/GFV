@@ -47,8 +47,19 @@ freqz(LPfir2,1,512,f_sample);
 [b,a] = besself(2, 1, 'high');
 signal_QRS = filter(b, a, signal_QRS);
 
-figure(fig); fig = fig + 1; clf;
-freqz(b,a,512,f_sample);
+
+
+
+subplot(2,2,1)
+plot(T,signal_QRS);
+freqSignal = fft(signal_QRS);
+subplot(2,2,2)
+semilogx(f(1:L/2),abs(freqSignal(1:L/2)))
+subplot(2,2,3)
+[x,y] = freqz(b,a,512,f_sample);
+plot(y,x);
+subplot(2,2,4)
+impz(b, a, 100, f_sample);
 
 %% Lowpass FIR
 
