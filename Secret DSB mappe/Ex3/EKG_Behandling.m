@@ -44,6 +44,10 @@ freqz(LPfir2,1,512,f_sample);
 
 %% Highpass IIR 
 
+meanDC = mean(signal_QRS);
+
+signal_QRS = signal_QRS - meanDC;
+
 [b,a] = besself(2, 1, 'high');
 signal_QRS = filter(b, a, signal_QRS);
 
@@ -52,14 +56,31 @@ signal_QRS = filter(b, a, signal_QRS);
 
 subplot(2,2,1)
 plot(T,signal_QRS);
+xlabel('tid [s]');
+ylabel('amplitude');
+title('Filtret signal');
+
 freqSignal = fft(signal_QRS);
 subplot(2,2,2)
 semilogx(f(1:L/2),abs(freqSignal(1:L/2)))
+xlabel('frekvens [Hz]');
+ylabel('amplitude');
+title('frekvenskaraktistik');
+
 subplot(2,2,3)
-[x,y] = freqz(b,a,512,f_sample);
-plot(y,x);
+[x,y] = freqz(b,a,512);
+plot(y,abs(x));
+xlabel('frekvens [Hz]');
+ylabel('amplitude [dB]');
+title('filterkaraktistik');
+
+[b,a] = besself(3, 1, 'high');
+
 subplot(2,2,4)
-impz(b, a, 100, f_sample);
+impz(b, a, 100, f_sample); 
+xlabel('tid [s]');
+ylabel('amplitude [dB]');
+title('impulsrespons');
 
 %% Lowpass FIR
 
