@@ -27,11 +27,11 @@ LPfir = fir1(100, 0.005, 'low', hann(101));
 signal_Lowpass = filter(LPfir,1,signal_noDC);
 %% IIR Cheby2 Highpass
 Wp = 1/(f_sample/2);                                        % Passband Frequency (Normalised)
-Ws = 0.01/(f_sample/2);                                      % Stopband Frequency (Normalised)
+Ws = 0.1/(f_sample/2);                                      % Stopband Frequency (Normalised)
 Rp =   1;                                                   % Passband Ripple (dB)
-Rs = 50;                                                   % Stopband Ripple (dB)
-[n,Ws] = ellipord(Wp,Ws,Rp,Rs);                             % Filter Order
-[b,a] = ellip(n,Rp,Rs,Ws,'high');                             % Filter Design, Specify Bandstop
+Rs =  50;                                                   % Stopband Ripple (dB)
+[n,Ws] = cheb2ord(Wp,Ws,Rp,Rs);                             % Filter Order
+[b,a] = cheby2(n,Rs,Ws,'high');                             % Filter Design, Sepcify Bandstop
 signal_Highpass = filter(b, a, signal_Lowpass);
 
 %% Plotter grafen i alle stadier af filtering 5 Hz
@@ -57,18 +57,6 @@ ylabel("Amplitude");
 legend("EKG signal uden DC med lowpass filter");
 figure(figNr); figNr = figNr + 1; clf;
 plot(T,signal_Highpass)
-title('3. filtering: IIR Cheby2 filter highpass')
-xlabel("Tid [s]");
-ylabel("Amplitude");
-legend("EKG signal uden DC med lowpass - og highpass filter");
-
-%%
-Sig_Index = [9600; 10900];
-PR_Index = [9900; 9950];
-QRS_Index = [9950; 10097];
-T_Index = [10549; 10683];
-figure(figNr); figNr = figNr + 1; clf;
-plot(T(Sig_Index(1):Sig_Index(2),signal_Highpass)
 title('3. filtering: IIR Cheby2 filter highpass')
 xlabel("Tid [s]");
 ylabel("Amplitude");
@@ -107,6 +95,37 @@ title('4. filtering: IIR Cheby2 filter highpass')
 xlabel("Tid [s]");
 ylabel("Amplitude");
 legend("EKG signal uden DC og 50 Hz, med lowpass - og highpass filter");
+
+%% Signal med PR, QRS og T 100 Hz
+Sig_Index = [9600; 10900];
+PR_Index = [9900; 9950];
+QRS_Index = [9950; 10097];
+T_Index = [10549; 10683];
+figure(figNr); figNr = figNr + 1; clf;
+plot(T(Sig_Index(1):Sig_Index(2)),signal_Highpass(Sig_Index(1):Sig_Index(2)))
+title('Aflæsning af filteret EKG-måling')
+xlabel("Tid [s]");
+ylabel("Amplitude");
+hold on
+plot(T(PR_Index(1):PR_Index(2)),signal_Highpass(PR_Index(1):PR_Index(2)), 'm')
+plot(T(QRS_Index(1):QRS_Index(2)),signal_Highpass(QRS_Index(1):QRS_Index(2)), 'g')
+plot(T(T_Index(1):T_Index(2)),signal_Highpass(T_Index(1):T_Index(2)), 'r')
+legend("EKG signalet", "PR", "QRS", "T");
+%% Signal med PR, QRS og T 5 Hz
+Sig_Index = [9600; 10900];
+PR_Index = [Sig_Index(1)+270; Sig_Index(1)+340];
+QRS_Index = [Sig_Index(1)+340; Sig_Index(1)+540];
+T_Index = [Sig_Index(1)+910; Sig_Index(1)+1115];
+figure(figNr); figNr = figNr + 1; clf;
+plot(T(Sig_Index(1):Sig_Index(2)),signal_Highpass(Sig_Index(1):Sig_Index(2)))
+title('Aflæsning af filteret EKG-måling')
+xlabel("Tid [s]");
+ylabel("Amplitude");
+hold on
+plot(T(PR_Index(1):PR_Index(2)),signal_Highpass(PR_Index(1):PR_Index(2)), 'm')
+plot(T(QRS_Index(1):QRS_Index(2)),signal_Highpass(QRS_Index(1):QRS_Index(2)), 'g')
+plot(T(T_Index(1):T_Index(2)),signal_Highpass(T_Index(1):T_Index(2)), 'r')
+legend("EKG signalet", "PR", "QRS", "T");
 
 
 %% Plotter alt FFT i log akse 5 Hz
@@ -213,6 +232,15 @@ legend('faseforskydning');
 xlabel("Frekvens [Hz]");
 ylabel("Fase [grader]");
 
+%% Impulsrespons for begge filtre. 5 Hz
+figure(figNr); figNr = figNr + 1; clf;
+impz(LPfir,1,120,f_sample);
+xlabel("nT [sekunder]");
+
+figure(figNr); figNr = figNr + 1; clf;
+impz(b,a,10,f_sample);
+xlabel("nT [sekunder]");
+
 %% Filterkarakteristiker for alle tre filtre. 100 Hz
 figure(figNr); figNr = figNr + 1; clf;
 freqz(LPfir,1,2^14,f_sample);
@@ -246,6 +274,21 @@ subplot(2,1,2)
 legend('faseforskydning');
 xlabel("Frekvens [Hz]");
 ylabel("Fase [grader]");
+
+
+
+%% Impulsrespons for alle tre filtre. 100 Hz
+figure(figNr); figNr = figNr + 1; clf;
+impz(LPfir,1,100,f_sample);
+xlabel("nT [sekunder]");
+
+figure(figNr); figNr = figNr + 1; clf;
+impz(b,a,10,f_sample);
+xlabel("nT [sekunder]");
+
+figure(figNr); figNr = figNr + 1; clf;
+impz(b1,a1,100,f_sample);
+xlabel("nT [sekunder]");
 
 %%
 figure(figNr); figNr = figNr + 1; clf;
