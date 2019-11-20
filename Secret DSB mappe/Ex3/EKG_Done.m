@@ -27,11 +27,11 @@ LPfir = fir1(100, 0.005, 'low', hann(101));
 signal_Lowpass = filter(LPfir,1,signal_noDC);
 %% IIR Cheby2 Highpass
 Wp = 1/(f_sample/2);                                        % Passband Frequency (Normalised)
-Ws = 0.01/(f_sample/2);                                      % Stopband Frequency (Normalised)
+Ws = 0.1/(f_sample/2);                                      % Stopband Frequency (Normalised)
 Rp =   1;                                                   % Passband Ripple (dB)
-Rs = 50;                                                   % Stopband Ripple (dB)
-[n,Ws] = ellipord(Wp,Ws,Rp,Rs);                             % Filter Order
-[b,a] = ellip(n,Rp,Rs,Ws,'high');                             % Filter Design, Specify Bandstop
+Rs =  50;                                                   % Stopband Ripple (dB)
+[n,Ws] = cheb2ord(Wp,Ws,Rp,Rs);                             % Filter Order
+[b,a] = cheby2(n,Rs,Ws,'high');                             % Filter Design, Sepcify Bandstop
 signal_Highpass = filter(b, a, signal_Lowpass);
 
 %% Plotter grafen i alle stadier af filtering 5 Hz
