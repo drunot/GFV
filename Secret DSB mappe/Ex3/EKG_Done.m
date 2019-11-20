@@ -15,18 +15,22 @@ grafNr = 0;
 %% Filter DC
 meanDC = mean(signal_QRS);
 signal_noDC = signal_QRS - meanDC;
-
-%% FIR1 Lowpass
+%% Nuke 50 Hz
+[b1, a1] = ellip(2, 2, 25, [45/(f_sample/2) 55/(f_sample/2)], 'stop');
+signal_no50Hz = filter(b1, a1, signal_noDC);
+%% FIR1 Lowpass 100 Hz
+LPfir = fir1(100, 0.1, 'low', hann(101));
+signal_Lowpass = filter(LPfir,1,signal_no50Hz);
+%% FIR1 Lowpass 5 Hz
 LPfir = fir1(100, 0.005, 'low', hann(101));
 signal_Lowpass = filter(LPfir,1,signal_noDC);
-
 %% IIR Cheby2 Highpass
-Wp = 1/(f_sample/2);                                               % Stopband Frequency (Normalised)
-Ws = 0.1/(f_sample/2);                                               % Passband Frequency (Normalised)
+Wp = 1/(f_sample/2);                                        % Passband Frequency (Normalised)
+Ws = 0.1/(f_sample/2);                                      % Stopband Frequency (Normalised)
 Rp =   1;                                                   % Passband Ripple (dB)
 Rs =  50;                                                   % Stopband Ripple (dB)
 [n,Ws] = cheb2ord(Wp,Ws,Rp,Rs);                             % Filter Order
-[b,a] = cheby2(n,Rs,Ws,'high');                           % Filter Design, Sepcify Bandstop
+[b,a] = cheby2(n,Rs,Ws,'high');                             % Filter Design, Sepcify Bandstop
 signal_Highpass = filter(b, a, signal_Lowpass);
 
 %% Plotter grafen i alle stadier af filtering
@@ -104,6 +108,35 @@ legend("EKG signal uden DC");
 figure(figNr); figNr = figNr + 1; clf;
 freqz(LPfir,1,2^14,f_sample);
 title('FIR lowpass filter')
+legend('frekvenskarakteristik')
+xlabel("Frekvens [Hz]");
+ylabel("Magnetude [dB]");
+subplot(2,1,2)
+legend('faseforskydning');
+xlabel("Frekvens [Hz]");
+ylabel("Fase [grader]");
 figure(figNr); figNr = figNr + 1; clf;
 freqz(b,a,2^14,f_sample);
 title('IIR Cheby2 filter highpass')
+xlabel("Frekvens [Hz]");
+ylabel("Magnetude [dB]");
+legend('frekvenskarakteristik')
+subplot(2,1,2)
+legend('faseforskydning');
+xlabel("Frekvens [Hz]");
+ylabel("Fase [grader]");
+
+%%
+figure(figNr); figNr = figNr + 1; clf;
+[h,f]=freqz(b,a,2^14,f_sample);
+subplot(2,1,1)
+semilogx(f,20*log(abs(h)));
+legend('frekvenskarakteristik')
+title('IIR Cheby2 filter highpass')
+xlabel("Frekvens [Hz]");
+ylabel("Magnetude [dB]");
+subplot(2,1,2)
+semilogx(f,360/(2*pi)*unwrap(angle(h)));
+legend('faseforskydning');
+xlabel("Frekvens [Hz]");
+ylabel("Fase [grader]");
