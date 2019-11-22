@@ -19,6 +19,10 @@ static uint16_t sampleWaitTimeInMilliseconds = 1000 / SAMPLES_PER_SECOND;
 static float setPoint = 50;
 static char outputBuffer[256] = {0};
 static uint8_t tempBuf [2] = {0};
+
+void strRep(char * buf, char find, char replace);
+
+
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
@@ -27,8 +31,8 @@ int main(void)
     PWM_1_Start();
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     float Kp = 2.0f;
-    float Ki = 1.0f/30.0f;
-    float Kd = 0.0f;
+    float Ki = 1.0f/10.0f;
+    float Kd = 1.0f/10.0f;
     float integralMax = 3000;
     float integralMin = -3000;
     float temp = 0;
@@ -37,7 +41,7 @@ int main(void)
     float dt = ((float)sampleWaitTimeInMilliseconds) / 1000; // dt is measured in seconds
     PIDControl_init(Kp, Ki, Kd, integralMax, integralMin, dt);
     PIDControl_changeSetPoint(setPoint);
-    UART_1_PutString("Taget:,Current:,Delta:,PWM:,pp:,ip:,dp:\t\r\n");
+    UART_1_PutString("Taget:;Current:;Delta:;PWM:;pp:;ip:;dp:\r\n");
     PinLED_Write(0);
     for(;;)
     {
@@ -49,9 +53,10 @@ int main(void)
         
         controlSignal = PIDControl_doStep(temp, &proportionalPart, &integralPart, &derivativePart);
         PWM_1_WriteCompare(controlSignal);
-        snprintf(outputBuffer, sizeof(outputBuffer), "%.1f,%.1f,%.1f,%.3f,%.3f,%.3f,%.3f\r\n", 
+        snprintf(outputBuffer, sizeof(outputBuffer), "%.1f;%.1f;%.1f;%.3f;%.3f;%.3f;%.3f\r\n", 
                                                       setPoint, temp, error, controlSignal, 
                                                       proportionalPart, integralPart, derivativePart);
+        strRep(outputBuffer, '.',',');
         
         UART_1_PutString(outputBuffer);
         if(temp == setPoint)
@@ -67,7 +72,18 @@ int main(void)
     }
 }
 
-
+void strRep(char * buf, char find, char replace)
+{
+    uint8_t i = 0;
+    while(buf[i] != 0)
+    {
+        if(buf[i] == find)
+        {
+            buf[i] = replace;
+        }
+        i++;
+    }
+}
 
 
 /* [] END OF FILE */
