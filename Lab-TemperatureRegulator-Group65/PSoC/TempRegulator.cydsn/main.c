@@ -32,7 +32,7 @@ int main(void)
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     float Kp = 2.0f;
     float Ki = 1.0f/10.0f;
-    float Kd = 1.0f/10.0f;
+    float Kd = 10;
     float integralMax = 3000;
     float integralMin = -3000;
     float temp = 0;
@@ -41,6 +41,9 @@ int main(void)
     float dt = ((float)sampleWaitTimeInMilliseconds) / 1000; // dt is measured in seconds
     PIDControl_init(Kp, Ki, Kd, integralMax, integralMin, dt);
     PIDControl_changeSetPoint(setPoint);
+    sprintf(outputBuffer,"Kp:;%.3f;Ki:;%.3f;Kd:%.3f\r\n",Kp,Ki,Kd);
+    strRep(outputBuffer, '.',',');
+    UART_1_PutString(outputBuffer);
     UART_1_PutString("Taget:;Current:;Delta:;PWM:;pp:;ip:;dp:\r\n");
     PinLED_Write(0);
     for(;;)
