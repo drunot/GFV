@@ -41,11 +41,11 @@ int main(void)
     float dt = ((float)sampleWaitTimeInMilliseconds) / 1000; // dt is measured in seconds
     PIDControl_init(Kp, Ki, Kd, integralMax, integralMin, dt);
     PIDControl_changeSetPoint(setPoint);
-    sprintf(outputBuffer,"Kp:;%.3f;Ki:;%.3f;Kd:;%.3f\r\n",Kp,Ki,Kd);
-    strRep(outputBuffer, '.',',');
-    UART_1_PutString(outputBuffer);
-    UART_1_PutString("Taget:;Current:;Delta:;PWM:;pp:;ip:;dp:\r\n");
-    PinLED_Write(0);
+    sprintf(outputBuffer,"Kp:;%.3f;Ki:;%.3f;Kd:;%.3f\r\n",Kp,Ki,Kd); //Semicolon sepperated for standard dansih ".csv" 
+    strRep(outputBuffer, '.',','); // dot changed to comma for standard dansih excel decimal seperator.
+    UART_1_PutString(outputBuffer); // Writes settings
+    UART_1_PutString("Taget:;Current:;Delta:;PWM:;pp:;ip:;dp:\r\n"); //Wirtes header
+    PinLED_Write(0); //Sets LED off
     for(;;)
     {
         temp = readFromI2C(0x48, tempBuf, 2);
@@ -54,19 +54,19 @@ int main(void)
         float integralPart = 0;
         float derivativePart = 0;
         
-        controlSignal = PIDControl_doStep(temp, &proportionalPart, &integralPart, &derivativePart);
-        PWM_1_WriteCompare(controlSignal);
+        controlSignal = PIDControl_doStep(temp, &proportionalPart, &integralPart, &derivativePart); //Gets PWM compare.
+        PWM_1_WriteCompare(controlSignal); //Sets PWM compare.
         snprintf(outputBuffer, sizeof(outputBuffer), "%.1f;%.1f;%.1f;%.3f;%.3f;%.3f;%.3f\r\n", 
                                                       setPoint, temp, error, controlSignal, 
-                                                      proportionalPart, integralPart, derivativePart);
-        strRep(outputBuffer, '.',',');
+                                                      proportionalPart, integralPart, derivativePart); //Semicolon sepperated for standard dansih ".csv" 
+        strRep(outputBuffer, '.',','); // dot changed to comma for standard dansih excel decimal seperator.
         
-        UART_1_PutString(outputBuffer);
-        if(temp == setPoint)
+        UART_1_PutString(outputBuffer); //Writes current status.
+        if(temp == setPoint) //If temp is reaced turn on LED.
         {
             PinLED_Write(1);
         }
-        else
+        else //Else off.
         {
             PinLED_Write(0);
         }
@@ -75,7 +75,7 @@ int main(void)
     }
 }
 
-void strRep(char * buf, char find, char replace)
+void strRep(char * buf, char find, char replace) //Replace-function for correct format for danish csv.
 {
     uint8_t i = 0;
     while(buf[i] != 0)
