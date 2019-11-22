@@ -12,8 +12,7 @@
 
 #include "project.h"
 
-int8_t convertToSigned(uint8_t number);
-uint8_t getDecimal(uint8_t number);
-char8* readFromI2C(uint8_t Address, char8* printString, uint8_t* DataToRead);
+float convertTofloat(void * number, uint8_t decimal);
+float readFromI2C(uint8_t Address, uint8_t * buf, uint8_t size);
 
 /* [] END OF FILE */

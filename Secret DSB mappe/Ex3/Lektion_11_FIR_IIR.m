@@ -213,7 +213,7 @@ xlabel('Frequency (Hz)')
 %fasekarakteristikken at der sker et ret stort fasedrej i pasbåndet, dette 
 %vil ligeledes vise at der inde for pasbåndet sker en stor ændrig af
 %hvornår de forskellige frekvenser kommer igennem filteret.
-%Max GDP er 2.3073
+%Max GPD er 2.3073
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Opgave 3.14: Givet det analoge shelving filter %
