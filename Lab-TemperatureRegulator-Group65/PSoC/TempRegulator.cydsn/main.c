@@ -30,9 +30,9 @@ int main(void)
     UART_1_Start();
     PWM_1_Start();
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
-    float Kp = 2.0f;
+    float Kp = 5.0f;
     float Ki = 1.0f/10.0f;
-    float Kd = 1.0f/10.0f;
+    float Kd = 0.0f;
     float integralMax = 3000;
     float integralMin = -3000;
     float temp = 0;
