@@ -92,7 +92,7 @@ void strRep(char * buf, char find, char replace) //Replace-function for correct 
 
 CY_ISR(ISR_UART_rx_handler)
 {
-    uint8_t bytesToRead = UART_1_GetRxBufferSize();
+    uint8_t bytesToRead = UART_1_GetRxBufferSize(); 
     uint8_t byteReceived[bytesToRead];
     int i = 0;
     while (bytesToRead > i)
@@ -121,14 +121,14 @@ void handleByteReceived(uint8_t byteReceived[])
             
         case 'S' :
                        
-            PID_change_setPoint(strtof(&byteReceived[1], &currPoint));    //Set parameters (target temp, Kp, Ki, Kd)
+            PID_change_setPoint(strtof((char*) &byteReceived[1], &currPoint));    //Set parameters (target temp, Kp, Ki, Kd)
             PID_change_Kp(strtof(currPoint, &currPoint));
             PID_change_Ki(strtof(currPoint, &currPoint));
             PID_change_Kd(strtof(currPoint, &currPoint));
             break;
             
         case 'i' :
-            PID_change_integral_extremes(strtof(&byteReceived[1], &currPoint), 
+            PID_change_integral_extremes(strtof((char*) &byteReceived[1], &currPoint), 
                                         strtof(currPoint, &currPoint)); //Set integral min/max (Imin, Imax)
             break;
             
