@@ -13,6 +13,7 @@
 #ifndef PID_CONTROL_H
 #define PID_CONTROL_H
     
+<<<<<<< HEAD
 #define StdKp 5.0f
 #define StdKi 1.0f/30.0f
 #define StdKd 0.0f
@@ -25,43 +26,24 @@
 #define samples_to_stable 50
     
 /*
+=======
+/**
+ * Initialize the PID controller.
+>>>>>>> parent of aeda303... SW updated and ready for testing
  * @param Kp the Proportional gain.
  * @param Ki the Integral gain.
  * @param Kd the Derivative gain.
  * @param integralMax max limit for the integral.
  * @param integralMin min limit for the integral.
  * @param dt time between each sample, measured in seconds.
-*/
-struct PID_settings {
-    float Kp;
-    float Ki;
-    float Kd;
-    float Imax;
-    float Imin;
-    float Target;
-} PID_settings_t;
-
-/**
-* Change the settings
-* @param Kp - the new Kp value
-* @param Ki - the new Ki value
-* @param Kd - the new Kd value
-* @param Imin - the new Imin value
-* @param Imax - the new Imax value
-* @param setPoint the PID setpoint
-*/
-void PID_change_Kp(float Kp);
-void PID_change_Ki(float Ki);
-void PID_change_Kd(float Kd);
-void PID_change_integral_extremes(float Imin, float Imax);
-void PID_change_setPoint(float setPoint);
-
-    
-/**
- * Initialize the PID controller from the settings.
  */
-void PIDControl_init(void);
+void PIDControl_init(float Kp, float Ki, float Kd, float integralMax, float integralMin, float dt);
 
+/**
+ * Change the setpoint, i.e. the desired system output value.
+ * @param setPoint the PID setpoint.
+ */
+void PIDControl_changeSetPoint(float setPoint);
 
 /**
  * Do one step of the regulation algorithm.

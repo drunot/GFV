@@ -11,6 +11,7 @@
 */
 #include "PIDControl.h"
 
+<<<<<<< HEAD
 static float integral = 0;
 static float previousError = 0;
 
@@ -25,14 +26,31 @@ void PID_change_integral_extremes(float Imin, float Imax)
         }
     }
 void PID_change_setPoint(float setPoint) {PID_settings_t.Target = setPoint;}
+=======
+static float Kp = 0;
+static float Ki = 0;
+static float Kd = 0;
+static float dt = 0;
+static float integralMax = 0;
+static float integralMin = 0;
+static float setPoint = 0;
+static float integral = 0;
+static float previousError = 0;
 
-void PIDControl_init(void)
+void PIDControl_init(float _Kp, float _Ki, float _Kd, float _integralMax, float _integralMin, float _dt)
 {
-    PID_change_Kp(StdKp);
-    PID_change_Ki(StdKi);
-    PID_change_Kd(StdKd);
-    PID_change_integral_extremes(StdImin, StdImax);
-    PID_change_setPoint(StdResetTemp); 
+    Kp = _Kp;
+    Ki = _Ki;
+    Kd = _Kd;
+    integralMax = _integralMax;
+    integralMin = _integralMin;
+    dt = _dt;
+}
+>>>>>>> parent of aeda303... SW updated and ready for testing
+
+void PIDControl_changeSetPoint(float _setPoint)
+{
+    setPoint = _setPoint;
 }
 
 float PIDControl_doStep(float systemOutput, float* proportionalPart, float* integralPart, float* derivativePart)
@@ -43,7 +61,7 @@ float PIDControl_doStep(float systemOutput, float* proportionalPart, float* inte
     float currentError = 0;
     
     // calculate current error
-    currentError = PID_settings_t.Target - systemOutput;
+    currentError = setPoint - systemOutput;
     
     // calculate proportional part
     proportional = currentError;
@@ -52,16 +70,16 @@ float PIDControl_doStep(float systemOutput, float* proportionalPart, float* inte
     integral = integral + (currentError * dt());
     
     // limit the integral
-    if (integral > PID_settings_t.Imax) integral = PID_settings_t.Imax;
-    if (integral < PID_settings_t.Imin) integral = PID_settings_t.Imin;
+    if (integral > integralMax) integral = integralMax;
+    if (integral < integralMin) integral = integralMin;
     
     // calculate derivative part
     derivative = (currentError - previousError) / dt();
     
-    output = proportional * PID_settings_t.Kp + integral * PID_settings_t.Ki + derivative * PID_settings_t.Kd;
-    *proportionalPart = proportional * PID_settings_t.Kp;
-    *integralPart = integral * PID_settings_t.Ki;
-    *derivativePart = derivative * PID_settings_t.Kd;
+    output = proportional * Kp + integral * Ki + derivative * Kd;
+    *proportionalPart = proportional * Kp;
+    *integralPart = integral * Ki;
+    *derivativePart = derivative * Kd;
     
     previousError = currentError;
     return output;
