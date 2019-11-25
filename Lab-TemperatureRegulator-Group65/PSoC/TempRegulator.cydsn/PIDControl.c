@@ -11,7 +11,6 @@
 */
 #include "PIDControl.h"
 
-static float dt = 0;
 static float integral = 0;
 static float previousError = 0;
 
@@ -50,14 +49,14 @@ float PIDControl_doStep(float systemOutput, float* proportionalPart, float* inte
     proportional = currentError;
     
     // calculate integral part
-    integral = integral + (currentError * dt);
+    integral = integral + (currentError * dt());
     
     // limit the integral
     if (integral > PID_settings_t.Imax) integral = PID_settings_t.Imax;
     if (integral < PID_settings_t.Imin) integral = PID_settings_t.Imin;
     
     // calculate derivative part
-    derivative = (currentError - previousError) / dt;
+    derivative = (currentError - previousError) / dt();
     
     output = proportional * PID_settings_t.Kp + integral * PID_settings_t.Ki + derivative * PID_settings_t.Kd;
     *proportionalPart = proportional * PID_settings_t.Kp;

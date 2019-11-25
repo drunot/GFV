@@ -21,8 +21,8 @@
 #define StdResetTemp 30.0f
 #define SAMPLES_PER_SECOND 3
 #define sampleWaitTimeInMilliseconds(void) (1000 / SAMPLES_PER_SECOND)
-#define dt(void) (sampleWaitTimeInMilliseconds / 1000) // dt is measured in seconds
-#define samples_to_stable 15
+#define dt(void) sampleWaitTimeInMilliseconds() / 1000 // dt is measured in seconds
+#define samples_to_stable 50
     
 /*
  * @param Kp the Proportional gain.
