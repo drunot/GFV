@@ -9,10 +9,11 @@
  *
  * ========================================
 */
-
-#include "project.h"
-
-float convertTofloat(void * number, uint8_t decimal);
-float readFromI2C(uint8_t Address, uint8_t * buf, uint8_t size);
-
-/* [] END OF FILE */
+#ifndef CYAPICALLBACKS_H
+#define CYAPICALLBACKS_H
+    
+    /*Define your macro callbacks here */
+    /*For more information, refer to the Macro Callbacks topic in the PSoC Creator Help.*/
+    
+#endif /* CYAPICALLBACKS_H */   
+/* [] */

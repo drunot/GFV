@@ -9,7 +9,7 @@
  *
  * ========================================
 */
-#include "I2CHelper.h"
+#include "I2Chelper.h"
 #include <stdio.h>
 
 

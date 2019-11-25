@@ -77,7 +77,7 @@
         <Data key="xtal_ampiadj" value="19" />
         <Data key="xtal_ampiadj_customized" value="False" />
         <Data key="xtal_automatic_gain_control" value="False" />
-        <Data key="xtal_crystal_accuracy_unit" value="PPM" />
+        <Data key="xtal_crystal_accuracy_unit" value="Pct" />
         <Data key="xtal_custom_timeout" value="130000" />
         <Data key="xtal_enable_fault_recovery" value="False" />
         <Data key="xtal_feedback_ref_level" value="3" />
@@ -243,20 +243,23 @@
   </Group>
   <Group key="Component">
     <Group key="v1">
-      <Data key="cy_boot" value="cy_boot_v5_70" />
-      <Data key="Em_EEPROM_Dynamic" value="Em_EEPROM_Dynamic_v2_0" />
-      <Data key="LIN_Dynamic" value="LIN_Dynamic_v4_0" />
+      <Data key="cy_boot" value="cy_boot_v5_50" />
+      <Data key="Em_EEPROM_Dynamic" value="Em_EEPROM_Dynamic_v2_20" />
+      <Data key="LIN_Dynamic" value="LIN_Dynamic_v3_40" />
     </Group>
   </Group>
   <Data key="DataVersionKey" value="2" />
   <Group key="DWRInstGuidMapping">
     <Group key="Pin">
       <Data key="02f2cf2c-2c7a-49df-9246-7a3435c21be3" value="SCL_1" />
+      <Data key="8d318d8b-cf7b-4b6b-b02c-ab1c5c49d0ba" value="SW" />
+      <Data key="8e811c02-24d4-47bc-a16b-751ae9d0c071" value="Rx_1" />
       <Data key="22863ebe-a37b-476f-b252-6e49a8c00b12" value="SDA_1" />
-      <Data key="441228a5-a978-4de1-a187-411a9173a8df" value="PinLED" />
-      <Data key="1425177d-0d0e-4468-8bcc-e638e5509a9b" value="Rx_1" />
-      <Data key="e851a3b9-efb8-48be-bbb8-b303b216c393" value="Pin_1" />
+      <Data key="1425177d-0d0e-4468-8bcc-e638e5509a9b" value="RST_1" />
+      <Data key="b7747fd0-bda1-4110-a942-d3fad3bcb56b" value="LED" />
+      <Data key="e851a3b9-efb8-48be-bbb8-b303b216c393" value="PWM" />
       <Data key="ed092b9b-d398-4703-be89-cebf998501f6" value="Tx_1" />
+      <Data key="ff91a7c5-3ed7-49f7-95fa-d6ebd2d8c0fd" value="Pin_LED" />
     </Group>
   </Group>
   <Group key="EEPROM">
@@ -3348,14 +3351,19 @@
         <Data key="Port Format" value="12,0" />
       </Group>
     </Group>
+    <Group key="8d318d8b-cf7b-4b6b-b02c-ab1c5c49d0ba">
+      <Group key="0">
+        <Data key="Port Format" value="2,2" />
+      </Group>
+    </Group>
+    <Group key="8e811c02-24d4-47bc-a16b-751ae9d0c071">
+      <Group key="0">
+        <Data key="Port Format" value="12,6" />
+      </Group>
+    </Group>
     <Group key="22863ebe-a37b-476f-b252-6e49a8c00b12">
       <Group key="0">
         <Data key="Port Format" value="12,1" />
-      </Group>
-    </Group>
-    <Group key="441228a5-a978-4de1-a187-411a9173a8df">
-      <Group key="0">
-        <Data key="Port Format" value="2,1" />
       </Group>
     </Group>
     <Group key="1425177d-0d0e-4468-8bcc-e638e5509a9b">
@@ -3363,9 +3371,24 @@
         <Data key="Port Format" value="12,6" />
       </Group>
     </Group>
+    <Group key="b7747fd0-bda1-4110-a942-d3fad3bcb56b">
+      <Group key="0">
+        <Data key="Port Format" value="2,1" />
+      </Group>
+    </Group>
+    <Group key="e851a3b9-efb8-48be-bbb8-b303b216c393">
+      <Group key="0">
+        <Data key="Port Format" value="2,0" />
+      </Group>
+    </Group>
     <Group key="ed092b9b-d398-4703-be89-cebf998501f6">
       <Group key="0">
         <Data key="Port Format" value="12,7" />
+      </Group>
+    </Group>
+    <Group key="ff91a7c5-3ed7-49f7-95fa-d6ebd2d8c0fd">
+      <Group key="0">
+        <Data key="Port Format" value="2,1" />
       </Group>
     </Group>
   </Group>
@@ -3374,7 +3397,7 @@
   </Group>
   <Group key="System3">
     <Data key="CYDEV_CONFIG_FASTBOOT_ENABLED" value="True" />
-    <Data key="CYDEV_CONFIG_UNUSED_IO" value="AllowButWarn" />
+    <Data key="CYDEV_CONFIG_UNUSED_IO" value="Disallowed" />
     <Data key="CYDEV_CONFIGURATION_ECC" value="True" />
     <Data key="CYDEV_CONFIGURATION_MODE" value="COMPRESSED" />
     <Data key="CYDEV_DEBUGGING_DPS" value="SWD_SWV" />

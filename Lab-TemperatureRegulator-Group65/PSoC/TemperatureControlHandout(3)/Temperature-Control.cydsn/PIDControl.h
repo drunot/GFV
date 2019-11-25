@@ -13,23 +13,8 @@
 #ifndef PID_CONTROL_H
 #define PID_CONTROL_H
     
-<<<<<<< HEAD
-#define StdKp 5.0f
-#define StdKi 1.0f/30.0f
-#define StdKd 0.0f
-#define StdImax 3000.0f
-#define StdImin -3000.0f
-#define StdResetTemp 30.0f
-#define SAMPLES_PER_SECOND 3
-#define sampleWaitTimeInMilliseconds(void) (1000 / SAMPLES_PER_SECOND)
-#define dt(void) sampleWaitTimeInMilliseconds() / 1000 // dt is measured in seconds
-#define samples_to_stable 50
-    
-/*
-=======
 /**
  * Initialize the PID controller.
->>>>>>> parent of aeda303... SW updated and ready for testing
  * @param Kp the Proportional gain.
  * @param Ki the Integral gain.
  * @param Kd the Derivative gain.

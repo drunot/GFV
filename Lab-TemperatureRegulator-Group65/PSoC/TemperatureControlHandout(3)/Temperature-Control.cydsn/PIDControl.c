@@ -11,29 +11,13 @@
 */
 #include "PIDControl.h"
 
-<<<<<<< HEAD
-static float integral = 0;
-static float previousError = 0;
-
-void PID_change_Kp(float Kp) {PID_settings_t.Kp = Kp;}
-void PID_change_Ki(float Ki) {PID_settings_t.Ki = Ki;}
-void PID_change_Kd(float Kd) {PID_settings_t.Kd = Kd;}
-void PID_change_integral_extremes(float Imin, float Imax) 
-    {
-        if (Imin < Imax){
-            PID_settings_t.Imin = Imin; 
-            PID_settings_t.Imax = Imax; 
-        }
-    }
-void PID_change_setPoint(float setPoint) {PID_settings_t.Target = setPoint;}
-=======
 static float Kp = 0;
 static float Ki = 0;
 static float Kd = 0;
 static float dt = 0;
 static float integralMax = 0;
 static float integralMin = 0;
-static float setPoint = 0;
+float setPoint = 0;
 static float integral = 0;
 static float previousError = 0;
 
@@ -46,7 +30,6 @@ void PIDControl_init(float _Kp, float _Ki, float _Kd, float _integralMax, float 
     integralMin = _integralMin;
     dt = _dt;
 }
->>>>>>> parent of aeda303... SW updated and ready for testing
 
 void PIDControl_changeSetPoint(float _setPoint)
 {
@@ -67,21 +50,26 @@ float PIDControl_doStep(float systemOutput, float* proportionalPart, float* inte
     proportional = currentError;
     
     // calculate integral part
-    integral = integral + (currentError * dt());
+    integral = integral + (currentError * dt);
     
     // limit the integral
     if (integral > integralMax) integral = integralMax;
     if (integral < integralMin) integral = integralMin;
     
     // calculate derivative part
-    derivative = (currentError - previousError) / dt();
+    derivative = (currentError - previousError) / dt;
     
     output = proportional * Kp + integral * Ki + derivative * Kd;
     *proportionalPart = proportional * Kp;
     *integralPart = integral * Ki;
     *derivativePart = derivative * Kd;
     
-    previousError = currentError;
+    previousError = currentError;  
+    if (output < 0) {
+        output = 0;
+    } else if (output > 100) {
+        output = 100;
+    }
     return output;
 }
 
