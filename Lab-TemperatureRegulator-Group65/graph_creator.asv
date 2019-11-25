@@ -9,33 +9,29 @@ newdata = table2array(data);
 
 time = height(data);
 
-t = [0:1/3:(time-1)/3];
+t = [0:1/3:(time-2)/3];
+
+riseTimeLow = find(newdata(2:end, 2) > ((0.1 * 20) + 30), 1) / 3;
+riseTimeHigh = find(newdata(2:end, 2) > ((0.9 * 20) + 30), 1) / 3;
+riseTime = (riseTimeHigh - riseTimeLow); 
+
+overShoot = max(newdata(2:end, 2))
 
 figure(1); clf;
-plot(t,newdata(:,1:3));
-legend('TargetTemp','CurrTemp','Difference')
+hold on
+plot(t,newdata(2:end,1:3));
+legend('TargetTemp','CurrTemp','Difference');
+title("Temperatur måling. Kp = 2, Ki = 1/30, Kd = 0");
+xlabel("Tid [s]");
+ylabel("Amplitude [deg]");
+xline(riseTimeLow);
+xline(riseTimeHigh);
+hold off
 
 figure(2); clf;
-plot(t,newdata(:,4:end);
+plot(t,newdata(2:end,4:end));
 legend('PWM','Partial','Integral','Differential');
-%%
-TargetTemp = data(:,1);
-CurrTemp = data(:,2);
-Difference = data(:,3);
-PWM = data(:,4);
-Partial = data(:,5);
-Integral = data(:,6);
-Differential = data(:,7); 
-
-%%
-stackedplot(CurrTemp);
-stackedplot(time,Difference);
-stackedplot(time,PWM);
-stackedplot(time,Partial);
-stackedplot(time,Integral);
-stackedplot(time,Differential);
-%%
-
-plot(TargetTemp);
-
+title("PWM måling. Kp = 2, Ki = 1/30, Kd = 0");
+xlabel("Tid [s]");
+ylabel("Amplitude [%duty]");
 %%
