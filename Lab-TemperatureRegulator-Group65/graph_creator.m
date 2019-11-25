@@ -3,8 +3,8 @@ clc
 close all
 clear
 
-data = readtable('capture17.txt');
-labelstr = ("Kp = 10, Ki = 3/30, Kd = 1");
+data = readtable('capturex.txt');
+labelstr = ("Kp = x, Ki = x, Kd = x");
 
 newdata = table2array(data);
 
@@ -16,10 +16,12 @@ riseTimeLow = find(newdata(2:end, 2) > ((0.1 * 20) + 30), 1) / 3;
 riseTimeHigh = find(newdata(2:end, 2) > ((0.9 * 20) + 30), 1) / 3;
 riseTime = riseTimeHigh - riseTimeLow;
 
-overShoot = (max(newdata(2:end, 2)) - 50) / 30 * 100;
+overShoot = (max(newdata(2:end, 2)) - 50) / 20 * 100;
 
 S = stepinfo(newdata(2:end, 2), 'SettlingTimeThreshold', 0.02); 
 settlingTime = (S.SettlingTime / 3) - (find(newdata(2:end, 1) == 50, 1) / 3);
+
+%%
 
 figure(1); clf;
 hold on
