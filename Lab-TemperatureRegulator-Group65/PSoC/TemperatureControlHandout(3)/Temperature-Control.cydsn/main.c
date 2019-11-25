@@ -30,6 +30,7 @@ int main(void)
     
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
 
+    //Variables
     float Kp = 2.0f;
     float Ki = 1.0f/30.0f;
     float Kd = 5.0f;
@@ -44,9 +45,10 @@ int main(void)
     int consistent = 0;
 
     float dt = ((float)sampleWaitTimeInMilliseconds) / 1000; // dt is measured in seconds
-    PIDControl_init(Kp, Ki, Kd, integralMax, integralMin, dt);
-    PIDControl_changeSetPoint(30);
+    PIDControl_init(Kp, Ki, Kd, integralMax, integralMin, dt);  //Init
+    PIDControl_changeSetPoint(30);  //Initial temperature setting
 
+    //Print the startup sequeence and the settings
     UART_1_PutString("Temperature control application started\r\n");
     snprintf(outputBuffer, sizeof(outputBuffer), "Kp: %f, Ki: %f, Kd: %f\r\n", Kp, Ki, Kd);
     UART_1_PutString(outputBuffer);
@@ -55,34 +57,34 @@ int main(void)
 
     for(;;)
     {
-        /* Place your application code here. */
-        temp = readFromI2C(0x48, buffer, 2);
-        error = setPoint - temp;
+
+        temp = readFromI2C(0x48, buffer, 2);    //Read temp
+        error = setPoint - temp;                //Find error
         
         
-        controlSignal = PIDControl_doStep(temp, &proportionalPart, &integralPart, &derivativePart);            
-        snprintf(outputBuffer, sizeof(outputBuffer), "%0.2f, %0.2f, %0.2f, %0.3f, %0.4f, %0.4f, %0.4f \r\n", 
+        controlSignal = PIDControl_doStep(temp, &proportionalPart, &integralPart, &derivativePart); //Step            
+        snprintf(outputBuffer, sizeof(outputBuffer), "%0.2f, %0.2f, %0.2f, %0.3f, %0.4f, %0.4f, %0.4f \r\n",   //Print data
                                                       setPoint, temp, error, controlSignal, 
                                                       proportionalPart, integralPart, derivativePart);
         UART_1_PutString(outputBuffer);
         
         PWM_1_WriteCompare(controlSignal);
         
-        if(temp == setPoint) {
+        if(temp == setPoint) {  //Check for target temp
             consistent++;
         } else {
             consistent = 0;
         }
-        if (consistent == 30) {
+        if (consistent == 30) { //Count hits if 30 then we are done
             LED_Write(1);
         }
         
-        if (SW_Read() == 0) {
-            LED_Write(0);
-            PIDControl_changeSetPoint(50);
+        if (SW_Read() == 0) {   //Check button for temp change
+            LED_Write(0);   //Reset LED
+            PIDControl_changeSetPoint(50);  //Set new target temp
         }
 
-        CyDelay(sampleWaitTimeInMilliseconds);
+        CyDelay(sampleWaitTimeInMilliseconds);  //Delay
     }
 }
 
