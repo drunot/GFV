@@ -46,45 +46,43 @@ int main(void)
     float integralPart = 0.0;      
     float derivativePart = 0.0;
 
-    PIDControl_init();
+    float dt = ((float)sampleWaitTimeInMilliseconds) / 1000; // dt is measured in seconds
+    PIDControl_init(Kp, Ki, Kd, integralMax, integralMin, dt);
+    PIDControl_changeSetPoint(setPoint);
+    sprintf(outputBuffer,"Kp:;%.3f;Ki:;%.3f;Kd:;%.3f\r\n",Kp,Ki,Kd);
+    strRep(outputBuffer, '.',',');
+    UART_1_PutString(outputBuffer);
+    UART_1_PutString("Taget:;Current:;Delta:;PWM:;pp:;ip:;dp:\r\n");
+    PinLED_Write(0);
     for(;;)
     {
-        if (run){
-            temp = readFromI2C(0x48, tempBuf, 2);
-            error = PID_settings_t.Target - temp;
-            strRep(outputBuffer, '.',','); 
-    
-            controlSignal = PIDControl_doStep(temp, &proportionalPart, &integralPart, &derivativePart); //Gets PWM compare.
-            PWM_1_WriteCompare(controlSignal); //Sets PWM compare.
-            snprintf(outputBuffer, sizeof(outputBuffer), "%.1f;%.1f;%.1f;%.3f;%.3f;%.3f;%.3f\r\n", 
-                                                          PID_settings_t.Target, temp, error, controlSignal, 
-                                                          proportionalPart, integralPart, derivativePart); //Semicolon sepperated for standard dansih ".csv" 
-            strRep(outputBuffer, '.',','); // dot changed to comma for standard dansih excel decimal seperator.
-            
-            UART_1_PutString(outputBuffer); //Writes current status.
-            
-            if(temp >= PID_settings_t.Target -0.5 && temp <= PID_settings_t.Target + 0.5) //If temp is reaced turn on LED.
-            {   
-                run++;
-            }
-            else //Else not there yet
-            {
-                PinLED_Write(0);
-                run = 1;
-            }
-            if (run >= samples_to_stable){  //Stable at current temp
-                run = 0;
-                PinLED_Write(1);
-            }
-            CyDelay(sampleWaitTimeInMilliseconds());
+        temp = readFromI2C(0x48, tempBuf, 2);
+        float error = setPoint - temp;
+        float proportionalPart = 0;
+        float integralPart = 0;
+        float derivativePart = 0;
+        
+        controlSignal = PIDControl_doStep(temp, &proportionalPart, &integralPart, &derivativePart);
+        PWM_1_WriteCompare(controlSignal);
+        snprintf(outputBuffer, sizeof(outputBuffer), "%.1f;%.1f;%.1f;%.3f;%.3f;%.3f;%.3f\r\n", 
+                                                      setPoint, temp, error, controlSignal, 
+                                                      proportionalPart, integralPart, derivativePart);
+        strRep(outputBuffer, '.',',');
+        
+        UART_1_PutString(outputBuffer);
+        if(temp == setPoint)
+        {
+            PinLED_Write(1);
+        }
+        else
+        {
+            PinLED_Write(0);
         }
         /* Place your application code here. */
     }
 }
 
-
-
-CY_ISR(ISR_UART_rx_handler)
+void strRep(char * buf, char find, char replace)
 {
     uint8_t bytesToRead = UART_1_GetRxBufferSize(); 
     
