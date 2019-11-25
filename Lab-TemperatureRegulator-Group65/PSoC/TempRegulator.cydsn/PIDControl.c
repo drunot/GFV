@@ -19,7 +19,12 @@ void PID_change_Kp(float Kp) {PID_settings_t.Kp = Kp;}
 void PID_change_Ki(float Ki) {PID_settings_t.Ki = Ki;}
 void PID_change_Kd(float Kd) {PID_settings_t.Kd = Kd;}
 void PID_change_integral_extremes(float Imin, float Imax) 
-    {PID_settings_t.Imin = Imin; PID_settings_t.Imax = Imax; }
+    {
+        if (Imin < Imax){
+            PID_settings_t.Imin = Imin; 
+            PID_settings_t.Imax = Imax; 
+        }
+    }
 void PID_change_setPoint(float setPoint) {PID_settings_t.Target = setPoint;}
 
 void PIDControl_init(void)

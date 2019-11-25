@@ -21,7 +21,7 @@ static uint8_t run = 0;
 
 void strRep(char * buf, char find, char replace);
 CY_ISR_PROTO(ISR_UART_rx_handler);
-void handleByteReceived(uint8_t byteReceived[]);
+void handleByteReceived(void);
 void printHelp(void);
 void printSettings(void);
 
@@ -58,16 +58,16 @@ int main(void)
             strRep(outputBuffer, '.',','); // dot changed to comma for standard dansih excel decimal seperator.
             
             UART_1_PutString(outputBuffer); //Writes current status.
-            if(temp == PID_settings_t.Target) //If temp is reaced turn on LED.
+            if(temp >= PID_settings_t.Target -0.5 && temp <= PID_settings_t.Target + 0.5) //If temp is reaced turn on LED.
             {   
                 run++;
             }
-            else //Else off.
+            else //Else not there yet
             {
                 PinLED_Write(0);
                 run = 1;
             }
-            if (run >= samples_to_stable){
+            if (run >= samples_to_stable){  //Stable at current temp
                 run = 0;
                 PinLED_Write(1);
             }
@@ -90,20 +90,29 @@ void strRep(char * buf, char find, char replace) //Replace-function for correct 
     }
 }
 
+uint8_t byteReceived[50];
+uint8 currPlace = 0;
+
 CY_ISR(ISR_UART_rx_handler)
 {
     uint8_t bytesToRead = UART_1_GetRxBufferSize(); 
-    uint8_t byteReceived[bytesToRead];
-    int i = 0;
-    while (bytesToRead > i)
+    
+    while (bytesToRead--)
     {
-        byteReceived[i++] = UART_1_ReadRxData();        
+        byteReceived[currPlace++] = UART_1_ReadRxData();   
+        byteReceived[currPlace] = '\0';
     }
     
-     handleByteReceived(byteReceived);
+    if(strchr((char*)byteReceived, 'k'))
+    {
+        
+        handleByteReceived();
+        currPlace = 0;
+
+    }
 }
 
-void handleByteReceived(uint8_t byteReceived[])
+void handleByteReceived(void)
 {
     char *currPoint;
     switch(byteReceived[0])
@@ -135,6 +144,10 @@ void handleByteReceived(uint8_t byteReceived[])
         case 'c' :
             printSettings();    //Print current settings
             break;
+            
+        case 's' :
+            run = 0;
+            break;
         
         default :
             printHelp();     // Print help
@@ -150,6 +163,7 @@ void printHelp(void){
                      "S: Set parameters (target_temp, Kp, Ki, Kd)\r\n"
                      "i: Set int min/max (min, max)\r\n"
                      "c: prints current settings\r\n"
+                     "After any full command type 'k' to run the command\r\n"
                      "If none of the above this menu gets printed\r\n");
 }
 
