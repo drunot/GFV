@@ -30,8 +30,11 @@ hold on;
 while (i < info.NumChannels + 1)
     subplot(rows,1,i);
     plot(t,input(:,i));
-    title(sprintf('Channel%i',i));
-    i = i + 1;
+    title(sprintf('IFT original signal for channel %i',i));
+    xlabel('Tid [s]');
+    ylabel('Amplitude');
+    legend(sprintf('IFT for channel %i',i));
+    i = i + 1; 
 end
 
 saveas(gcf, sprintf('Plot_Original_IFT_%s.eps', info.Title));
@@ -52,7 +55,10 @@ hold on;
 while (i < info.NumChannels + 1)
     subplot(rows,1,i);
     semilogy(f(1:stopPoint-1),abs(DFT(1:stopPoint-1,i)));
-    title(sprintf('Channel%i',i));
+    title(sprintf('DFT original signal for channel %i',i));
+    xlabel('Frekvens [Hz]');
+    ylabel('Amplitude');
+    legend(sprintf('DFT for channel %i',i));
     i = i + 1;
 end
 
@@ -73,8 +79,11 @@ hold on;
 
 while (i < info.NumChannels + 1)
     subplot(rows,1,i);
-    plot(t,IFT(:,i));
-    title(sprintf('Channel%i',i));
+    plot(t,real(IFT(:,i)));
+    title(sprintf('IFT 16Bit for channel %i',i));
+    xlabel('Tid [s]');
+    ylabel('Amplitude');
+    legend(sprintf('IFT for channel %i',i));
     i = i + 1;
 end
 
@@ -88,7 +97,10 @@ hold on;
 while (i < info.NumChannels + 1)
     subplot(rows,1,i);
     semilogy(f(1:stopPoint-1),abs(DFT16bit(1:stopPoint-1,i)));
-    title(sprintf('Channel%i',i));
+    title(sprintf('DFT 16Bit for channel %i',i));
+    xlabel('Frekvens [Hz]');
+    ylabel('Amplitude');
+    legend(sprintf('DFT for channel %i',i));
     i = i + 1;
 end
 
@@ -140,8 +152,11 @@ hold on;
 
 while (i < info.NumChannels + 1)
     subplot(rows,1,i);
-    plot(t,IFT(:,i));
-    title(sprintf('Channel%i',i));
+    plot(t,real(IFT(:,i)));
+    title(sprintf('IFT encoded for channel %i',i));
+    xlabel('Tid [s]');
+    ylabel('Amplitude');
+    legend(sprintf('IFT for channel %i',i));
     i = i + 1;
 end
 
@@ -155,7 +170,10 @@ hold on;
 while (i < info.NumChannels + 1)
     subplot(rows,1,i);
     semilogy(f(1:stopPoint-1),abs(encoded(1:stopPoint-1,i)));
-    title(sprintf('Channel%i',i));
+    title(sprintf('DFT encoded for channel %i',i));
+    xlabel('Frekvens [Hz]');
+    ylabel('Amplitude');
+    legend(sprintf('DFT for channel %i',i));
     i = i + 1;
 end
 

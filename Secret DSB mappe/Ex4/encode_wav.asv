@@ -30,8 +30,11 @@ hold on;
 while (i < info.NumChannels + 1)
     subplot(rows,1,i);
     plot(t,input(:,i));
-    title(sprintf('Channel%i',i));
-    i = i + 1;
+    title(sprintf('IFT original signal for channel %i',i));
+    xlabel('Tid [s]');
+    ylabel('Amplitude');
+    legend(sprintf('IFT for channel %i',i));
+    i = i + 1; 
 end
 
 saveas(gcf, sprintf('Plot_Original_IFT_%s.eps', info.Title));
@@ -41,11 +44,8 @@ saveas(gcf, sprintf('Plot_Original_IFT_%s.eps', info.Title));
 DFT = fft(input);
 f = fs*(0:(L/2))/L;
 stopPoint = find(f>20000, 1);
-%DFT = cat(1, DFT(1:stopPoint,:), zeros(L-stopPoint, 2));
-%f = cat(2, f(1:stopPoint), zeros(1, L-stopPoint));
-
-DFT = DFT(1:stopPoint,:);
-
+DFT = cat(1, DFT(1:stopPoint,:), zeros(L-stopPoint, 2));
+f = cat(2, f(1:stopPoint), zeros(1, L-stopPoint));
 
 %%Plot en figur af dataene, et subplot for hver channel
 i = 1;
@@ -54,8 +54,11 @@ hold on;
 
 while (i < info.NumChannels + 1)
     subplot(rows,1,i);
-    semilogy(f,DFT(:,i));
-    title(sprintf('Channel%i',i));
+    semilogy(f(1:stopPoint-1),abs(DFT(1:stopPoint-1,i)));
+    title(sprintf('DFT original signal for channel %i',i));
+    xlabel('Frekvens [Hz]');
+    ylabel('Amplitude');
+    legend(sprintf('DFT for channel %i',i));
     i = i + 1;
 end
 
@@ -76,8 +79,11 @@ hold on;
 
 while (i < info.NumChannels + 1)
     subplot(rows,1,i);
-    plot(t,IFT(:,i));
-    title(sprintf('Channel%i',i));
+    plot(t,real(IFT(:,i));
+    title(sprintf('IFT 16Bit for channel %i',i));
+    xlabel('Tid [s]');
+    ylabel('Amplitude');
+    legend(sprintf('IFT for channel %i',i));
     i = i + 1;
 end
 
@@ -90,8 +96,11 @@ hold on;
 
 while (i < info.NumChannels + 1)
     subplot(rows,1,i);
-    semilogy(f,DFT16bit(:,i));
-    title(sprintf('Channel%i',i));
+    semilogy(f(1:stopPoint-1),abs(DFT16bit(1:stopPoint-1,i)));
+    title(sprintf('DFT 16Bit for channel %i',i));
+    xlabel('Frekvens [Hz]');
+    ylabel('Amplitude');
+    legend(sprintf('DFT for channel %i',i));
     i = i + 1;
 end
 
@@ -144,7 +153,10 @@ hold on;
 while (i < info.NumChannels + 1)
     subplot(rows,1,i);
     plot(t,IFT(:,i));
-    title(sprintf('Channel%i',i));
+    title(sprintf('IFT encoded for channel %i',i));
+    xlabel('Tid [s]');
+    ylabel('Amplitude');
+    legend(sprintf('IFT for channel %i',i));
     i = i + 1;
 end
 
@@ -157,8 +169,11 @@ hold on;
 
 while (i < info.NumChannels + 1)
     subplot(rows,1,i);
-    semilogy(f,encoded(:,i));
-    title(sprintf('Channel%i',i));
+    semilogy(f(1:stopPoint-1),abs(encoded(1:stopPoint-1,i)));
+    title(sprintf('DFT encoded for channel %i',i));
+    xlabel('Frekvens [Hz]');
+    ylabel('Amplitude');
+    legend(sprintf('DFT for channel %i',i));
     i = i + 1;
 end
 
