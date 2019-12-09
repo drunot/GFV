@@ -1,5 +1,6 @@
 %% Loading af lyd
 
+
 function[Compression, Size16bit, SizeEncoded] = encode_wav(filename)
 
 %%Faa info fra filen
@@ -19,6 +20,21 @@ if (fs < 40001)
     return
 end
 
+%%Plot en figur af dataene, et subplot for hver channel
+i = 1;
+figure('visible', 'off'); clf;
+
+rows = info.NumChannels;
+hold on;
+
+while (i < info.NumChannels + 1)
+    subplot(rows,1,i);
+    plot(t,input(:,i));
+    title(sprintf('Channel%i',i));
+    i = i + 1;
+end
+
+saveas(gcf, sprintf('Plot_Original_IFT_%s.eps', info.Title));
 
 %% DFT af signal og fjern alt data over 20 kHz (maksimum hoerbar frekvens)
 
@@ -28,6 +44,19 @@ stopPoint = find(f>20000, 1);
 DFT = cat(1, DFT(1:stopPoint,:), zeros(L-stopPoint, 2));
 f = cat(2, f(1:stopPoint), zeros(1, L-stopPoint));
 
+%%Plot en figur af dataene, et subplot for hver channel
+i = 1;
+clf;
+hold on;
+
+while (i < info.NumChannels + 1)
+    subplot(rows,1,i);
+    semilogy(f(1:stopPoint-1),abs(DFT(1:stopPoint-1,i)));
+    title(sprintf('Channel%i',i));
+    i = i + 1;
+end
+
+saveas(gcf, sprintf('Plot_Original_DFT_%s.eps', info.Title));
 %% Kvantisering til 16 bits
 
 DFT16bit = quantise_n_bits(DFT, 16);
@@ -36,6 +65,34 @@ encoded_file = sprintf("16bit_%s", filename);
 audiowrite(encoded_file, real(IFT), fs);
 bitDepth = 16;
 Size16bit = bitDepth * L * channels; %fil stoerelse
+
+%%Plot en figur af dataene, et subplot for hver channel
+i = 1;
+clf;
+hold on;
+
+while (i < info.NumChannels + 1)
+    subplot(rows,1,i);
+    plot(t,IFT(:,i));
+    title(sprintf('Channel%i',i));
+    i = i + 1;
+end
+
+saveas(gcf, sprintf('Plot_16bit_IFT_%s.eps', info.Title));
+
+%%Plot en figur af dataene, et subplot for hver channel
+i = 1;
+clf;
+hold on;
+
+while (i < info.NumChannels + 1)
+    subplot(rows,1,i);
+    semilogy(f(1:stopPoint-1),abs(DFT16bit(1:stopPoint-1,i)));
+    title(sprintf('Channel%i',i));
+    i = i + 1;
+end
+
+saveas(gcf, sprintf('Plot_16bit_DFT_%s.eps', info.Title));
 
 %% Adskilning af signal
 
@@ -75,6 +132,34 @@ encoded = cat(1, kp0_100Hz, kp101_500Hz, kp501_1500Hz, kp1501_3000Hz, kp3001_600
 IFT = ifft(encoded);
 encoded_file = sprintf("encoded_%s", filename);
 audiowrite(encoded_file, real(IFT), fs);
+
+%%Plot en figur af dataene, et subplot for hver channel
+i = 1;
+clf;
+hold on;
+
+while (i < info.NumChannels + 1)
+    subplot(rows,1,i);
+    plot(t,IFT(:,i));
+    title(sprintf('Channel%i',i));
+    i = i + 1;
+end
+
+saveas(gcf, sprintf('Plot_encoded_IFT_%s.eps', info.Title));
+
+%%Plot en figur af dataene, et subplot for hver channel
+i = 1;
+clf;
+hold on;
+
+while (i < info.NumChannels + 1)
+    subplot(rows,1,i);
+    semilogy(f(1:stopPoint-1),abs(encoded(1:stopPoint-1,i)));
+    title(sprintf('Channel%i',i));
+    i = i + 1;
+end
+
+saveas(gcf, sprintf('Plot_encoded_DFT_%s.eps', info.Title));
 
 % beregn samlede bitlaengde
 length4bit = length(kp0_100Hz) + length(kp10001_20000Hz);

@@ -1,5 +1,6 @@
 %% Loading af lyd
 
+
 function[Compression, Size16bit, SizeEncoded] = encode_wav(filename)
 
 %%Faa info fra filen
@@ -19,15 +20,46 @@ if (fs < 40001)
     return
 end
 
+%%Plot en figur af dataene, et subplot for hver channel
+i = 1;
+figure('visible', 'off'); clf;
 
-%% DFT af signal og fjern alt data over 20 kHz (maksimum h?rbar frekvens)
+rows = info.NumChannels;
+hold on;
+
+while (i < info.NumChannels + 1)
+    subplot(rows,1,i);
+    plot(t,input(:,i));
+    title(sprintf('Channel%i',i));
+    i = i + 1;
+end
+
+saveas(gcf, sprintf('Plot_Original_IFT_%s.eps', info.Title));
+
+%% DFT af signal og fjern alt data over 20 kHz (maksimum hoerbar frekvens)
 
 DFT = fft(input);
 f = fs*(0:(L/2))/L;
 stopPoint = find(f>20000, 1);
-DFT = cat(1, DFT(1:stopPoint,:), zeros(L-stopPoint, 2));
-f = cat(2, f(1:stopPoint), zeros(1, L-stopPoint));
+%DFT = cat(1, DFT(1:stopPoint,:), zeros(L-stopPoint, 2));
+%f = cat(2, f(1:stopPoint), zeros(1, L-stopPoint));
 
+DFT = DFT(1:stopPoint,:);
+
+
+%%Plot en figur af dataene, et subplot for hver channel
+i = 1;
+clf;
+hold on;
+
+while (i < info.NumChannels + 1)
+    subplot(rows,1,i);
+    semilogy(f,DFT(:,i));
+    title(sprintf('Channel%i',i));
+    i = i + 1;
+end
+
+saveas(gcf, sprintf('Plot_Original_DFT_%s.eps', info.Title));
 %% Kvantisering til 16 bits
 
 DFT16bit = quantise_n_bits(DFT, 16);
@@ -35,9 +67,37 @@ IFT = ifft(DFT16bit);
 encoded_file = sprintf("16bit_%s", filename); 
 audiowrite(encoded_file, real(IFT), fs);
 bitDepth = 16;
-Size16bit = bitDepth * L * channels;
+Size16bit = bitDepth * L * channels; %fil stoerelse
 
-% Adskilning af signal
+%%Plot en figur af dataene, et subplot for hver channel
+i = 1;
+clf;
+hold on;
+
+while (i < info.NumChannels + 1)
+    subplot(rows,1,i);
+    plot(t,IFT(:,i));
+    title(sprintf('Channel%i',i));
+    i = i + 1;
+end
+
+saveas(gcf, sprintf('Plot_16bit_IFT_%s.eps', info.Title));
+
+%%Plot en figur af dataene, et subplot for hver channel
+i = 1;
+clf;
+hold on;
+
+while (i < info.NumChannels + 1)
+    subplot(rows,1,i);
+    semilogy(f,DFT16bit(:,i));
+    title(sprintf('Channel%i',i));
+    i = i + 1;
+end
+
+saveas(gcf, sprintf('Plot_16bit_DFT_%s.eps', info.Title));
+
+%% Adskilning af signal
 
 point100Hz = find(f>100,1);
 point500Hz = find(f>500,1);
@@ -56,7 +116,7 @@ p6001_10000Hz = DFT16bit(point6000Hz+1:point10000Hz,:);
 p10001_20000Hz = DFT16bit(point10000Hz+1:stopPoint,:);
 
 
-% Kvantisering af dele
+%% Kvantisering af dele
 %til 4 bit, 0-100 og 10001-20000 Hz
 kp0_100Hz = quantise_n_bits(p0_100Hz, 4);
 kp10001_20000Hz = quantise_n_bits(p10001_20000Hz, 4);
@@ -69,17 +129,46 @@ kp3001_6000Hz = quantise_n_bits(p3001_6000Hz, 12);
 %ubehandlet 1501-3000 Hz
 kp1501_3000Hz = p1501_3000Hz;
 
-% sammensaetning
+%% sammensaetning
 encoded = cat(1, kp0_100Hz, kp101_500Hz, kp501_1500Hz, kp1501_3000Hz, kp3001_6000Hz, kp6001_10000Hz, kp10001_20000Hz, zeros(L-stopPoint, 2));
 
 IFT = ifft(encoded);
 encoded_file = sprintf("encoded_%s", filename);
 audiowrite(encoded_file, real(IFT), fs);
 
-% calculate size difference
+%%Plot en figur af dataene, et subplot for hver channel
+i = 1;
+clf;
+hold on;
+
+while (i < info.NumChannels + 1)
+    subplot(rows,1,i);
+    plot(t,IFT(:,i));
+    title(sprintf('Channel%i',i));
+    i = i + 1;
+end
+
+saveas(gcf, sprintf('Plot_encoded_IFT_%s.eps', info.Title));
+
+%%Plot en figur af dataene, et subplot for hver channel
+i = 1;
+clf;
+hold on;
+
+while (i < info.NumChannels + 1)
+    subplot(rows,1,i);
+    semilogy(f,encoded(:,i));
+    title(sprintf('Channel%i',i));
+    i = i + 1;
+end
+
+saveas(gcf, sprintf('Plot_encoded_DFT_%s.eps', info.Title));
+
+% beregn samlede bitlaengde
 length4bit = length(kp0_100Hz) + length(kp10001_20000Hz);
 length6bit = length(kp101_500Hz) + length(kp6001_10000Hz);
 length12bit = length(kp501_1500Hz) + length(kp3001_6000Hz);
 length16bit = length(kp1501_3000Hz);
-SizeEncoded = channels * (4 * length4bit + 6 * length6bit + 12 * length12bit + 16 * length16bit);
-Compression = ((Size16bit-SizeEncoded) / Size16bit) * 100; 
+SizeEncoded = channels * (4 * length4bit + 6 * length6bit + 12 * length12bit + 16 * length16bit);   %Fil storelse efter komprimering
+Compression = ((Size16bit-SizeEncoded) / Size16bit) * 100;  %Kompresionsrate i procent
+
