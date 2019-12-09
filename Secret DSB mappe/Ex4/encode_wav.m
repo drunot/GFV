@@ -2,19 +2,25 @@
 
 function[Compression, Size16bit, SizeEncoded] = encode_wav(filename)
 
+%%Faa info fra filen
 info = audioinfo(filename);
 [input, fs] = audioread(filename);
+bitDepth = info.BitsPerSample;
+channels = info.NumChannels;
+
+%%Lav akser til beregning
 T = 1/fs;
 L = length(input);
 t = (0:L-1)*T;
+
+%%Check sample raten
 if (fs < 40001)
     disp('Sample Rate too low');
     return
 end
-bitDepth = info.BitsPerSample;
-channels = info.NumChannels;
 
-%% DFT af signal, kvantisering til 16bit
+
+%% DFT af signal og fjern alt data over 20 kHz (maksimum hoerbar frekvens)
 
 DFT = fft(input);
 f = fs*(0:(L/2))/L;
@@ -29,9 +35,9 @@ IFT = ifft(DFT16bit);
 encoded_file = sprintf("16bit_%s", filename); 
 audiowrite(encoded_file, real(IFT), fs);
 bitDepth = 16;
-Size16bit = bitDepth * L * channels;
+Size16bit = bitDepth * L * channels; %fil stoerelse
 
-% Adskilning af signal
+%% Adskilning af signal
 
 point100Hz = find(f>100,1);
 point500Hz = find(f>500,1);
@@ -50,7 +56,7 @@ p6001_10000Hz = DFT16bit(point6000Hz+1:point10000Hz,:);
 p10001_20000Hz = DFT16bit(point10000Hz+1:stopPoint,:);
 
 
-% Kvantisering af dele
+%% Kvantisering af dele
 %til 4 bit, 0-100 og 10001-20000 Hz
 kp0_100Hz = quantise_n_bits(p0_100Hz, 4);
 kp10001_20000Hz = quantise_n_bits(p10001_20000Hz, 4);
@@ -63,17 +69,18 @@ kp3001_6000Hz = quantise_n_bits(p3001_6000Hz, 12);
 %ubehandlet 1501-3000 Hz
 kp1501_3000Hz = p1501_3000Hz;
 
-% sammensætning
+%% sammensaetning
 encoded = cat(1, kp0_100Hz, kp101_500Hz, kp501_1500Hz, kp1501_3000Hz, kp3001_6000Hz, kp6001_10000Hz, kp10001_20000Hz, zeros(L-stopPoint, 2));
 
 IFT = ifft(encoded);
 encoded_file = sprintf("encoded_%s", filename);
 audiowrite(encoded_file, real(IFT), fs);
 
-% calculate size difference
+% beregn samlede bitlaengde
 length4bit = length(kp0_100Hz) + length(kp10001_20000Hz);
 length6bit = length(kp101_500Hz) + length(kp6001_10000Hz);
 length12bit = length(kp501_1500Hz) + length(kp3001_6000Hz);
 length16bit = length(kp1501_3000Hz);
-SizeEncoded = channels * (4 * length4bit + 6 * length6bit + 12 * length12bit + 16 * length16bit);
-Compression = ((Size16bit-SizeEncoded) / Size16bit) * 100; 
+SizeEncoded = channels * (4 * length4bit + 6 * length6bit + 12 * length12bit + 16 * length16bit);   %Fil storelse efter komprimering
+Compression = ((Size16bit-SizeEncoded) / Size16bit) * 100;  %Kompresionsrate i procent
+

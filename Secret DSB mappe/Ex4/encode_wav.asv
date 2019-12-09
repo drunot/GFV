@@ -1,19 +1,26 @@
 %% Loading af lyd
 
-%function[StartSize, Size16bit, SizeEncoded] encode_wav(filename)
+function[Compression, Size16bit, SizeEncoded] = encode_wav(filename)
 
-
-
+%%Faa info fra filen
 info = audioinfo(filename);
 [input, fs] = audioread(filename);
+bitDepth = info.BitsPerSample;
+channels = info.NumChannels;
+
+%%Lav akser til beregning
 T = 1/fs;
 L = length(input);
 t = (0:L-1)*T;
-bitDepth = info.BitsPerSample;
-channels = info.NumChannels;
-StartSize = bitDepth * L * channels;
 
-% DFT af signal, kvantisering til 16bit
+%%Check sample raten
+if (fs < 40001)
+    disp('Sample Rate too low');
+    return
+end
+
+
+%% DFT af signal og fjern alt data over 20 kHz (maksimum h?rbar frekvens)
 
 DFT = fft(input);
 f = fs*(0:(L/2))/L;
@@ -21,12 +28,12 @@ stopPoint = find(f>20000, 1);
 DFT = cat(1, DFT(1:stopPoint,:), zeros(L-stopPoint, 2));
 f = cat(2, f(1:stopPoint), zeros(1, L-stopPoint));
 
-% Kvantisering til 16 bits
+%% Kvantisering til 16 bits
 
 DFT16bit = quantise_n_bits(DFT, 16);
 IFT = ifft(DFT16bit);
 encoded_file = sprintf("16bit_%s", filename); 
-%audiowrite(encoded_file, real(IFT), fs);
+audiowrite(encoded_file, real(IFT), fs);
 bitDepth = 16;
 Size16bit = bitDepth * L * channels;
 
@@ -62,14 +69,17 @@ kp3001_6000Hz = quantise_n_bits(p3001_6000Hz, 12);
 %ubehandlet 1501-3000 Hz
 kp1501_3000Hz = p1501_3000Hz;
 
-% sammensætning
+% sammensaetning
 encoded = cat(1, kp0_100Hz, kp101_500Hz, kp501_1500Hz, kp1501_3000Hz, kp3001_6000Hz, kp6001_10000Hz, kp10001_20000Hz, zeros(L-stopPoint, 2));
 
 IFT = ifft(encoded);
 encoded_file = sprintf("encoded_%s", filename);
-%audiowrite(encoded_file, real(IFT), fs);
+audiowrite(encoded_file, real(IFT), fs);
+
+% calculate size difference
 length4bit = length(kp0_100Hz) + length(kp10001_20000Hz);
 length6bit = length(kp101_500Hz) + length(kp6001_10000Hz);
 length12bit = length(kp501_1500Hz) + length(kp3001_6000Hz);
 length16bit = length(kp1501_3000Hz);
 SizeEncoded = channels * (4 * length4bit + 6 * length6bit + 12 * length12bit + 16 * length16bit);
+Compression = ((Size16bit-SizeEncoded) / Size16bit) * 100; 
