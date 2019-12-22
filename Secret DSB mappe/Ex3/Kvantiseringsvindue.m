@@ -1,6 +1,6 @@
 
 
-filename = 'korobeiniki.wav';
+filename = uigetfile('*.wav');
 info = audioinfo(filename);
 [input, fs] = audioread(filename);
 bitDepth = info.BitsPerSample;
