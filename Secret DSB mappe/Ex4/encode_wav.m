@@ -72,7 +72,7 @@ saveas(gcf, sprintf('Plot_Original_DFT_%s.eps', info.Title));
 %% Kvantisering til 16 bits
 
 DFT16bit = quantise_n_bits(DFT, 16);
-IFT = ifft(DFT16bit);
+IFT = ifft(DFT16bit.*m);
 encoded_file = sprintf("16bit_%s", filename); 
 audiowrite(encoded_file, real(IFT), fs);
 bitDepth = 16;
@@ -147,7 +147,7 @@ kp1501_3000Hz = p1501_3000Hz;
 %% sammensaetning
 encoded = cat(1, kp0_100Hz, kp101_500Hz, kp501_1500Hz, kp1501_3000Hz, kp3001_6000Hz, kp6001_10000Hz, kp10001_20000Hz, zeros(L-stopPoint, 2));
 
-IFT = ifft(encoded);
+IFT = ifft(encoded.*m);
 encoded_file = sprintf("encoded_%s", filename);
 audiowrite(encoded_file, real(IFT), fs);
 
